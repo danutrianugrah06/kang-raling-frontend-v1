@@ -1,0 +1,286 @@
+/* Page Header */
+.al-page-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.al-page-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #1F2937;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.al-page-subtitle {
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* Table Card */
+.al-table-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  border: 1px solid #F3F4F6;
+  overflow: hidden;
+}
+
+/* Toolbar (Search) */
+.al-toolbar {
+  padding: 16px;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  background: #fff;
+}
+
+.al-search-wrap {
+  position: relative;
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+}
+
+.al-search-wrap i.bi-search {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF;
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.al-search-input {
+  width: 100%;
+  padding: 9px 36px 9px 36px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #1F2937;
+  background: #fff;
+  transition: border-color 0.2s;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.al-search-input:focus { border-color: #4CAF50; }
+
+.al-btn-clear {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #9CA3AF;
+  cursor: pointer;
+  font-size: 0.9rem;
+  padding: 4px;
+}
+.al-btn-clear:hover { color: #E53935; }
+
+/* Table */
+.al-table-wrap { overflow-x: auto; }
+
+.al-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+/* Lebar kolom (menggantikan inline style width) */
+.al-th-no        { width: 5%; }
+.al-th-waktu     { width: 15%; }
+.al-th-user-ip   { width: 20%; }
+.al-th-aksi      { width: 20%; }
+.al-th-deskripsi { width: 40%; }
+
+.al-table thead tr {
+  background: #F9FAFB;
+  border-bottom: 1px solid #E5E7EB;
+  border-top: 1px solid #E5E7EB;
+}
+
+.al-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-weight: 600;
+  color: #374151;
+  white-space: nowrap;
+  font-size: 0.8125rem;
+}
+
+.al-data-row {
+  border-bottom: 1px solid #F3F4F6;
+  transition: background 0.15s;
+}
+
+.al-data-row:last-child { border-bottom: none; }
+.al-data-row:hover { background: #F9FAFB; }
+
+.al-table tbody td {
+  padding: 14px 16px;
+  color: #374151;
+  vertical-align: middle;
+}
+
+.al-td-center { color: #9CA3AF; font-size: 0.8125rem; }
+
+.al-td-time {
+  font-weight: 600;
+  color: #1F2937;
+  white-space: nowrap;
+}
+
+.al-td-user {
+  font-weight: 600;
+  color: #1F2937;
+  margin: 0 0 2px 0;
+}
+
+.al-td-ip {
+  color: #6B7280;
+  font-size: 0.75rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.al-text-action {
+  font-weight: 600;
+  color: #4CAF50;
+  font-size: 0.85rem;
+}
+
+.al-td-desc {
+  margin: 0;
+  color: #374151;
+  line-height: 1.5;
+}
+
+.al-td-model {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  margin: 4px 0 0 0;
+}
+
+/* Skeleton (Ekstraksi inline style) */
+.al-skel {
+  border-radius: 6px;
+  background: linear-gradient(90deg, #F3F4F6 25%, #E9EAEC 50%, #F3F4F6 75%);
+  background-size: 200% 100%;
+  animation: al-shimmer 1.4s infinite;
+}
+
+.al-skel-no            { width: 24px; height: 14px; }
+.al-skel-waktu         { width: 100px; height: 14px; }
+.al-skel-user          { width: 120px; height: 14px; margin-bottom: 6px; }
+.al-skel-ip            { width: 90px; height: 11px; }
+.al-skel-aksi          { width: 110px; height: 14px; }
+.al-skel-deskripsi-full { width: 80%; height: 14px; margin-bottom: 6px; }
+.al-skel-deskripsi-half { width: 40%; height: 11px; }
+
+@keyframes al-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Table Footer / Pagination */
+.al-table-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-top: 1px solid #F3F4F6;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.al-pagination-info { font-size: 0.8125rem; color: #6B7280; margin: 0; }
+
+.al-pagination { display: flex; align-items: center; gap: 4px; }
+.al-page-btn {
+  min-width: 32px;
+  height: 32px;
+  padding: 0 8px;
+  border-radius: 7px;
+  border: 1px solid #E5E7EB;
+  background: #fff;
+  color: #374151;
+  font-size: 0.8125rem;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.al-page-btn:hover:not(:disabled) { background: #F9FAFB; border-color: #D1D5DB; }
+.al-page-btn.active { background: #4CAF50; border-color: #4CAF50; color: #fff; font-weight: 600; }
+.al-page-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.al-page-btn.is-ellipsis { border-color: transparent; background: transparent; cursor: default; }
+
+/* Empty State */
+.al-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 56px 24px;
+  text-align: center;
+}
+.al-empty-icon {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.75rem;
+  color: #9CA3AF;
+  margin-bottom: 16px;
+}
+.al-empty-title { font-size: 1rem; font-weight: 600; color: #374151; margin: 0 0 6px 0; }
+.al-empty-desc { font-size: 0.875rem; color: #9CA3AF; margin: 0; }
+
+/* Toast */
+.al-toast-wrap {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+.al-toast { 
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 18px;
+  border-radius: 10px;
+  background: #fff;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.14);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #1F2937;
+  pointer-events: all;
+  animation: al-toast-in 0.25s ease;
+  max-width: 340px;
+  border-left: 4px solid transparent;
+}
+.al-toast-success { border-left-color: #4CAF50; }
+.al-toast-error   { border-left-color: #E53935; }
+.al-toast-icon { font-size: 1.1rem; flex-shrink: 0; }
+.al-toast-success .al-toast-icon { color: #4CAF50; }
+.al-toast-error   .al-toast-icon { color: #E53935; }
+
+@keyframes al-toast-in { from { transform: translateX(60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }

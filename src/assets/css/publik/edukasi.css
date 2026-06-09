@@ -1,0 +1,740 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap');
+
+/* HERO */
+
+.edukasi-hero {
+  background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 60%, #bbf7d0 100%);
+  padding: 72px 0 48px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.edukasi-hero::before {
+  content: '';
+  position: absolute;
+  top: -80px;
+  right: -80px;
+  width: 340px;
+  height: 340px;
+  background: radial-gradient(circle, rgba(76,175,80,0.13) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.edukasi-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px;
+  left: -60px;
+  width: 260px;
+  height: 260px;
+  background: radial-gradient(circle, rgba(245,124,0,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.edukasi-hero-label {
+  display: inline-block;
+  background: rgba(76,175,80,0.12);
+  color: #2E7D32;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  padding: 6px 18px;
+  border-radius: 999px;
+  margin-bottom: 18px;
+  border: 1px solid rgba(76,175,80,0.25);
+}
+
+.edukasi-hero-title {
+  font-size: clamp(28px, 4vw, 44px);
+  font-weight: 800;
+  color: #1F2937;
+  line-height: 1.2;
+  margin-bottom: 14px;
+  letter-spacing: -0.5px;
+}
+
+.edukasi-hero-title span {
+  color: #4CAF50;
+}
+
+.edukasi-hero-desc {
+  font-size: 16px;
+  color: #6B7280;
+  max-width: 520px;
+  margin: 0 auto 36px;
+  line-height: 1.7;
+}
+
+/* CONTENT AREA */
+
+.edukasi-content {
+  background: #F9FAFB;
+  padding: 56px 0 80px;
+  min-height: 60vh;
+}
+
+/* SECTION HEADER */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.section-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #1F2937;
+  position: relative;
+  padding-left: 14px;
+  margin: 0;
+}
+
+.section-title::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 22px;
+  background: #4CAF50;
+  border-radius: 2px;
+}
+
+.section-divider {
+  margin: 52px 0;
+  border: none;
+  border-top: 1px solid #E5E7EB;
+}
+
+/* MODUL EDUKASI — GRID CARD */
+
+.modul-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.modul-card {
+  background: #FFFFFF;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+}
+
+.modul-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+  border-color: rgba(76,175,80,0.3);
+}
+
+.modul-card-img-wrap {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  background: #e5e7eb;
+}
+
+.modul-card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+.modul-card:hover .modul-card-img-wrap img {
+  transform: scale(1.06);
+}
+
+.modul-card-img-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+}
+
+.modul-card-img-placeholder i {
+  font-size: 52px;
+  color: #4CAF50;
+  opacity: 0.45;
+}
+
+/* Badge kategori di atas foto */
+.modul-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 999px;
+  z-index: 2;
+}
+
+.modul-badge.modul {
+  background: rgba(33,150,243,0.9);
+  color: #fff;
+}
+
+/* Icon PDF di pojok kanan atas */
+.modul-pdf-tag {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.modul-pdf-tag i {
+  font-size: 16px;
+  color: #DC2626;
+}
+
+.modul-card-body {
+  padding: 18px 20px 20px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.modul-card-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1F2937;
+  line-height: 1.45;
+  margin-bottom: 8px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.modul-card-desc {
+  font-size: 13px;
+  color: #6B7280;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+}
+
+.modul-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 12px;
+  border-top: 1px solid #F3F4F6;
+  margin-top: auto;
+}
+
+.modul-card-meta {
+  font-size: 12px;
+  color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.modul-card-meta i {
+  font-size: 12px;
+  color: #4CAF50;
+}
+
+.modul-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #4CAF50;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modul-card:hover .modul-open-btn {
+  gap: 8px;
+}
+
+/* VIDEO EDUKASI */
+
+/* VIDEO FEATURED (besar) */
+.video-featured {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  aspect-ratio: 16/8;
+  background: #1a1a1a;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  margin-bottom: 24px;
+}
+
+.video-featured img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+  display: block;
+}
+
+.video-featured:hover img {
+  transform: scale(1.03);
+}
+
+.video-featured-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #14291a, #1e3d26);
+}
+
+.video-featured-placeholder i {
+  font-size: 80px;
+  color: rgba(76,175,80,0.3);
+}
+
+.video-featured-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(5, 15, 5, 0.85) 0%,
+    rgba(5, 15, 5, 0.25) 50%,
+    transparent 100%
+  );
+}
+
+/* Tombol play di tengah */
+.video-play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 3;
+}
+
+.video-play-btn i {
+  font-size: 26px;
+  color: #2E7D32;
+  margin-left: 4px;
+}
+
+.video-featured:hover .video-play-btn {
+  transform: translate(-50%, -50%) scale(1.1);
+  box-shadow: 0 6px 32px rgba(0,0,0,0.4);
+}
+
+.video-featured-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 32px 32px 28px;
+  z-index: 2;
+}
+
+.video-featured-badge {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border-radius: 999px;
+  background: #DC2626;
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.video-featured-title {
+  font-size: clamp(18px, 2.5vw, 26px);
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.3;
+  margin-bottom: 8px;
+  text-shadow: 0 1px 8px rgba(0,0,0,0.4);
+}
+
+.video-featured-meta {
+  font-size: 13px;
+  color: rgba(255,255,255,0.72);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.video-featured-meta span {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* GRID VIDEO KECIL */
+.video-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.video-card {
+  background: #FFFFFF;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #E5E7EB;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  display: block;
+}
+
+.video-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.10);
+  border-color: rgba(76,175,80,0.25);
+}
+
+.video-card-thumb {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+
+.video-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+  display: block;
+}
+
+.video-card:hover .video-card-thumb img {
+  transform: scale(1.07);
+}
+
+.video-card-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #14291a, #1e3d26);
+}
+
+.video-card-thumb-placeholder i {
+  font-size: 40px;
+  color: rgba(76,175,80,0.35);
+}
+
+.video-card-thumb-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-card:hover .video-card-thumb-overlay {
+  background: rgba(0,0,0,0.15);
+}
+
+.video-card-play {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.video-card-play i {
+  font-size: 18px;
+  color: #2E7D32;
+  margin-left: 3px;
+}
+
+.video-card:hover .video-card-play {
+  transform: scale(1.1);
+}
+
+.video-card-body {
+  padding: 14px 16px 16px;
+}
+
+.video-card-badge {
+  display: inline-block;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(220,38,38,0.1);
+  color: #DC2626;
+  margin-bottom: 7px;
+}
+
+.video-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1F2937;
+  line-height: 1.4;
+  margin-bottom: 7px;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.video-card-meta {
+  font-size: 12px;
+  color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.video-card-meta i {
+  font-size: 11px;
+  color: #4CAF50;
+}
+
+/* SKELETON LOADER */
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.sk-base {
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: 6px;
+}
+
+.skeleton-modul-card {
+  background: #FFFFFF;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #E5E7EB;
+}
+
+.sk-img {
+  height: 180px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.sk-body {
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sk-line {
+  height: 13px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #e5e7eb 25%, #f3f4f6 50%, #e5e7eb 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.sk-line-full   { width: 100%; }
+.sk-line-medium { width: 70%; }
+.sk-line-short  { width: 45%; }
+
+/* Class untuk margin-top skeleton (menggantikan inline style margin-top:6px) */
+.sk-line-mt-6 {
+  margin-top: 6px;
+}
+
+/* Class untuk margin-right icon (menggantikan inline style margin-right:4px) */
+.icon-mr-4 {
+  margin-right: 4px;
+}
+
+.sk-video-featured {
+  aspect-ratio: 16/8;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  background: linear-gradient(90deg, #d1d5db 25%, #e5e7eb 50%, #d1d5db 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.skeleton-video-card {
+  background: #FFFFFF;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid #E5E7EB;
+}
+
+.sk-video-thumb {
+  height: 150px;
+  background: linear-gradient(90deg, #d1d5db 25%, #e5e7eb 50%, #d1d5db 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* EMPTY STATE */
+
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+}
+
+.empty-icon {
+  font-size: 64px;
+  color: #4CAF50;
+  opacity: 0.22;
+  display: block;
+  margin-bottom: 20px;
+  line-height: 1;
+}
+
+.empty-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1F2937;
+  margin-bottom: 8px;
+}
+
+.empty-desc {
+  font-size: 14px;
+  color: #6B7280;
+  max-width: 360px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* LOAD MORE */
+
+.btn-load-more {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 36px auto 0;
+  padding: 13px 38px;
+  background: #FFFFFF;
+  border: 2px solid #4CAF50;
+  color: #4CAF50;
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.btn-load-more:hover {
+  background: #4CAF50;
+  color: #fff;
+  box-shadow: 0 4px 18px rgba(76,175,80,0.3);
+}
+
+.btn-load-more:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ANIMASI SPIN (untuk ikon loading) */
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+.spinning {
+  animation: spin 1s linear infinite;
+}
+
+/* TOAST NOTIFIKASI */
+
+.toast-container {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #1F2937;
+  color: #fff;
+  padding: 14px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.14);
+  animation: toast-in 0.35s ease;
+  max-width: 320px;
+}
+
+.toast.success { background: #2E7D32; }
+.toast.error   { background: #DC2626; }
+
+@keyframes toast-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+
+@media (max-width: 992px) {
+  .modul-grid  { grid-template-columns: repeat(2, 1fr); }
+  .video-grid  { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .edukasi-hero    { padding: 52px 0 36px; }
+  .modul-grid      { grid-template-columns: 1fr; }
+  .video-grid      { grid-template-columns: 1fr; }
+  .video-featured  { aspect-ratio: 16/10; }
+  .video-featured-info { padding: 20px; }
+}

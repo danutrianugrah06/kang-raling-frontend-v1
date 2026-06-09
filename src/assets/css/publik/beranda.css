@@ -1,0 +1,672 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* GLOBAL & UTILITIES */
+.beranda {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+/* BADGE & JUDUL REUSABLE */
+.badge-section {
+  display: inline-block;
+  background: rgba(76, 175, 80, 0.12);
+  color: #2e7d32;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 14px;
+  border-radius: 20px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.badge-section.center {
+  display: block;
+  text-align: center;
+}
+
+.badge-section.light {
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.judul-section {
+  font-size: 32px;
+  font-weight: 800;
+  color: #1f2937;
+  margin: 0 0 16px;
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+
+.judul-section.center {
+  text-align: center;
+}
+
+.judul-section.light {
+  color: #fff;
+}
+
+.sub-section {
+  font-size: 15px;
+  color: #6b7280;
+  line-height: 1.75;
+  max-width: 620px;
+  margin: 0 auto 48px;
+  text-align: center;
+}
+
+.sub-section.light {
+  color: rgba(255, 255, 255, 0.75);
+}
+
+/* TOMBOL */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #f57c00;
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 13px 28px;
+  border-radius: 10px;
+  transition: all 0.2s;
+}
+
+.btn-primary:hover {
+  background: #e65100;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(245, 124, 0, 0.30);
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 13px 28px;
+  border-radius: 10px;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  transition: all 0.2s;
+}
+
+.btn-outline:hover {
+  background: rgb(247, 247, 247);
+}
+
+/* SECTION HERO */
+.hero {
+  position: relative;
+  min-height: 92vh;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to top, #fff 0%, transparent 100%);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  padding: 0 60px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: rgba(255, 255, 255, 0.90);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 16px;
+  border-radius: 20px;
+  margin-bottom: 24px;
+  backdrop-filter: blur(8px);
+}
+
+.hero-title {
+  font-size: 62px;
+  font-weight: 800;
+  color: #fff;
+  line-height: 1.05;
+  margin: 0 0 20px;
+  letter-spacing: -1.5px;
+}
+
+.hero-subtitle {
+  font-size: 16px;
+  color: rgba(255, 255, 255, 0.80);
+  line-height: 1.75;
+  margin: 0 0 36px;
+  max-width: 480px;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+/* KATA PENGANTAR */
+.pengantar {
+  padding: 96px 0;
+  background: #fff;
+}
+
+.pengantar-inner {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 72px;
+  align-items: start;
+}
+
+.pengantar-foto-wrap {
+  position: sticky;
+  top: 80px;
+}
+
+.pengantar-foto {
+  width: 100%;
+  border-radius: 20px 20px 0 0;
+  display: block;
+  box-shadow: 0 16px 48px rgba(46, 125, 50, 0.15);
+}
+
+.pengantar-label {
+  background: #2e7d32;
+  color: #fff;
+  padding: 16px 20px;
+  border-radius: 0 0 20px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.pengantar-label strong {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.pengantar-label span {
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.80);
+  line-height: 1.5;
+}
+
+.pengantar-isi {
+  font-size: 15px;
+  color: #4b5563;
+  line-height: 1.85;
+  margin-bottom: 16px;
+}
+
+/* TENTANG KANG RALING */
+.tentang {
+  padding: 96px 0;
+  background: #f9fafb;
+}
+
+.tentang-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.tentang-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.tentang-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 28px 24px;
+  border: 1px solid #f3f4f6;
+  transition: all 0.3s;
+}
+
+.tentang-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  border-color: #c8e6c9;
+}
+
+.tentang-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 16px;
+}
+
+.tentang-icon-hijau-muda {
+  background: rgba(76, 175, 80, 0.12);
+  color: #2e7d32;
+}
+
+.tentang-icon-hijau-tua {
+  background: rgba(46, 125, 50, 0.12);
+  color: #2e7d32;
+}
+
+.tentang-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  margin: 0 0 10px;
+}
+
+.tentang-card p {
+  font-size: 13.5px;
+  color: #6b7280;
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* LANDASAN HUKUM */
+.hukum {
+  padding: 96px 0;
+  background: #fff;
+}
+
+.hukum-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.hukum-item {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #f9fafb;
+  border: 1px solid #f3f4f6;
+  border-radius: 14px;
+  padding: 20px 24px;
+  transition: all 0.2s;
+}
+
+.hukum-item:hover {
+  border-color: #c8e6c9;
+  background: #f0f7f0;
+}
+
+.hukum-nomor {
+  font-size: 26px;
+  font-weight: 800;
+  color: #c8e6c9;
+  min-width: 44px;
+  line-height: 1;
+}
+
+.hukum-detail {
+  flex: 1;
+}
+
+.hukum-kode {
+  font-size: 13px;
+  font-weight: 700;
+  color: #2e7d32;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.hukum-detail p {
+  font-size: 13px;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hukum-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #2e7d32;
+  background: rgba(76, 175, 80, 0.10);
+  padding: 4px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+/* SDGs DESA */
+.sdgs {
+  padding: 96px 0;
+  background: linear-gradient(135deg, #1b5e20 0%, #2e7d32 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.sdgs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.sdgs-card {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.3s;
+}
+
+.sdgs-card:hover {
+  background: rgba(255, 255, 255, 0.14);
+  transform: translateY(-4px);
+}
+
+.sdgs-nomor {
+  font-size: 11px;
+  font-weight: 700;
+  color: #a5d6a7;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.sdgs-icon {
+  font-size: 36px;
+  color: #fff;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.sdgs-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #fff;
+  margin: 0 0 10px;
+}
+
+.sdgs-card p {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.70);
+  line-height: 1.7;
+  margin: 0;
+}
+
+/* HASIL CAPAIAN */
+.hasil {
+  padding: 96px 0;
+  background: #f9fafb;
+}
+
+.hasil-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+}
+
+.hasil-card {
+  background: #fff;
+  border-radius: 20px;
+  padding: 36px 24px;
+  text-align: center;
+  border: 1px solid #f3f4f6;
+  transition: all 0.3s;
+}
+
+.hasil-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.08);
+  border-color: #c8e6c9;
+}
+
+.hasil-icon {
+  font-size: 32px;
+  color: #4caf50;
+  display: block;
+  margin-bottom: 16px;
+}
+
+.hasil-angka {
+  font-size: 44px;
+  font-weight: 800;
+  color: #2e7d32;
+  line-height: 1;
+  margin-bottom: 8px;
+  letter-spacing: -1px;
+}
+
+.hasil-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: #1f2937;
+  margin-bottom: 6px;
+}
+
+.hasil-sub {
+  font-size: 12.5px;
+  color: #9ca3af;
+  line-height: 1.5;
+}
+
+/* DESA MODEL (VIDEO) */
+.desa-model {
+  padding: 96px 0;
+  background: #fff;
+}
+
+.video-wrap {
+  position: relative;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.12);
+  aspect-ratio: 16 / 9;
+  max-width: 860px;
+  margin: 0 auto 40px;
+}
+
+.video-wrap iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+}
+
+/* PARTNER */
+.partof {
+  padding: 64px 0;
+  background: #f9fafb;
+  border-top: 1px solid #f3f4f6;
+  text-align: center;
+}
+
+.partof-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 32px;
+}
+
+.partof-logos {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 56px;
+}
+
+.partof-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.partof-item:hover {
+  transform: translateY(-3px);
+}
+
+.partof-img {
+  height: 72px;
+  width: auto;
+  object-fit: contain;
+}
+
+.partof-item span {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #4b5563;
+}
+
+.partof-divider {
+  width: 1px;
+  height: 64px;
+  background: #e5e7eb;
+}
+
+/* RESPONSIVE TABLET LANDSCAPE */
+@media (max-width: 1024px) {
+  .hero-title {
+    font-size: 48px;
+  }
+  .tentang-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .sdgs-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .hasil-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* RESPONSIVE TABLET PORTRAIT */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+  .hero {
+    min-height: 80vh;
+  }
+  .hero-content {
+    padding: 0 24px;
+  }
+  .hero-title {
+    font-size: 36px;
+  }
+  .hero-subtitle {
+    font-size: 14px;
+  }
+  .judul-section {
+    font-size: 24px;
+  }
+  .pengantar {
+    padding: 64px 0;
+  }
+  .pengantar-inner {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+  .pengantar-foto-wrap {
+    position: static;
+  }
+  .tentang {
+    padding: 64px 0;
+  }
+  .tentang-grid {
+    grid-template-columns: 1fr;
+  }
+  .hukum {
+    padding: 64px 0;
+  }
+  .hukum-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .sdgs {
+    padding: 64px 0;
+  }
+  .sdgs-grid {
+    grid-template-columns: 1fr;
+  }
+  .hasil {
+    padding: 64px 0;
+  }
+  .hasil-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .desa-model {
+    padding: 64px 0;
+  }
+  .partof-logos {
+    gap: 32px;
+  }
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 480px) {
+  .hero-title {
+    font-size: 28px;
+  }
+  .hero-actions {
+    flex-direction: column;
+  }
+  .btn-primary,
+  .btn-outline {
+    justify-content: center;
+  }
+  .hasil-grid {
+    grid-template-columns: 1fr;
+  }
+  .partof-logos {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .partof-divider {
+    width: 60px;
+    height: 1px;
+  }
+  .judul-section {
+    font-size: 22px;
+  }
+}

@@ -1,0 +1,207 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+/* NAVBAR UTAMA */
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  background: #fff;
+  border-bottom: 1px solid #E5E7EB;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* LOGO */
+.navbar-brand {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-logo {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+}
+
+/* MENU NAVIGASI */
+.navbar-menu {
+  display: flex;
+  list-style: none;
+  gap: 2px;
+  align-items: center;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu li {
+  display: flex;
+  align-items: center;
+}
+
+.navbar-menu a {
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: #4B5563;
+  padding: 8px 14px;
+  border-radius: 8px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  line-height: 1;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar-menu a:hover,
+.navbar-menu a.router-link-active {
+  color: #2E7D32;
+  background: #f0f7f0;
+}
+
+/* TOMBOL LOGIN */
+.navbar-btn {
+  background: #F57C00 !important;
+  color: #fff !important;
+  text-decoration: none;
+  font-size: 13.5px;
+  font-weight: 700;
+  padding: 10px 26px;
+  border-radius: 9px;
+  transition: all 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar-btn:hover,
+.navbar-btn:active,
+.navbar-menu a.navbar-btn:hover,
+.navbar-menu a.navbar-btn:active,
+.navbar-menu a.navbar-btn.router-link-active {
+  background: #E65100 !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+/* AKSI KANAN */
+.navbar-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.navbar-menu li.navbar-mobile-login {
+  display: none !important;
+}
+
+/* HAMBURGER MENU */
+.navbar-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.navbar-hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: #1F2937;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+
+/* RESPONSIVE TABLET */
+@media (max-width: 900px) {
+  .navbar {
+    padding: 0 24px;
+  }
+  .navbar-menu a {
+    font-size: 12.5px;
+    padding: 6px 10px;
+  }
+}
+
+/* RESPONSIVE MOBILE */
+@media (max-width: 768px) {
+  .navbar-hamburger {
+    display: flex;
+  }
+
+  .navbar-desktop-login {
+    display: none !important;
+  }
+
+  .navbar-menu li.navbar-mobile-login {
+    display: flex !important;
+    width: 100%;
+    margin-top: 10px;
+    padding: 0 16px;
+    box-sizing: border-box;
+  }
+
+  .navbar-mobile-login .navbar-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .navbar-menu {
+    display: none;
+    position: absolute;
+    top: 64px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 12px 0 24px;
+    border-bottom: 1px solid #E5E7EB;
+    gap: 2px;
+    transform: none;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  }
+
+  .navbar-menu-open {
+    display: flex;
+  }
+
+  .navbar-menu li {
+    padding: 0 16px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .navbar-menu a {
+    font-size: 14px;
+    padding: 10px 12px;
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+/* RESPONSIVE MOBILE KECIL */
+@media (max-width: 480px) {
+  .navbar {
+    padding: 0 16px;
+  }
+  .navbar-btn {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+}

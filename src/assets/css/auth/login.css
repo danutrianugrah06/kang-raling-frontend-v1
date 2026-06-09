@@ -1,0 +1,436 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* LAYOUT UTAMA */
+.login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #f5f5f5;
+}
+
+.login-main {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.login-container {
+  display: flex;
+  width: 100%;
+  max-width: 860px;
+  min-height: 440px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* SISI KIRI (BRANDING) */
+.login-left {
+  flex: 1;
+  background: #2E7D32;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 32px;
+}
+
+.login-left-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1B5E20 0%, #2E7D32 50%, #388E3C 100%);
+}
+
+.login-left-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+}
+
+.login-left-icon {
+  position: relative;
+  display: inline-block;
+  margin-bottom: 24px;
+}
+
+.login-left-icon-bg {
+  width: 80px;
+  height: 80px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+}
+
+.login-left-icon-dot {
+  position: absolute;
+  bottom: 2px;
+  right: -2px;
+  width: 18px;
+  height: 18px;
+  background: #F57C00;
+  border-radius: 50%;
+  border: 2px solid #2E7D32;
+}
+
+.login-left-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #ffffff;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.login-left-subtitle {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1.6;
+}
+
+.login-left-circle {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.login-left-circle-1 {
+  width: 200px;
+  height: 200px;
+  bottom: -60px;
+  left: -60px;
+}
+
+.login-left-circle-2 {
+  width: 140px;
+  height: 140px;
+  top: -40px;
+  right: -40px;
+}
+
+/* SISI KANAN (FORM) */
+.login-right {
+  flex: 1.1;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 36px;
+}
+
+.login-form-wrap {
+  width: 100%;
+  max-width: 340px;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.login-brand-img {
+  height: 36px;
+  width: auto;
+}
+
+.login-form-title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1F2937;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.login-form-subtitle {
+  font-size: 13px;
+  color: #9CA3AF;
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+/* ALERT ERROR */
+.alert-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+/* FORM FIELD */
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field-label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 6px;
+}
+
+.form-field input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 10px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13px;
+  color: #1F2937;
+  background: #FAFAFA;
+  transition: all 0.2s;
+  outline: none;
+}
+
+.form-field input:focus {
+  border-color: #4CAF50;
+  background: #ffffff;
+  box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+}
+
+.form-field input::placeholder {
+  color: #D1D5DB;
+}
+
+.form-field input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-field-error input {
+  border-color: #EF4444;
+}
+
+.form-field-error input:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.form-field-error-msg {
+  display: block;
+  font-size: 11px;
+  color: #EF4444;
+  margin-top: 4px;
+  font-weight: 500;
+}
+
+/* Input group dengan eye button */
+.form-field-input-wrap {
+  position: relative;
+}
+
+.form-field-input-wrap input {
+  padding-right: 42px;
+}
+
+.form-field-eye-btn {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9CA3AF;
+  display: flex;
+  align-items: center;
+  padding: 0;
+}
+
+.form-field-eye-btn:hover {
+  color: #4CAF50;
+}
+
+/* CAPTCHA */
+.captcha-display-wrap {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.captcha-display {
+  flex: 1;
+  background: #f4f3ec;
+  border: 1.5px dashed #A5D6A7;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  position: relative;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Garis coretan abstrak di background */
+.captcha-display::before {
+  content: '';
+  position: absolute;
+  width: 120%;
+  height: 2px;
+  background: #2E7D32;
+  transform: rotate(-6deg);
+  opacity: 0.3;
+}
+
+.captcha-display::after {
+  content: '';
+  position: absolute;
+  width: 120%;
+  height: 2px;
+  background: #F57C00;
+  transform: rotate(10deg);
+  opacity: 0.3;
+}
+
+.captcha-text {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 22px;
+  font-weight: 900;
+  color: #1F2937;
+  letter-spacing: 8px;
+  position: relative;
+  z-index: 2;
+}
+
+.captcha-refresh-btn {
+  width: 44px;
+  background: #FAFAFA;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #6B7280;
+  font-size: 16px;
+  transition: all 0.2s;
+}
+
+.captcha-refresh-btn:hover:not(:disabled) {
+  background: #E5E7EB;
+  color: #1F2937;
+}
+
+.captcha-refresh-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Class untuk input CAPTCHA (menggantikan inline style text-transform: uppercase) */
+.captcha-input {
+  text-transform: uppercase;
+}
+
+/* TOMBOL LOGIN */
+.btn-login {
+  width: 100%;
+  padding: 12px;
+  background: #F57C00;
+  border: none;
+  border-radius: 10px;
+  color: #ffffff;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 0.2s;
+  margin-top: 8px;
+}
+
+.btn-login:hover:not(:disabled) {
+  background: #E65100;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(245, 124, 0, 0.3);
+}
+
+.btn-login:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Animasi spin untuk ikon loading */
+.spin {
+  animation: spinning 0.8s linear infinite;
+}
+
+@keyframes spinning {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* LUPA AKUN */
+.forgot-section {
+  margin-top: 20px;
+  padding-top: 16px;
+  border-top: 1px solid #F3F4F6;
+}
+
+.forgot-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #F57C00;
+  margin-bottom: 4px;
+}
+
+.forgot-text {
+  font-size: 11px;
+  color: #9CA3AF;
+  line-height: 1.6;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .login-container {
+    flex-direction: column;
+    max-width: 420px;
+  }
+  .login-left {
+    padding: 32px 24px;
+    min-height: 200px;
+  }
+  .login-left-title {
+    font-size: 18px;
+  }
+  .login-right {
+    padding: 32px 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-main {
+    padding: 24px 12px;
+  }
+  .login-right {
+    padding: 28px 20px;
+  }
+}
