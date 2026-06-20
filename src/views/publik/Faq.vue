@@ -5,7 +5,7 @@
     <!-- HERO SECTION -->
     <section class="faq-hero">
       <div class="container">
-        <span class="faq-hero-label">💬 Pusat Bantuan</span>
+        <span class="faq-hero-label">Pusat Bantuan</span>
         <h1 class="faq-hero-title">
           Pertanyaan yang Sering <span>Ditanyakan</span>
         </h1>
@@ -21,39 +21,55 @@
       <div class="container">
         <div class="faq-inner">
 
-          <!-- ===== KATEGORI 1: TENTANG PROGRAM ===== -->
+          <!-- KATEGORI 1: TENTANG PROGRAM -->
           <div class="faq-kategori">
             <div class="faq-kategori-icon green">
               <i class="bi bi-info-circle-fill"></i>
             </div>
-            <span class="faq-kategori-label">Tentang Program</span>
+            <span class="faq-kategori-label">Tentang Program dan Pengelolaan Sampah</span>
           </div>
 
           <div class="faq-list">
-            <div
-              v-for="(faq, idx) in kategori1"
-              :key="'k1-'+idx"
-              class="faq-item"
-              :class="{ open: openIdx === 'k1-'+idx }"
-            >
-              <button
-                class="faq-question"
-                @click="toggle('k1-'+idx)"
-                :aria-expanded="openIdx === 'k1-'+idx"
-              >
+            <div v-for="(faq, idx) in kategori1" :key="'k1-' + idx" class="faq-item"
+              :class="{ open: openIdx === 'k1-' + idx }">
+              <button class="faq-question" @click="toggle('k1-' + idx)" :aria-expanded="openIdx === 'k1-' + idx">
                 <div class="faq-question-left">
                   <span class="faq-question-number">{{ idx + 1 }}</span>
                   <span class="faq-question-text">{{ faq.q }}</span>
                 </div>
                 <i class="bi bi-chevron-down faq-chevron"></i>
               </button>
-              <div v-if="openIdx === 'k1-'+idx" class="faq-answer">
+              <div v-if="openIdx === 'k1-' + idx" class="faq-answer">
                 <p v-for="(par, pi) in faq.a" :key="pi">{{ par }}</p>
               </div>
             </div>
           </div>
 
-          <!-- ===== KATEGORI 2: DATA & PLATFORM ===== -->
+          <!-- KATEGORI 2: PERAN & TATA KELOLA -->
+          <div class="faq-kategori">
+            <div class="faq-kategori-icon orange">
+              <i class="bi bi-people-fill"></i>
+            </div>
+            <span class="faq-kategori-label">Peran & Tata Kelola</span>
+          </div>
+
+          <div class="faq-list">
+            <div v-for="(faq, idx) in kategori2" :key="'k2-' + idx" class="faq-item"
+              :class="{ open: openIdx === 'k2-' + idx }">
+              <button class="faq-question" @click="toggle('k2-' + idx)" :aria-expanded="openIdx === 'k2-' + idx">
+                <div class="faq-question-left">
+                  <span class="faq-question-number">{{ kategori1.length + idx + 1 }}</span>
+                  <span class="faq-question-text">{{ faq.q }}</span>
+                </div>
+                <i class="bi bi-chevron-down faq-chevron"></i>
+              </button>
+              <div v-if="openIdx === 'k2-' + idx" class="faq-answer">
+                <p v-for="(par, pi) in faq.a" :key="pi">{{ par }}</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- KATEGORI 3: DATA & PLATFORM -->
           <div class="faq-kategori">
             <div class="faq-kategori-icon blue">
               <i class="bi bi-bar-chart-line-fill"></i>
@@ -62,49 +78,9 @@
           </div>
 
           <div class="faq-list">
-            <div
-              v-for="(faq, idx) in kategori2"
-              :key="'k2-'+idx"
-              class="faq-item"
-              :class="{ open: openIdx === 'k2-'+idx }"
-            >
-              <button
-                class="faq-question"
-                @click="toggle('k2-'+idx)"
-                :aria-expanded="openIdx === 'k2-'+idx"
-              >
-                <div class="faq-question-left">
-                  <span class="faq-question-number">{{ kategori1.length + idx + 1 }}</span>
-                  <span class="faq-question-text">{{ faq.q }}</span>
-                </div>
-                <i class="bi bi-chevron-down faq-chevron"></i>
-              </button>
-              <div v-if="openIdx === 'k2-'+idx" class="faq-answer">
-                <p v-for="(par, pi) in faq.a" :key="pi">{{ par }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- ===== KATEGORI 3: PARTISIPASI MASYARAKAT ===== -->
-          <div class="faq-kategori">
-            <div class="faq-kategori-icon orange">
-              <i class="bi bi-people-fill"></i>
-            </div>
-            <span class="faq-kategori-label">Partisipasi Masyarakat</span>
-          </div>
-
-          <div class="faq-list">
-            <div
-              v-for="(faq, idx) in kategori3"
-              :key="'k3-'+idx"
-              class="faq-item"
-              :class="{ open: openIdx === 'k3-'+idx }"
-            >
-              <button
-                class="faq-question"
-                @click="toggle('k3-'+idx)"
-                :aria-expanded="openIdx === 'k3-'+idx"
-              >
+            <div v-for="(faq, idx) in kategori3" :key="'k3-' + idx" class="faq-item"
+              :class="{ open: openIdx === 'k3-' + idx }">
+              <button class="faq-question" @click="toggle('k3-' + idx)" :aria-expanded="openIdx === 'k3-' + idx">
                 <div class="faq-question-left">
                   <span class="faq-question-number">
                     {{ kategori1.length + kategori2.length + idx + 1 }}
@@ -113,7 +89,7 @@
                 </div>
                 <i class="bi bi-chevron-down faq-chevron"></i>
               </button>
-              <div v-if="openIdx === 'k3-'+idx" class="faq-answer">
+              <div v-if="openIdx === 'k3-' + idx" class="faq-answer">
                 <p v-for="(par, pi) in faq.a" :key="pi">{{ par }}</p>
               </div>
             </div>
@@ -145,54 +121,99 @@ export default {
         {
           q: 'Apa itu program Kang Raling?',
           a: [
-            'Kang Raling (Kampung Ramah Lingkungan) adalah program unggulan Dinas Lingkungan Hidup Kabupaten Garut yang dirancang untuk mengintegrasikan sistem pengelolaan sampah berbasis komunitas di tingkat desa.',
-            'Program ini mengedepankan prinsip Reduce, Reuse, dan Recycle (3R) yang diimplementasikan melalui TPS 3R di berbagai desa binaan di seluruh Kabupaten Garut.'
+            'Program Kampung Ramah Lingkungan (Kang Raling) merupakan sebuah program peningkatan peran serta masyarakat dalam pengelolaan sampah dan perbaikan lingkungan dengan membangun model pengelolaan sampah yang berkelanjutan di tingkat kawasan setingkat RW.'
           ]
         },
         {
-          q: 'Apa itu TPS 3R dan bagaimana cara kerjanya?',
+          q: 'Apa saja tujuan utama dari Program Kang Raling?',
           a: [
-            'TPS 3R (Tempat Pengolahan Sampah Reduce, Reuse, Recycle) adalah fasilitas pengelolaan sampah berbasis komunitas yang memilah sampah menjadi tiga jenis: organik, anorganik, dan residu.',
-            'Sampah organik diolah menjadi kompos, sampah anorganik dikumpulkan untuk didaur ulang oleh bank sampah, sedangkan sampah residu yang tidak bisa diolah dibuang ke TPA dengan volume yang sudah jauh berkurang.'
+            '- Mengedukasi masyarakat agar mampu memilah sampah dari rumah.',
+            '- Meningkatkan partisipasi masyarakat dalam mengelola sampah (terutama organik) dan menata lingkungan.',
+            '- Membangun model pengelolaan sampah yang berkelanjutan di kawasan setingkat RW atau Desa'
           ]
         },
         {
-          q: 'Siapa yang mengelola program Kang Raling?',
+          q: 'Bagaimana tahapan awal untuk membuat program ini di lingkungan saya?',
           a: [
-            'Program Kang Raling dikelola langsung oleh Dinas Lingkungan Hidup (DLH) Kabupaten Garut sebagai penanggung jawab utama.',
-            'Di lapangan, setiap desa binaan memiliki seorang Fasilitator Desa yang bertugas mencatat dan melaporkan data sampah harian, serta seorang Pengelola TPS yang bertanggung jawab atas operasional TPS 3R sehari-hari.'
+            'Pembuatan Kang Raling dimulai dengan memilih RW model yang sudah memiliki sistem dasar, kemudian membentuk Kelompok Penggerak. Setelah itu, dilakukan pemetaan potensi wilayah, dilanjutkan dengan diskusi antar pihak untuk menyepakati sistem pengelolaan sampah yang sesuai.'
           ]
         },
         {
-          q: 'Desa mana saja yang sudah bergabung sebagai desa binaan?',
+          q: 'Siapa sajakah yang memegang peranan penting agar program ini berhasil?',
           a: [
-            'Saat ini program Kang Raling sudah mencakup beberapa desa binaan aktif di Kabupaten Garut. Kamu bisa melihat daftar lengkap desa binaan beserta profil TPS-nya di halaman Desa Binaan pada website ini.',
-            'Jumlah desa binaan terus berkembang seiring bertambahnya desa yang mendaftarkan diri ke program Kang Raling.'
+            'Keberhasilan Kang Raling memerlukan kolaborasi multi-pihak, mulai dari individu yang memilah sampah, Kelompok Penggerak yang mengedukasi warga, RT/RW yang membuat sistem dan memonitor, hingga Pemerintah dan Dinas Lingkungan Hidup yang membuat kebijakan dan mendukung sarana.'
           ]
-        }
+        },
+        {
+          q: 'Apa dampak positif yang akan didapatkan warga jika menerapkan pengelolaan sampah ala Kang Raling?',
+          a: [
+            'Program ini dirancang untuk tidak sekadar menyelesaikan masalah sampah, tetapi juga memberi dampak positif lintas dimensi. Masyarakat akan mendapatkan lingkungan yang lebih bersih, terciptanya sumber pendapatan baru melalui inovasi daur ulang, serta terserapnya tenaga kerja bagi petugas persampahan lokal.'
+          ]
+        },
+        {
+          q: 'Apa kunci sukses paling utama dalam pengelolaan sampah di kawasan?',
+          a: [
+            'Kunci sukses yang paling utama dan menjadi syarat mutlak adalah pemilahan sampah langsung dari sumbernya (rumah tangga). Pemilahan sejak awal ini akan sangat mengurangi beban transportasi sampah dan jumlah sampah yang dibuang ke TPA.'
+          ]
+        },
+        {
+          q: 'Bagaimana panduan dasar pemilahan sampah ala Kang Raling?',
+          a: [
+            '- Organik: Sisa makanan dan tumbuhan yang diselesaikan di rumah atau kawasan.',
+            '- Anorganik: Sampah berpotensi daur ulang yang bisa disalurkan ke Bank Sampah.',
+            '- Residu: Sampah lainnya yang tidak bisa diolah dan akan ditangani oleh pemerintah untuk dibuang ke TPA.'
+          ]
+        },
+        {
+          q: 'Apa yang harus kami lakukan terhadap sampah organik dari dapur?',
+          a: [
+            'Sampah organik sebaiknya diolah sedekat mungkin dengan sumbernya. Anda dapat melakukan pengomposan mandiri, menjadikannya pakan binatang (seperti maggot, bebek, atau ayam), atau mengolahnya menjadi Pupuk Organik Cair (POC) / MOL.'
+          ]
+        },
+        {
+          q: 'Bagaimana langkah awal yang baik untuk mengurangi timbulan sampah sehari-hari?',
+          a: [
+            'Kita bisa mulai dengan mencegah food waste (sampah makanan) melalui perencanaan menu dan daftar belanja sesuai kebutuhan. Selain itu, kurangi pemakaian plastik dengan membawa tas belanja, menggunakan botol minum/tumbler sendiri, memakai wadah makanan guna ulang, dan mengganti tisu dengan sapu tangan.'
+          ]
+        },
+        {
+          q: 'Apa yang terjadi jika sampah tidak dipilah dan tercampur begitu saja?',
+          a: [
+            'Sampah yang tercampur akan menjadi tumpukan sampah yang bau dan berpenyakit, menurunkan kualitas lingkungan, serta tidak bisa dimanfaatkan kembali melalui siklus organik maupun anorganik (daur ulang).'
+          ]
+        },
       ],
 
       // KATEGORI 2: DATA & PLATFORM
       kategori2: [
         {
-          q: 'Apakah data sampah yang ditampilkan di website ini bisa dipercaya?',
+          q: 'Apa sebenarnya peran saya dan keluarga dalam sistem ini?',
           a: [
-            'Ya. Semua data sampah yang ditampilkan di halaman publik sudah melalui proses verifikasi oleh Administrator dari Dinas Lingkungan Hidup Kabupaten Garut sebelum dipublikasikan.',
-            'Data yang masih berstatus "pending" atau ditolak tidak akan ditampilkan kepada masyarakat umum. Hanya data yang sudah diverifikasi yang bisa dilihat di halaman Data Sampah.'
+            'Peran paling krusial dari individu dan keluarga adalah disiplin memisahkan sampah secara mandiri dari dalam rumah dan tertib membayar retribusi/iuran kebersihan setiap bulannya.'
           ]
         },
         {
-          q: 'Siapa saja yang bisa mengakses data di website ini?',
+          q: 'Apa yang dimaksud dengan Kelompok Penggerak?',
           a: [
-            'Data publik seperti statistik sampah, profil desa binaan, artikel, galeri, dan edukasi dapat diakses oleh siapa saja tanpa perlu login.',
-            'Untuk mengakses fitur pengelolaan data seperti input data sampah, verifikasi, dan manajemen pengguna, diperlukan akun login dengan peran Fasilitator atau Administrator.'
+            'Kelompok Penggerak adalah sekelompok warga setempat—bisa dari unsur RT, RW, tokoh masyarakat, Karang Taruna, kader posyandu, atau PKK yang mampu bergerak dan mengajak warga lainnya untuk mau terlibat aktif dalam pengelolaan sampah.'
           ]
         },
         {
-          q: 'Bagaimana cara membaca data di halaman Data Sampah?',
+          q: 'Bagaimana jika ada warga yang enggan memilah sampah?',
           a: [
-            'Di halaman Data Sampah, kamu bisa melihat rekapitulasi timbulan sampah dari setiap desa binaan. Gunakan filter Desa, Bulan, dan Tahun untuk menyaring data yang ingin dilihat.',
-            'Klik tombol "Detail" pada setiap baris data untuk melihat rincian lengkap termasuk jumlah sampah organik, anorganik, residu, dan persentase sampah yang berhasil dikelola.'
+            'Kelompok Penggerak akan terus melakukan pendekatan dan pendampingan. Edukasi dapat dilakukan dengan mendatangi rumah warga untuk memastikan mereka paham sistem pemilahan, atau melalui sosialisasi tentang pengelolaan sampah.'
+          ]
+        },
+        {
+          q: 'Dari mana sumber biaya operasional pengelolaan sampah didapatkan?',
+          a: [
+            'Sumber pemasukan utama berasal dari iuran warga per bulan yang sebaiknya dikoordinir oleh RT/RW agar lebih terkontrol. Pendapatan tambahan juga bisa diperoleh dari hasil penjualan sampah daur ulang, penjualan kompos.'
+          ]
+        },
+        {
+          q: 'Mengapa pengelolaan sampah di tingkat Desa membutuhkan Peraturan Desa (Perdes)?',
+          a: [
+            'Perdes sangat diperlukan untuk memberikan kepastian hukum dan kejelasan kewenangan antara pemerintah desa dan masyarakat. Perdes memastikan setiap warga tunduk pada sistem yang disepakati, guna menjamin kelestarian alam dan kesehatan masyarakat setempat.'
           ]
         }
       ],
@@ -200,26 +221,35 @@ export default {
       // KATEGORI 3: PARTISIPASI MASYARAKAT
       kategori3: [
         {
-          q: 'Bagaimana cara desa saya bergabung menjadi desa binaan Kang Raling?',
+          q: 'Benarkah pemerintah akan berhenti membangun Tempat Pembuangan Akhir (TPA)?',
           a: [
-            'Desa yang ingin bergabung dapat mengajukan permohonan langsung ke Dinas Lingkungan Hidup Kabupaten Garut.',
-            'Persyaratan utamanya adalah adanya komitmen dari kepala desa, ketersediaan lahan untuk pembangunan TPS 3R, dan minimal 50 KK yang bersedia berpartisipasi aktif dalam program pemilahan sampah.'
+            'Benar. Berdasarkan target Kementerian Lingkungan Hidup dan Kehutanan (KLHK), pada tahun 2030 tidak akan ada lagi pembangunan TPA baru di Indonesia. Penggunaan TPA eksisting hanya akan dilanjutkan sampai masa operasionalnya berakhir.'
           ]
         },
         {
-          q: 'Apa manfaat yang didapat warga dari program ini?',
+          q: 'Mengapa paradigma "Kumpul-Angkut-Buang" harus ditinggalkan?',
           a: [
-            'Warga mendapatkan lingkungan yang lebih bersih dan sehat karena sampah dikelola dengan baik sejak dari sumbernya. Tidak ada lagi penumpukan sampah yang menimbulkan bau dan penyakit.',
-            'Selain itu, warga juga bisa mendapatkan manfaat ekonomi dari bank sampah — sampah anorganik yang dikumpulkan bisa ditukar dengan uang atau sembako melalui program bank sampah yang dikelola TPS 3R.'
+            'Berdasarkan amanat UU No 18 Tahun 2008, kita harus bertransformasi dari sistem sentralisasi menuju desentralisasi. Artinya, sampah tidak lagi semuanya dikirim ke TPA, melainkan harus dikelola dan diolah sedekat mungkin dengan sumbernya secara partisipatif di tingkat rumah, RW, atau desa.'
           ]
         },
         {
-          q: 'Bagaimana cara melaporkan permasalahan atau memberikan masukan?',
+          q: 'Apakah Dana Desa bisa dialokasikan untuk program pengelolaan sampah?',
           a: [
-            'Kamu bisa menghubungi tim Kang Raling langsung melalui WhatsApp di nomor +62 812-2456-107 pada hari kerja Senin–Jumat pukul 08.00–16.00 WIB.',
-            'Alternatifnya, kamu juga bisa mengirimkan email ke dlh@garutkab.go.id atau datang langsung ke kantor Dinas Lingkungan Hidup Kabupaten Garut di Jl. Terusan Pahlawan No. 20, Tarogong Kidul, Kabupaten Garut.'
+            'Bisa dan sangat dianjurkan. Berdasarkan Peraturan Menteri Desa Nomor 7 Tahun 2023, Dana Desa dapat diprioritaskan untuk mewujudkan "Desa Peduli Lingkungan Darat". Dana ini sah digunakan untuk pengelolaan limbah rumah tangga, bank sampah desa, kendaraan pengangkut sampah, hingga mesin pengolah sampah.'
           ]
-        }
+        },
+        {
+          q: 'Informasi apa saja yang bisa saya akses secara bebas di website ini?',
+          a: [
+            'Melalui website resmi Kang Raling (https://kangraling.dlhgarut.id/), Anda dapat mempelajari konsep teknis pengelolaan kawasan, serta mengakses E-Book interaktif. Tersedia Buku Saku Budi Daya Maggot, Buku Saku Kompos, Buku Saku Ecoenzyme, dan Buku Saku Pemilahan. serta bisa melihat data sampah yang ada di Desa Binaan Kang Raling'
+          ]
+        },
+        {
+          q: 'Bagaimana jika Desa kami butuh pendampingan untuk memulai program ini?',
+          a: [
+            'Jika wilayah Anda sudah memiliki embrio pengelolaan sampah dan berencana membangun sistem ala Kang Raling, Anda dapat mengontak kami melalui informasi kontak dan media sosial (@kangraling) yang tertera di website ini untuk koordinasi lebih lanjut terkait edukasi dan kolaborasi.'
+          ]
+        },
       ]
     }
   },

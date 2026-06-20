@@ -33,10 +33,18 @@
       <div class="footer-col">
         <h4>Info Lainnya</h4>
         <ul>
-          <li><a href="#">Regulasi</a></li>
-          <li><a href="#">Pemerintah Kabupaten Garut</a></li>
-          <li><a href="#">Kontak Kami</a></li>
-          <li><a href="#">FAQ</a></li>
+          <li>
+            <a href="https://www.garutkab.go.id/" target="_blank" rel="noopener noreferrer">Regulasi</a>
+          </li>
+          <li>
+            <a href="https://www.garutkab.go.id/" target="_blank" rel="noopener noreferrer">Pemerintah Kabupaten Garut</a>
+          </li>
+          <li>
+            <router-link to="/tentang-kami">Kontak Kami</router-link>
+          </li>
+          <li>
+            <router-link to="/faq">FAQ</router-link>
+          </li>
         </ul>
       </div>
 
@@ -44,10 +52,18 @@
       <div class="footer-col">
         <h4>Ikuti Kami</h4>
         <ul>
-          <li><a href="#">Facebook</a></li>
-          <li><a href="#">Youtube</a></li>
-          <li><a href="#">Instagram</a></li>
-          <li><a href="#">Tiktok</a></li>
+          <li>
+            <a href="https://www.facebook.com/search/top?q=Kang+Raling" target="_blank" rel="noopener noreferrer">Facebook</a>
+          </li>
+          <li>
+            <a href="https://www.youtube.com/results?search_query=Kang+Raling" target="_blank" rel="noopener noreferrer">Youtube</a>
+          </li>
+          <li>
+            <a href="https://www.instagram.com/explore/search/keyword/?q=Kang+Raling" target="_blank" rel="noopener noreferrer">Instagram</a>
+          </li>
+          <li>
+            <a href="https://www.tiktok.com/search?q=Kang+Raling" target="_blank" rel="noopener noreferrer">Tiktok</a>
+          </li>
         </ul>
       </div>
       

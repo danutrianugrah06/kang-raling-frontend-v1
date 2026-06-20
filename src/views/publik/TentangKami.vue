@@ -9,14 +9,14 @@
 
       <!-- Class tk-hero-container menggantikan inline style position:relative; z-index:2 -->
       <div class="container tk-hero-container">
-        <span class="tk-hero-label">✦ Kenali Lebih Dekat</span>
+        <span class="tk-hero-label">Kenali Lebih Dekat</span>
         <h1 class="tk-hero-title">
           Tentang <span>Kang Raling</span>
         </h1>
         <p class="tk-hero-desc">
-          Kampung Ramah Lingkungan — inisiatif Dinas Lingkungan Hidup Kabupaten Garut
+          Kampung Ramah Lingkungan Program Kerja Dinas Lingkungan Hidup Kabupaten Garut
           untuk mewujudkan pengelolaan sampah mandiri yang terintegrasi, berkelanjutan,
-          dan berbasis masyarakat di seluruh pelosok Garut.
+          dan berbasis masyarakat di seluruh Desa Garut.
         </p>
         <div class="tk-hero-btns">
           <a href="https://wa.me/628122456107" target="_blank" rel="noopener noreferrer" class="tk-btn-primary">
@@ -56,29 +56,29 @@
             <i class="bi bi-lightbulb-fill"></i>
             <p>
               Kang Raling berkomitmen menjadikan Kabupaten Garut sebagai kabupaten percontohan
-              pengelolaan sampah mandiri berbasis teknologi digital di Jawa Barat pada tahun 2025.
+              pengelolaan sampah mandiri berbasis teknologi digital Provinsi di Jawa Barat.
             </p>
           </div>
 
           <!-- Statistik singkat (4 kotak) -->
           <div class="tk-tentang-stats">
             <div class="tk-tentang-stat-item">
-              <p class="tk-tentang-stat-value">8+</p>
+              <p class="tk-tentang-stat-value">10+</p>
               <p class="tk-tentang-stat-label">Desa Binaan Aktif</p>
             </div>
             <div class="tk-tentang-stat-divider"></div>
             <div class="tk-tentang-stat-item">
-              <p class="tk-tentang-stat-value">12</p>
+              <p class="tk-tentang-stat-value">10+</p>
               <p class="tk-tentang-stat-label">Unit TPS 3R</p>
             </div>
             <div class="tk-tentang-stat-divider"></div>
             <div class="tk-tentang-stat-item">
-              <p class="tk-tentang-stat-value">1.200+</p>
+              <p class="tk-tentang-stat-value">1.000+</p>
               <p class="tk-tentang-stat-label">KK Terlayani</p>
             </div>
             <div class="tk-tentang-stat-divider"></div>
             <div class="tk-tentang-stat-item">
-              <p class="tk-tentang-stat-value">2.500+</p>
+              <p class="tk-tentang-stat-value">900+</p>
               <p class="tk-tentang-stat-label">Ton Sampah Terkelola</p>
             </div>
           </div>
@@ -100,18 +100,18 @@
         <div class="tk-tujuan-grid">
           <div class="tk-tujuan-card">
             <div class="tk-tujuan-icon green"><i class="bi bi-recycle"></i></div>
-            <h3 class="tk-tujuan-name">Pengurangan Residu</h3>
-            <p class="tk-tujuan-desc">Meminimalkan volume sampah residu yang tidak dapat didaur ulang hingga di bawah standar nasional 15%.</p>
+            <h3 class="tk-tujuan-name">Kurangi Sampah</h3>
+            <p class="tk-tujuan-desc">Gunakan wadah sendiri dan hindari plastik sekali pakai untuk mengurangi timbulan sampah dari sumbernya.</p>
           </div>
           <div class="tk-tujuan-card">
             <div class="tk-tujuan-icon blue"><i class="bi bi-tree"></i></div>
-            <h3 class="tk-tujuan-name">Lingkungan Sehat</h3>
-            <p class="tk-tujuan-desc">Menciptakan ekosistem sanitasi lingkungan yang mendukung kualitas hidup masyarakat secara berkelanjutan.</p>
+            <h3 class="tk-tujuan-name">Pisahkan Sampah</h3>
+            <p class="tk-tujuan-desc">Pisahkan sampah organik, anorganik, dan residu agar lebih mudah dikelola dan didaur ulang.</p>
           </div>
           <div class="tk-tujuan-card">
             <div class="tk-tujuan-icon orange"><i class="bi bi-currency-dollar"></i></div>
-            <h3 class="tk-tujuan-name">Ekonomi Sirkular</h3>
-            <p class="tk-tujuan-desc">Mendorong pengembangan ekonomi berbasis daur ulang sampah yang menguntungkan masyarakat di pedesaan.</p>
+            <h3 class="tk-tujuan-name">Manfaatkan Sampah</h3>
+            <p class="tk-tujuan-desc">Ubah sampah menjadi kompos atau barang daur ulang agar memiliki nilai dan tidak terbuang percuma.</p>
           </div>
         </div>
       </div>
@@ -261,20 +261,20 @@ export default {
       openFaq: null, // Menyimpan indeks FAQ yang sedang terbuka
       faqs: [
         {
-          q: 'Apa itu TPS 3R dan bagaimana cara kerjanya?',
-          a: 'TPS 3R (Tempat Pengolahan Sampah Reduce, Reuse, Recycle) adalah fasilitas pengelolaan sampah berbasis komunitas yang memilah sampah organik, anorganik, dan residu sebelum diangkut ke TPA. Sampah organik diolah menjadi kompos, anorganik didaur ulang, sedangkan residu dibuang ke TPA.'
+          q: 'Mengapa lingkungan RW/Desa kita harus segera memulai pengelolaan sampah mandiri?',
+          a: 'Pemerintah melalui KLHK menargetkan bahwa pada tahun 2030 tidak akan ada lagi pembangunan TPA (Tempat Pembuangan Akhir) baru. Oleh karena itu, kita harus segera beralih dari sistem sentralisasi yang hanya membuang sampah ke TPA, menuju sistem desentralisasi di mana sampah dikelola sedekat mungkin dengan sumbernya secara partisipatif.'
         },
         {
-          q: 'Bagaimana cara bergabung sebagai desa binaan Kang Raling?',
-          a: 'Desa yang ingin bergabung dapat mengajukan permohonan melalui Dinas Lingkungan Hidup Kabupaten Garut. Syarat utamanya adalah komitmen kepala desa, ketersediaan lahan untuk TPS 3R, dan minimal 50 KK yang bersedia berpartisipasi aktif.'
+          q: 'Apa syarat utama agar sistem pengelolaan sampah kawasan ini bisa sukses?',
+          a: 'Kunci sukses yang paling utama adalah kedisiplinan warga dalam melakukan pemilahan sampah langsung dari sumbernya, yaitu dari dalam rumah. Warga setidaknya wajib memisahkan sampah ke dalam kategori organik (sisa makanan/tumbuhan), anorganik (potensi daur ulang), dan sampah residu agar proses pengolahan selanjutnya dapat berjalan lancar.'
         },
         {
-          q: 'Siapa yang bisa mengakses data sampah di website ini?',
-          a: 'Data sampah publik dapat diakses oleh siapa saja tanpa perlu login. Data ini menampilkan rekapitulasi timbulan sampah dari setiap desa binaan secara transparan untuk mendukung akuntabilitas publik.'
+          q: 'Mengapa pengelolaan sampah di tingkat kawasan memerlukan landasan hukum berupa Peraturan Desa (Perdes)?',
+          a: 'Dalam upaya menanggulangi sampah sedekat mungkin dengan sumbernya, diperlukan kepastian hukum yang kuat melalui pembentukan Perdes Pengelolaan Sampah. Peraturan ini krusial untuk memperjelas tanggung jawab serta kewenangan pemerintah desa, mengatur standar peran serta masyarakat, dan melibatkan dunia usaha agar penyelesaian masalah sampah dapat dilakukan bersama. Selain itu, Perdes menjadi wujud kepatuhan desa terhadap transformasi sistem persampahan nasional yang menuntut peralihan dari sistem sentralisasi (kumpul-angkut-buang) menuju sistem desentralisasi yang partisipatif.'
         },
         {
-          q: 'Apa perbedaan peran Fasilitator dan Administrator?',
-          a: 'Fasilitator adalah petugas lapangan yang bertugas mencatat data sampah harian di desa masing-masing. Administrator adalah pengelola sistem dari DLH Garut yang bertugas memverifikasi data, mengelola pengguna, dan mengakses seluruh fitur sistem.'
+          q: 'Apa keuntungan Ekonomi Sirkular yang didapat warga dari program ini?',
+          a: 'Dengan program Kang Raling, sampah tidak hanya dibuang tetapi diubah menjadi manfaat. Melalui siklus organik (Harum Madu), warga bisa mengolah sampah dapur menjadi kompos atau POC (Pupuk Organik Cair) untuk media tanam. Hasil panen sayurnya kemudian bisa dikonsumsi kembali, sehingga lingkungan menjadi lebih bersih, pengeluaran dapur lebih hemat, dan warga lebih sejahtera.'
         }
       ]
     }
