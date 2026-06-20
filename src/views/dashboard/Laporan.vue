@@ -1,9 +1,6 @@
 <template>
   <div class="lp-page-content">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Page Header -->
     <div class="lp-page-header lp-noprint">
@@ -23,20 +20,23 @@
             <option v-for="b in daftarBulan" :key="b.value" :value="b.value">{{ b.label }}</option>
           </select>
         </div>
+        
         <div class="lp-form-group">
           <label class="lp-label">Tahun</label>
           <select v-model="filter.tahun" class="lp-select">
             <option v-for="t in daftarTahun" :key="t" :value="t">{{ t }}</option>
           </select>
         </div>
-        <div v-if="isAdmin" class="lp-form-group">
+        
+        <!-- Dropdown Desa Binaan (Sudah tidak di-hidden lagi) -->
+        <div class="lp-form-group">
           <label class="lp-label">Desa Binaan</label>
           <select v-model="filter.desa_id" class="lp-select">
             <option value="">Semua Desa</option>
             <option v-for="d in daftarDesa" :key="d.id" :value="d.id">{{ d.nama_desa }}</option>
           </select>
         </div>
-        <!-- Class lp-form-group-action menggantikan inline style justify-content: flex-end -->
+        
         <div class="lp-form-group lp-form-group-action">
           <button class="lp-btn-generate" :disabled="generating" @click="generateLaporan">
             <i v-if="generating" class="bi bi-arrow-repeat lp-spin"></i>
@@ -104,7 +104,6 @@
           <table class="lp-table">
             <thead>
               <tr>
-                <!-- Class lebar kolom dan alignment (menggantikan inline style) -->
                 <th class="lp-th-no">No</th>
                 <th class="lp-th-desa">Desa</th>
                 <th class="lp-th-tanggal">Tanggal</th>

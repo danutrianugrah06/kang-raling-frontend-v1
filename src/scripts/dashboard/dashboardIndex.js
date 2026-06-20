@@ -1,19 +1,45 @@
 import { useAuthStore } from "@/store/auth";
 import api from "@/services/api";
 
-// Konstanta nama bulan (singkat dan full) untuk grafik
-const BULAN_SINGKAT = ["Jan", "Feb", "Mar", "Apr", "Mei", "Jun", "Jul", "Agu", "Sep", "Okt", "Nov", "Des"];
-const BULAN_FULL   = ["Januari", "Februari", "Maret", "April", "Mei", "Juni", "Juli", "Agustus", "September", "Oktober", "November", "Desember"];
+const BULAN_SINGKAT = [
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "Mei",
+  "Jun",
+  "Jul",
+  "Agu",
+  "Sep",
+  "Okt",
+  "Nov",
+  "Des",
+];
+const BULAN_FULL = [
+  "Januari",
+  "Februari",
+  "Maret",
+  "April",
+  "Mei",
+  "Juni",
+  "Juli",
+  "Agustus",
+  "September",
+  "Oktober",
+  "November",
+  "Desember",
+];
 
 export default {
   data() {
     const now = new Date();
     return {
-      loading: true,                    // Status loading data dashboard
-      formattedDate: "",                // String tanggal lengkap (tidak digunakan di template, tapi dipertahankan)
-      formattedTime: "",                // String waktu (tidak digunakan di template, tapi dipertahankan)
-      clockInterval: null,              // Interval update jam (tidak digunakan di template, tapi dipertahankan)
-      stats: {                          // Objek statistik dari API
+      loading: true,
+      formattedDate: "",
+      formattedTime: "",
+      clockInterval: null,
+
+      stats: {
         total_tps: null,
         volume_sampah: null,
         sampah_terkelola: null,
@@ -25,45 +51,65 @@ export default {
         data_terinput: null,
         verifikasi_tertunda: null,
       },
-      chartData: [],                    // Data grafik bulanan [{ bulan, bulan_singkat, jumlah }]
-      selectedYear: now.getFullYear(),  // Tahun yang dipilih untuk grafik
-      availableYears: [                 // Tahun yang tersedia untuk dipilih (tahun sekarang -2 s/d sekarang)
+      chartData: [],
+      selectedYear: now.getFullYear(),
+      availableYears: [
         now.getFullYear(),
         now.getFullYear() - 1,
         now.getFullYear() - 2,
       ],
-      downloadingPdf: false,            // Status unduh PDF (tidak digunakan secara aktif, tapi dipertahankan)
-      toast: { show: false, message: "", type: "success" }, // Notifikasi toast
+      downloadingPdf: false,
+      toast: { show: false, message: "", type: "success" },
     };
   },
 
   computed: {
-    // Cek apakah pengguna adalah admin (berdasarkan role di store auth)
-    isAdmin() {
-      return useAuthStore().isAdmin;
+    // 0. Ambil nama lengkap user dari memori Pinia
+    currentName() {
+      const store = useAuthStore();
+      return store.user?.name || store.user?.nama || this.currentRole;
     },
-    // Nama pengguna (tidak digunakan di template, tapi dipertahankan)
-    userName() {
-      return useAuthStore().user?.nama || "Pengguna";
+
+    // 1. Ambil wujud yang sedang aktif secara real-time dari Pinia
+    currentRole() {
+      return useAuthStore().currentRole || "Fasilitator";
+    },
+
+    // 2. Tentukan apakah perlu menampilkan kolom kanan (Aksi Cepat)
+    showRightCol() {
+      return ["Administrator", "Fasilitator"].includes(this.currentRole);
+    },
+
+    // 3. Kelas warna untuk Banner (DIBUAT UNIVERSAL UNTUK SEMUA ROLE / RBAC)
+    welcomeClass() {
+      return "welcome-universal";
+    },
+
+    // 4. Deskripsi Banner dinamis (DIBUAT UNIVERSAL)
+    welcomeDesc() {
+      return "Selamat datang di panel kontrol Kang Raling. Kelola, pantau, dan analisis data lingkungan dengan mudah melalui dashboard terpadu ini.";
+    },
+  },
+
+  watch: {
+    // Jika user mengganti dropdown Role, muat ulang data statistik yang sesuai
+    currentRole() {
+      this.loadDashboard();
     },
   },
 
   mounted() {
-    this.updateClock();                         // Set jam pertama kali
-    this.clockInterval = setInterval(this.updateClock, 1000); // Update setiap detik
-    this.loadDashboard();                       // Ambil data dashboard
-    this.loadChartData();                       // Ambil data grafik
+    this.updateClock();
+    this.clockInterval = setInterval(this.updateClock, 1000);
+    this.loadDashboard();
+    this.loadChartData();
   },
 
   beforeUnmount() {
-    clearInterval(this.clockInterval);          // Bersihkan interval saat komponen dihancurkan
+    clearInterval(this.clockInterval);
   },
 
   methods: {
-    /**
-     * Update jam dan tanggal (real-time)
-     * Meskipun tidak ditampilkan di template, fungsi ini tetap dijalankan untuk kebutuhan jika ada perubahan.
-     */
     updateClock() {
       const now = new Date();
       this.formattedDate = now.toLocaleDateString("id-ID", {
@@ -79,30 +125,43 @@ export default {
       });
     },
 
-    /**
-     * Muat data dashboard dari API (/dashboard)
-     * - Menentukan role (admin atau fasilitator) dan memetakan respons ke stats.
-     */
     async loadDashboard() {
       this.loading = true;
       try {
         const res = await api.get("/dashboard");
         const data = res.data || {};
 
-        // Statistik umum (semua role)
+        // Statistik umum (muncul untuk SEMUA role)
         this.stats.total_tps = data.total_desa ?? 0;
         this.stats.total_desa = data.total_desa ?? 0;
         this.stats.volume_sampah = Number(data.total_sampah) ?? 0;
         this.stats.sampah_terkelola = Number(data.total_sampah) ?? 0;
 
-        // Statistik berdasarkan role
-        if (this.isAdmin) {
-          this.stats.data_terinput = Number(data.total_sampah) ?? 0;
+        // Reset data spesifik sebelum diisi
+        this.stats.data_terinput = 0;
+        this.stats.verifikasi_tertunda = 0;
+        this.stats.total_pengajuan = 0;
+        this.stats.diterima = 0;
+        this.stats.dikembalikan = 0;
+        this.stats.belum_diverifikasi = 0;
+
+        // BUG FIX: Menghitung jumlah BARIS DATA (Total Entri) berdasarkan status.
+        // Diterima + Dikembalikan + Pending = Total Entri.
+        const totalEntriRiil =
+          (Number(data.diterima) || 0) +
+          (Number(data.dikembalikan) || 0) +
+          (Number(data.total_pending) || 0);
+
+        // Isi data spesifik berdasarkan Wujud Aktif
+        if (this.currentRole === "Administrator") {
+          this.stats.data_terinput =
+            data.total_entri !== undefined ? data.total_entri : totalEntriRiil; // Sekarang nampil 3, bukan 6.6!
           this.stats.verifikasi_tertunda = data.total_pending ?? 0;
           this.stats.diterima = data.diterima ?? 0;
           this.stats.dikembalikan = data.dikembalikan ?? 0;
-        } else {
-          this.stats.total_pengajuan = Number(data.total_sampah) ?? 0;
+        } else if (this.currentRole === "Fasilitator") {
+          this.stats.total_pengajuan =
+            data.total_entri !== undefined ? data.total_entri : totalEntriRiil; // Sama, sekarang nampil riilnya
           this.stats.diterima = data.diterima ?? 0;
           this.stats.dikembalikan = data.dikembalikan ?? 0;
           this.stats.belum_diverifikasi = data.total_pending ?? 0;
@@ -114,35 +173,68 @@ export default {
       }
     },
 
-    /**
-     * Muat data grafik volume sampah per bulan (hanya data yang sudah diverifikasi)
-     * - Filter berdasarkan tahun yang dipilih.
-     */
     async loadChartData() {
       try {
+        // Coba ambil data, bisa dari endpoint publik atau endpoint utama
         const res = await api.get("/data-sampah/publik", {
           params: { per_page: 9999 },
         });
 
-        const rawData = res.data?.data ?? [];
+        // 1. Ekstrak data SUPER AMAN (Menangani berbagai jenis Pagination Laravel)
+        let rawData = [];
+        if (Array.isArray(res.data)) {
+          rawData = res.data;
+        } else if (res.data && Array.isArray(res.data.data)) {
+          rawData = res.data.data;
+        } else if (
+          res.data &&
+          res.data.data &&
+          Array.isArray(res.data.data.data)
+        ) {
+          rawData = res.data.data.data;
+        }
 
-        // Inisialisasi map bulan (1..12) dengan nilai 0
         const bulanMap = {};
         for (let i = 1; i <= 12; i++) bulanMap[i] = 0;
 
-        // Akumulasi jumlah sampah per bulan berdasarkan tahun yang dipilih
         rawData.forEach((item) => {
-          if (item.status === "verified") {
-            const tgl = new Date(item.tanggal);
-            const tahunData = tgl.getFullYear();
-            const bulan = tgl.getMonth() + 1;
-            if (tahunData === this.selectedYear) {
-              bulanMap[bulan] += Number(item.jumlah) || 0;
-            }
+          // Ambil properti tanggal mana yang tersedia
+          let tglRaw = item.tanggal || item.created_at || item.tanggal_input;
+          if (!tglRaw) return;
+
+          let tgl;
+          // 2. ANTI-ERROR FORMAT TANGGAL
+          // Jika format dari Laravel adalah DD-MM-YYYY (misal: 16-06-2026)
+          if (
+            typeof tglRaw === "string" &&
+            tglRaw.match(/^\d{2}[-/]\d{2}[-/]\d{4}/)
+          ) {
+            const parts = tglRaw.split(/[-/]/);
+            // Ubah paksa ke standar Internasional YYYY-MM-DD
+            tgl = new Date(
+              `${parts[2].substring(0, 4)}-${parts[1]}-${parts[0]}`,
+            );
+          } else {
+            tgl = new Date(tglRaw); // Format standar YYYY-MM-DD aman
+          }
+
+          if (isNaN(tgl.getTime())) return;
+
+          const tahunData = tgl.getFullYear();
+          const bulan = tgl.getMonth() + 1;
+
+          if (tahunData == this.selectedYear) {
+            // 3. Deteksi pintar nama kolom jumlah sampah (berapapun namanya di backend)
+            const nilai =
+              Number(item.jumlah) ||
+              Number(item.volume) ||
+              Number(item.volume_sampah) ||
+              Number(item.total_sampah) ||
+              0;
+            bulanMap[bulan] += nilai;
           }
         });
 
-        // Bentuk array chartData (12 bulan)
         const hasil = [];
         for (let i = 1; i <= 12; i++) {
           hasil.push({
@@ -152,39 +244,28 @@ export default {
           });
         }
 
-        // Tampilkan grafik hanya jika ada data > 0
         const adaData = hasil.some((h) => h.jumlah > 0);
         this.chartData = adaData ? hasil : [];
-      } catch {
+      } catch (error) {
+        console.error("Gagal menggambar grafik:", error);
         this.chartData = [];
       }
     },
 
-    /**
-     * Hitung tinggi bar chart dalam persen (relative terhadap nilai maksimum)
-     * @param {number} value - Jumlah sampah untuk bulan tertentu
-     * @returns {number} - Tinggi dalam persen (0-100), minimal 4px untuk nilai >0 agar terlihat
-     */
     getBarHeight(value) {
       if (!this.chartData.length) return 0;
       const max = Math.max(...this.chartData.map((d) => d.jumlah));
       if (max === 0) return 0;
-      // Nilai minimal 6% agar batang tetap terlihat meskipun kecil
       return Math.max((value / max) * 100, value > 0 ? 6 : 0);
     },
 
-    /**
-     * Unduh PDF panduan (membuka tab baru dengan URL file PDF)
-     */
     downloadPanduan() {
-      window.open("http://localhost:8000/panduan/panduan-kang-raling.pdf", "_blank");
+      window.open(
+        "http://localhost:8000/panduan/panduan-kang-raling.pdf",
+        "_blank",
+      );
     },
 
-    /**
-     * Tampilkan toast notifikasi (sukses/error) yang hilang setelah 3 detik.
-     * @param {string} message - Pesan yang ditampilkan
-     * @param {string} type - 'success' atau 'error'
-     */
     showToast(message, type = "success") {
       this.toast = { show: true, message, type };
       setTimeout(() => {

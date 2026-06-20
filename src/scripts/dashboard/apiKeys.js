@@ -82,14 +82,32 @@ export default {
       
       this.saving = true
       try {
-        await api.post('/api-keys', { name: this.formCreate.name.trim() })
+        // 1. Tangkap balasan dari backend ke dalam variabel 'res'
+        const res = await api.post('/api-keys', { name: this.formCreate.name.trim() })
+        
+        // 2. Ambil token aslinya
+        const plainToken = res.data.token || res.data.data?.token;
+
         this.closeCreateModal()
-        this.showToast('Token baru berhasil di-generate.', 'success')
+        this.showToast('Token baru berhasil di-generate! Segera salin sekarang.', 'success')
+        
+        // 3. Refresh tabel
         await this.fetchKeys()
+
+        // 4. SUNTIKKAN TOKEN ASLI KE BARIS PERTAMA AGAR TERLIHAT (Karena dari database hasilnya '-')
+        if (this.apiKeys.length > 0 && plainToken) {
+          this.apiKeys[0].token = plainToken;
+          this.apiKeys[0].token_key = plainToken; // Cadangan
+          this.apiKeys[0].key = plainToken;       // Cadangan
+          
+          // 5. Otomatis klik tombol "mata" agar token langsung terlihat tanpa disensor
+          this.visibleKeys[this.apiKeys[0].id] = true;
+        }
+
       } catch (err) {
         if (err.response?.status === 422) {
           this.formErrors = err.response.data.errors || {}
-          this.showToast('Periksa isian form.', 'error')
+          this.showToast(err.response.data.message || 'Periksa isian form.', 'error')
         } else {
           this.showToast('Gagal membuat token.', 'error')
         }
@@ -110,7 +128,7 @@ export default {
 
     // Masking token: tampilkan hanya 8 karakter awal + 4 karakter akhir
     maskKey(key) {
-      if (!key) return '—'
+      if (!key || key === '-') return '—' // Jika '-', tampilkan strip panjang
       if (key.length <= 12) return '•'.repeat(key.length)
       return key.substring(0, 8) + '••••••••••••' + key.substring(key.length - 4)
     },
@@ -119,10 +137,19 @@ export default {
     // COPY TO CLIPBOARD
     // ==========================================
     async copyKey(item) {
+      // FIX: Karena nama properti bisa token, token_key, atau key, kita ambil yang ada isinya
+      const textToCopy = item.token || item.token_key || item.key;
+
+      // Cegah copy jika token sudah disensor dari database (-)
+      if (!textToCopy || textToCopy === '-' || textToCopy === '—') {
+        this.showToast('Demi keamanan, token lama disembunyikan. Buat token baru jika lupa.', 'error');
+        return;
+      }
+
       try {
-        await navigator.clipboard.writeText(item.key)
+        await navigator.clipboard.writeText(textToCopy)
         this.copiedId = item.id
-        this.showToast('Token berhasil disalin.', 'success')
+        this.showToast('Token berhasil disalin!', 'success')
         setTimeout(() => { this.copiedId = null }, 2500)
       } catch {
         this.showToast('Gagal menyalin token.', 'error')
@@ -150,4 +177,4 @@ export default {
       }, 3500)
     }
   }
-}
+} 

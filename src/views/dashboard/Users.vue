@@ -2,6 +2,19 @@
   <div class="us-page-content">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
+    <!-- Toast Notifikasi -->
+    <div class="us-toast-wrap">
+      <div
+        v-for="t in toasts"
+        :key="t.id"
+        :class="['us-toast', t.type === 'success' ? 'us-toast-success' : 'us-toast-error']"
+      >
+        <i :class="['us-toast-icon bi', t.type === 'success' ? 'bi-check-circle-fill' : 'bi-x-circle-fill']"></i>
+        <span>{{ t.message }}</span>
+      </div>
+    </div>
+
+    <!-- Page Header -->
     <div class="us-page-header">
       <div>
         <h1 class="us-page-title">Manajemen User</h1>
@@ -12,12 +25,20 @@
       </button>
     </div>
 
+    <!-- Table Card -->
     <div class="us-table-card">
 
+      <!-- Toolbar: Search + Filter Role -->
       <div class="us-toolbar">
         <div class="us-search-wrap">
           <i class="bi bi-search"></i>
-          <input v-model="searchQuery" type="text" class="us-search-input" placeholder="Cari nama atau email..." @input="onSearch" />
+          <input
+            v-model="searchQuery"
+            type="text"
+            class="us-search-input"
+            placeholder="Cari nama atau email..."
+            @input="onSearch"
+          />
           <button v-if="searchQuery" class="us-btn-clear" @click="clearSearch" title="Hapus pencarian">
             <i class="bi bi-x-lg"></i>
           </button>
@@ -25,22 +46,22 @@
         <div class="us-filter-wrap">
           <select v-model="filterRole" class="us-filter-select" @change="onSearch">
             <option value="">Semua Role</option>
-            <option value="administrator">Administrator</option>
-            <option value="fasilitator">Fasilitator</option>
+            <option v-for="role in availableRoles" :key="role.id" :value="role.name">
+              {{ role.name }}
+            </option>
           </select>
         </div>
       </div>
 
+      <!-- Tabel User -->
       <div class="us-table-wrap">
         <table class="us-table">
           <thead>
             <tr>
-              <!-- Class lebar kolom (menggantikan inline style width) -->
               <th class="us-th-no">No</th>
               <th class="us-th-nama">Nama Lengkap</th>
               <th class="us-th-email">Alamat Email</th>
-              <th class="us-th-role">Role</th>
-              <th class="us-th-status">Status Akun</th>
+              <th class="us-th-role">Role Sistem</th>
               <th class="us-th-aksi">Aksi</th>
             </tr>
           </thead>
@@ -53,7 +74,6 @@
                 <td><div class="us-skel us-skel-nama"></div></td>
                 <td><div class="us-skel us-skel-email"></div></td>
                 <td><div class="us-skel us-skel-badge"></div></td>
-                <td><div class="us-skel us-skel-status"></div></td>
                 <td>
                   <div class="us-aksi">
                     <div class="us-skel us-skel-btn"></div>
@@ -66,7 +86,7 @@
             <!-- Empty State -->
             <template v-else-if="users.length === 0">
               <tr>
-                <td colspan="6">
+                <td colspan="5">
                   <div class="us-empty">
                     <div class="us-empty-icon"><i class="bi bi-people"></i></div>
                     <p class="us-empty-title">Tidak ada user ditemukan</p>
@@ -79,29 +99,35 @@
             <!-- Data Rows -->
             <template v-else>
               <tr v-for="(user, index) in users" :key="user.id" class="us-data-row">
-                <td class="us-td-id">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-                <td><p class="us-td-nama">{{ user.nama }}</p></td>
-                <td class="us-td-email">{{ user.email }}</td>
-                <td>
-                  <span :class="['us-badge-role', user.role === 'administrator' ? 'us-role-admin' : 'us-role-fasil']">
-                    {{ user.role === 'administrator' ? 'Administrator' : 'Fasilitator' }}
+                <td class="us-td-no">
+                  {{ (currentPage - 1) * perPage + index + 1 }}
+                </td>
+                <td class="us-td-nama">
+                  <span class="us-user-nama" style="font-weight: 600; color: #1F2937;">{{ user.nama }}</span>
+                </td>
+                <td class="us-td-email">
+                  <span class="us-email-text">{{ user.email }}</span>
+                </td>
+                <td class="us-td-role">
+                  <span class="us-text-role">
+                    {{ user.roles && user.roles.length > 0 ? user.roles.map(r => r.name).join(', ') : 'Tidak Ada Role' }}
                   </span>
                 </td>
-                <td>
-                  <select :value="user.is_active ? 'aktif' : 'nonaktif'" @change="toggleStatus(user)"
-                    class="us-form-select us-select-status"
-                    :class="user.is_active ? 'status-aktif' : 'status-nonaktif'">
-                    <option value="aktif">Aktif</option>
-                    <option value="nonaktif">Nonaktif</option>
-                  </select>
-                </td>
-                <td>
+                <td class="us-td-aksi">
                   <div class="us-aksi">
-                    <button class="us-btn-icon us-btn-edit" @click="openEditModal(user)" title="Edit Password">
-                      <i class="bi bi-key"></i>
+                    <button
+                      class="us-btn-icon us-btn-edit"
+                      title="Edit user"
+                      @click="openEditModal(user)"
+                    >
+                      <i class="bi bi-pencil-square"></i>
                     </button>
-                    <button class="us-btn-icon us-btn-hapus" @click="confirmDelete(user)" title="Hapus User">
-                      <i class="bi bi-trash"></i>
+                    <button
+                      class="us-btn-icon us-btn-hapus"
+                      title="Hapus user"
+                      @click="confirmDelete(user)"
+                    >
+                      <i class="bi bi-trash3"></i>
                     </button>
                   </div>
                 </td>
@@ -112,87 +138,143 @@
         </table>
       </div>
 
-      <div v-if="totalPages > 1" class="us-table-footer">
-        <p class="us-pagination-info">Menampilkan halaman {{ currentPage }} dari {{ totalPages }}</p>
-        <div class="us-pagination">
-          <button class="us-page-btn" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
-            <i class="bi bi-chevron-left"></i>
-          </button>
-          <button v-for="p in pageNumbers" :key="p" class="us-page-btn"
-            :class="{ active: p === currentPage, 'is-ellipsis': p === '...' }" :disabled="p === '...'"
-            @click="p !== '...' && goToPage(p)">
-            {{ p }}
-          </button>
-          <button class="us-page-btn" :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)">
-            <i class="bi bi-chevron-right"></i>
-          </button>
-        </div>
+      <!-- Pagination -->
+      <div v-if="totalPages > 1" class="us-pagination">
+        <button class="us-page-btn" :disabled="currentPage === 1" @click="goToPage(currentPage - 1)">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <span class="us-page-info">Halaman {{ currentPage }} dari {{ totalPages }}</span>
+        <button class="us-page-btn" :disabled="currentPage === totalPages" @click="goToPage(currentPage + 1)">
+          <i class="bi bi-chevron-right"></i>
+        </button>
       </div>
+
     </div>
 
-    <!-- MODAL FORM (TAMBAH / EDIT PASSWORD) -->
+    <!-- MODAL TAMBAH / EDIT USER -->
     <div v-if="showModal" class="us-modal-overlay" @click.self="closeModal">
-      <!-- Class us-modal-form menggantikan inline style max-width:500px; -->
-      <div class="us-modal us-modal-form">
+      <div class="us-modal us-modal-form"> 
         <div class="us-modal-header">
-          <h2 class="us-modal-title">
-            {{ editMode ? 'Ganti Password User' : 'Tambah User Baru' }}
-          </h2>
-          <button class="us-modal-close" @click="closeModal"><i class="bi bi-x-lg"></i></button>
+          <h5 class="us-modal-title">
+            <i :class="editMode ? 'bi bi-pencil-square' : 'bi bi-person-plus-fill'"></i>
+            {{ editMode ? 'Edit User' : 'Tambah User Baru' }}
+          </h5>
+          <button class="us-modal-close" @click="closeModal">
+            <i class="bi bi-x-lg"></i>
+          </button>
         </div>
         <div class="us-modal-body">
 
-          <template v-if="!editMode">
-            <div class="us-form-group">
-              <label class="us-form-label" for="nama">Nama Lengkap <span>*</span></label>
-              <input id="nama" v-model="formModal.nama" type="text"
-                :class="['us-form-input', { error: formErrors.nama }]" placeholder="Masukkan nama" />
-              <p v-if="formErrors.nama" class="us-form-error"><i class="bi bi-exclamation-circle"></i> {{ formErrors.nama[0] }}</p>
-            </div>
-
-            <div class="us-form-group">
-              <label class="us-form-label" for="email">Alamat Email <span>*</span></label>
-              <input id="email" v-model="formModal.email" type="email"
-                :class="['us-form-input', { error: formErrors.email }]" placeholder="contoh@gmail.com" />
-              <p v-if="formErrors.email" class="us-form-error"><i class="bi bi-exclamation-circle"></i> {{ formErrors.email[0] }}</p>
-            </div>
-
-            <div class="us-form-group">
-              <label class="us-form-label" for="role">Role <span>*</span></label>
-              <select id="role" v-model="formModal.role" :class="['us-form-select', { error: formErrors.role }]">
-                <option value="" disabled>Pilih Role</option>
-                <option value="fasilitator">Fasilitator</option>
-                <option value="administrator">Administrator</option>
-              </select>
-              <p v-if="formErrors.role" class="us-form-error"><i class="bi bi-exclamation-circle"></i> {{ formErrors.role[0] }}</p>
-            </div>
-          </template>
-
-          <template v-else>
-            <div class="us-alert-box">
-              <i class="bi bi-info-circle-fill"></i> Anda sedang mengubah password untuk akun <strong>{{ formModal.nama }}</strong>.
-            </div>
-          </template>
-
+          <!-- Field Nama -->
           <div class="us-form-group">
-            <label class="us-form-label" for="password">Password {{ editMode ? 'Baru' : '' }} <span>*</span></label>
+            <label class="us-form-label">Nama Lengkap <span>*</span></label>
+            <input
+              v-model="formModal.nama"
+              type="text"
+              :class="['us-form-input', { error: formErrors.nama }]"
+              placeholder="Masukkan nama lengkap"
+            />
+            <p v-if="formErrors.nama" class="us-form-error">
+              <i class="bi bi-exclamation-circle"></i>
+              {{ Array.isArray(formErrors.nama) ? formErrors.nama[0] : formErrors.nama }}
+            </p>
+          </div>
+
+          <!-- Field Email -->
+          <div class="us-form-group">
+            <label class="us-form-label">Alamat Email <span>*</span></label>
+            <input
+              v-model="formModal.email"
+              type="email"
+              :class="['us-form-input', { error: formErrors.email }]"
+              placeholder="contoh@email.com"
+            />
+            <p v-if="formErrors.email" class="us-form-error">
+              <i class="bi bi-exclamation-circle"></i>
+              {{ Array.isArray(formErrors.email) ? formErrors.email[0] : formErrors.email }}
+            </p>
+          </div>
+
+          <!-- Field Password (wajib saat tambah, opsional saat edit) -->
+          <div class="us-form-group">
+            <label class="us-form-label">
+              Password
+              <span v-if="!editMode">*</span>
+              <span v-else style="color:#9CA3AF; font-weight:normal; font-size:12px; margin-left: 4px;">(kosongkan jika tidak diubah)</span>
+            </label>
             <div class="us-input-wrap">
-              <input id="password" v-model="formModal.password" :type="showPwModal ? 'text' : 'password'"
-                :class="['us-form-input', { error: formErrors.password }]" placeholder="Minimal 8 karakter" />
+              <input
+                v-model="formModal.password"
+                :type="showPwModal ? 'text' : 'password'"
+                :class="['us-form-input', { error: formErrors.password }]"
+                placeholder="Minimal 8 karakter"
+              />
               <button type="button" class="us-toggle-pw" @click="showPwModal = !showPwModal">
                 <i :class="showPwModal ? 'bi bi-eye-slash' : 'bi bi-eye'"></i>
               </button>
             </div>
-            <p v-if="formErrors.password" class="us-form-error"><i class="bi bi-exclamation-circle"></i> {{ formErrors.password[0] }}</p>
+            <p v-if="formErrors.password" class="us-form-error">
+              <i class="bi bi-exclamation-circle"></i>
+              {{ Array.isArray(formErrors.password) ? formErrors.password[0] : formErrors.password }}
+            </p>
+          </div>
+
+          <!-- Field Role (multi-select dynamic) -->
+          <div class="us-form-group">
+            <label class="us-form-label">Role Sistem <span>*</span></label>
+            <div
+              v-for="(role, index) in formModal.roles"
+              :key="index"
+              class="us-dynamic-role-row"
+            >
+              <select
+                v-model="formModal.roles[index]"
+                :class="['us-form-select', { error: formErrors.roles && index === 0 }]"
+                style="flex: 1;"
+              >
+                <option value="">-- Pilih Role --</option>
+                <option
+                  v-for="r in availableRoles"
+                  :key="r.id"
+                  :value="r.name"
+                  :disabled="isRoleDisabled(r.name, index)"
+                >
+                  {{ r.name }}
+                </option>
+              </select>
+              <button
+                v-if="formModal.roles.length > 1"
+                type="button"
+                class="us-btn-remove-role"
+                @click="removeRoleField(index)"
+                title="Hapus role ini"
+              >
+                <i class="bi bi-dash-circle"></i>
+              </button>
+            </div>
+            <button
+              type="button"
+              class="us-btn-add-role"
+              @click="addRoleField"
+              v-if="formModal.roles.length < availableRoles.length"
+            >
+              <i class="bi bi-plus-circle"></i> Tambah Role Lain
+            </button>
+            <p v-if="formErrors.roles" class="us-form-error">
+              <i class="bi bi-exclamation-circle"></i>
+              {{ Array.isArray(formErrors.roles) ? formErrors.roles[0] : formErrors.roles }}
+            </p>
           </div>
 
         </div>
         <div class="us-modal-footer">
-          <button class="us-btn-cancel" @click="closeModal" :disabled="savingModal">Batal</button>
+          <button class="us-btn-cancel" @click="closeModal" :disabled="savingModal">
+            Batal
+          </button>
           <button class="us-btn-save" @click="submitModal" :disabled="savingModal">
             <i v-if="savingModal" class="bi bi-arrow-repeat us-spin"></i>
-            <i v-else class="bi bi-check-lg"></i>
-            {{ savingModal ? 'Menyimpan...' : 'Simpan Data' }}
+            <i v-else :class="editMode ? 'bi bi-check-lg' : 'bi bi-plus-lg'"></i>
+            {{ savingModal ? 'Menyimpan...' : (editMode ? 'Simpan Perubahan' : 'Tambah User') }}
           </button>
         </div>
       </div>
@@ -203,30 +285,27 @@
       <div class="us-modal us-modal-sm">
         <div class="us-modal-header">
           <h2 class="us-modal-title">Konfirmasi Hapus</h2>
-          <button class="us-modal-close" @click="showDeleteModal = false"><i class="bi bi-x-lg"></i></button>
+          <button class="us-modal-close" @click="showDeleteModal = false">
+            <i class="bi bi-x-lg"></i>
+          </button>
         </div>
         <div class="us-modal-body">
           <div class="us-confirm-icon"><i class="bi bi-trash3"></i></div>
           <p class="us-confirm-title">Hapus Akun User?</p>
           <p class="us-confirm-desc">
-            Anda akan menghapus akun <strong>{{ deleteTarget?.nama }}</strong>. Tindakan ini tidak bisa dibatalkan.
+            Anda akan menghapus akun <strong>{{ deleteTarget?.nama }}</strong>. Semua data yang terkait dengan akun ini akan ikut terhapus secara permanen.
           </p>
         </div>
         <div class="us-modal-footer">
-          <button class="us-btn-cancel" @click="showDeleteModal = false" :disabled="deleting">Batal</button>
+          <button class="us-btn-cancel" @click="showDeleteModal = false" :disabled="deleting">
+            Batal
+          </button>
           <button class="us-btn-hapus-confirm" @click="deleteUser" :disabled="deleting">
             <i v-if="deleting" class="bi bi-arrow-repeat us-spin"></i>
-            <i v-else class="bi bi-trash3"></i> Ya, Hapus
+            <i v-else class="bi bi-trash3"></i>
+            {{ deleting ? 'Menghapus...' : 'Ya, Hapus' }}
           </button>
         </div>
-      </div>
-    </div>
-
-    <!-- TOAST NOTIFIKASI -->
-    <div class="us-toast-wrap" aria-live="polite">
-      <div v-for="t in toasts" :key="t.id" :class="['us-toast', 'us-toast-' + t.type]">
-        <i :class="['us-toast-icon bi', t.type === 'success' ? 'bi-check-circle-fill' : 'bi-x-circle-fill']"></i>
-        <span>{{ t.message }}</span>
       </div>
     </div>
 

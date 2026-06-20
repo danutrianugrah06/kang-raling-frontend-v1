@@ -1,19 +1,11 @@
 <template>
   <div class="db-index">
 
-    <!-- BANNER SELAMAT DATANG (role-based) -->
-    <div class="db-welcome" :class="isAdmin ? 'welcome-admin' : 'welcome-fasil'">
+    <!-- BANNER SELAMAT DATANG (Role-Based Dinamis) -->
+    <div class="db-welcome" :class="welcomeClass">
       <div class="db-welcome-text">
-        <h1 class="db-welcome-title">Selamat Datang, {{ isAdmin ? 'Admin' : 'Fasilitator' }} 👋</h1>
-        <p class="db-welcome-desc">
-          {{ isAdmin
-            ? 'Pantau dan kelola seluruh data pengelolaan sampah Kabupaten Garut dari satu tempat.'
-            : 'Hari ini adalah kesempatan baru untuk mencatat data sampah dengan lebih akurat dan berkontribusi untuk lingkungan yang lebih baik.'
-          }}
-        </p>
-      </div>
-      <div class="db-welcome-illustration" aria-hidden="true">
-        <i class="bi bi-recycle"></i>
+        <h1 class="db-welcome-title">Selamat Datang, {{ currentName }}</h1>
+        <p class="db-welcome-desc">{{ welcomeDesc }}</p>
       </div>
     </div>
 
@@ -31,7 +23,7 @@
     <!-- KONTEN UTAMA (setelah loading selesai) -->
     <template v-else>
 
-      <!-- RINGKASAN UMUM (semua role) -->
+      <!-- RINGKASAN UMUM (Muncul untuk SEMUA role) -->
       <div class="db-section-label">Ringkasan Umum</div>
       <div class="db-stat-grid">
 
@@ -68,7 +60,8 @@
             <span class="db-stat-unit">Kg</span>
           </div>
           <div class="db-stat-label">Sampah Terkelola</div>
-          <div class="db-stat-sub"><i class="bi bi-arrow-up-circle-fill text-success"></i><span>Dari total input</span></div>
+          <div class="db-stat-sub"><i class="bi bi-arrow-up-circle-fill text-success"></i><span>Dari total input</span>
+          </div>
         </div>
 
         <div class="db-stat-card">
@@ -83,115 +76,123 @@
 
       </div>
 
-      <!-- STATISTIK BERDASARKAN ROLE -->
-      <div class="db-section-label">{{ isAdmin ? 'Status Verifikasi Data' : 'Status Pengajuan Saya' }}</div>
-      <div class="db-stat-grid">
+      <!-- STATISTIK BERDASARKAN ROLE (Hanya untuk Admin & Fasil) -->
+      <template v-if="['Administrator', 'Fasilitator'].includes(currentRole)">
+        <div class="db-section-label">{{ currentRole === 'Administrator' ? 'Status Verifikasi Data' : 'Status Pengajuan Saya' }}</div>
+        <div class="db-stat-grid">
 
-        <!-- FASILITATOR -->
-        <template v-if="!isAdmin">
-          <div class="db-stat-card">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-blue">Pengajuan</span>
-              <div class="db-stat-icon icon-blue"><i class="bi bi-send-fill"></i></div>
+          <!-- FASILITATOR -->
+          <template v-if="currentRole === 'Fasilitator'">
+            <div class="db-stat-card">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-blue">Pengajuan</span>
+                <div class="db-stat-icon icon-blue"><i class="bi bi-send-fill"></i></div>
+              </div>
+              <div class="db-stat-value">{{ stats.total_pengajuan ?? '-' }}</div>
+              <div class="db-stat-label">Total Pengajuan</div>
+              <div class="db-stat-sub"><i class="bi bi-info-circle"></i><span>Data yang dikirim</span></div>
             </div>
-            <div class="db-stat-value">{{ stats.total_pengajuan ?? '-' }}</div>
-            <div class="db-stat-label">Total Pengajuan</div>
-            <div class="db-stat-sub"><i class="bi bi-info-circle"></i><span>Data yang dikirim</span></div>
-          </div>
 
-          <div class="db-stat-card">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-green">Diterima</span>
-              <div class="db-stat-icon icon-green"><i class="bi bi-check-circle-fill"></i></div>
+            <div class="db-stat-card">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-green">Diterima</span>
+                <div class="db-stat-icon icon-green"><i class="bi bi-check-circle-fill"></i></div>
+              </div>
+              <div class="db-stat-value">{{ stats.diterima ?? '-' }}</div>
+              <div class="db-stat-label">Data Diterima</div>
+              <div class="db-stat-sub"><i class="bi bi-patch-check-fill text-success"></i><span>Terverifikasi</span>
+              </div>
             </div>
-            <div class="db-stat-value">{{ stats.diterima ?? '-' }}</div>
-            <div class="db-stat-label">Data Diterima</div>
-            <div class="db-stat-sub"><i class="bi bi-patch-check-fill text-success"></i><span>Terverifikasi</span></div>
-          </div>
 
-          <div class="db-stat-card">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-orange">Dikembalikan</span>
-              <div class="db-stat-icon icon-orange"><i class="bi bi-arrow-counterclockwise"></i></div>
+            <div class="db-stat-card">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-orange">Dikembalikan</span>
+                <div class="db-stat-icon icon-orange"><i class="bi bi-arrow-counterclockwise"></i></div>
+              </div>
+              <div class="db-stat-value">{{ stats.dikembalikan ?? '-' }}</div>
+              <div class="db-stat-label">Dikembalikan</div>
+              <div class="db-stat-sub"><i class="bi bi-exclamation-circle text-warning"></i><span>Perlu
+                  diperbaiki</span></div>
             </div>
-            <div class="db-stat-value">{{ stats.dikembalikan ?? '-' }}</div>
-            <div class="db-stat-label">Dikembalikan</div>
-            <div class="db-stat-sub"><i class="bi bi-exclamation-circle text-warning"></i><span>Perlu diperbaiki</span></div>
-          </div>
 
-          <div class="db-stat-card">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-red">Pending</span>
-              <div class="db-stat-icon icon-red"><i class="bi bi-hourglass-split"></i></div>
+            <div class="db-stat-card">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-red">Pending</span>
+                <div class="db-stat-icon icon-red"><i class="bi bi-hourglass-split"></i></div>
+              </div>
+              <div class="db-stat-value">{{ stats.belum_diverifikasi ?? '-' }}</div>
+              <div class="db-stat-label">Belum Diverifikasi</div>
+              <div class="db-stat-sub"><i class="bi bi-clock text-danger"></i><span>Menunggu review</span></div>
             </div>
-            <div class="db-stat-value">{{ stats.belum_diverifikasi ?? '-' }}</div>
-            <div class="db-stat-label">Belum Diverifikasi</div>
-            <div class="db-stat-sub"><i class="bi bi-clock text-danger"></i><span>Menunggu review</span></div>
-          </div>
-        </template>
+          </template>
 
-        <!-- ADMINISTRATOR -->
-        <template v-if="isAdmin">
-          <div class="db-stat-card">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-blue">Input</span>
-              <div class="db-stat-icon icon-blue"><i class="bi bi-database-fill"></i></div>
+          <!-- ADMINISTRATOR -->
+          <template v-if="currentRole === 'Administrator'">
+            <div class="db-stat-card">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-blue">Input</span>
+                <div class="db-stat-icon icon-blue"><i class="bi bi-database-fill"></i></div>
+              </div>
+              <div class="db-stat-value">{{ stats.data_terinput ?? '-' }}</div>
+              <div class="db-stat-label">Data Terinput</div>
+              <div class="db-stat-sub"><i class="bi bi-file-earmark-text"></i><span>Total entri</span></div>
             </div>
-            <div class="db-stat-value">{{ stats.data_terinput ?? '-' }}</div>
-            <div class="db-stat-label">Data Terinput</div>
-            <div class="db-stat-sub"><i class="bi bi-file-earmark-text"></i><span>Total entri</span></div>
-          </div>
 
-          <div v-if="stats.verifikasi_tertunda > 0" class="db-stat-card card-alert">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-red">Segera!</span>
-              <div class="db-stat-icon icon-red"><i class="bi bi-patch-exclamation-fill"></i></div>
+            <div v-if="stats.verifikasi_tertunda > 0" class="db-stat-card card-alert">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-red">Segera!</span>
+                <div class="db-stat-icon icon-red"><i class="bi bi-patch-exclamation-fill"></i></div>
+              </div>
+              <div class="db-stat-value text-danger">{{ stats.verifikasi_tertunda ?? '-' }}</div>
+              <div class="db-stat-label">Verifikasi Tertunda</div>
+              <div class="db-stat-sub"><i class="bi bi-arrow-right-circle text-danger"></i><span>Segera tindak
+                  lanjuti</span></div>
             </div>
-            <div class="db-stat-value text-danger">{{ stats.verifikasi_tertunda ?? '-' }}</div>
-            <div class="db-stat-label">Verifikasi Tertunda</div>
-            <div class="db-stat-sub"><i class="bi bi-arrow-right-circle text-danger"></i><span>Segera tindak lanjuti</span></div>
-          </div>
-          <div v-else class="db-stat-card">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-red">Pending</span>
-              <div class="db-stat-icon icon-red"><i class="bi bi-patch-exclamation-fill"></i></div>
+            <div v-else class="db-stat-card">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-red">Pending</span>
+                <div class="db-stat-icon icon-red"><i class="bi bi-patch-exclamation-fill"></i></div>
+              </div>
+              <div class="db-stat-value">0</div>
+              <div class="db-stat-label">Verifikasi Tertunda</div>
+              <div class="db-stat-sub"><i class="bi bi-check-circle text-success"></i><span>Semua sudah ditangani</span>
+              </div>
             </div>
-            <div class="db-stat-value">0</div>
-            <div class="db-stat-label">Verifikasi Tertunda</div>
-            <div class="db-stat-sub"><i class="bi bi-check-circle text-success"></i><span>Semua sudah ditangani</span></div>
-          </div>
 
-          <div class="db-stat-card">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-green">Diterima</span>
-              <div class="db-stat-icon icon-green"><i class="bi bi-check-circle-fill"></i></div>
+            <div class="db-stat-card">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-green">Diterima</span>
+                <div class="db-stat-icon icon-green"><i class="bi bi-check-circle-fill"></i></div>
+              </div>
+              <div class="db-stat-value">{{ stats.diterima ?? '-' }}</div>
+              <div class="db-stat-label">Data Diterima</div>
+              <div class="db-stat-sub"><i class="bi bi-patch-check-fill text-success"></i><span>Terverifikasi</span>
+              </div>
             </div>
-            <div class="db-stat-value">{{ stats.diterima ?? '-' }}</div>
-            <div class="db-stat-label">Data Diterima</div>
-            <div class="db-stat-sub"><i class="bi bi-patch-check-fill text-success"></i><span>Terverifikasi</span></div>
-          </div>
 
-          <div class="db-stat-card">
-            <div class="db-stat-header">
-              <span class="db-stat-badge badge-orange">Dikembalikan</span>
-              <div class="db-stat-icon icon-orange"><i class="bi bi-arrow-counterclockwise"></i></div>
+            <div class="db-stat-card">
+              <div class="db-stat-header">
+                <span class="db-stat-badge badge-orange">Dikembalikan</span>
+                <div class="db-stat-icon icon-orange"><i class="bi bi-arrow-counterclockwise"></i></div>
+              </div>
+              <div class="db-stat-value">{{ stats.dikembalikan ?? '-' }}</div>
+              <div class="db-stat-label">Dikembalikan</div>
+              <div class="db-stat-sub"><i class="bi bi-exclamation-circle text-warning"></i><span>Perlu perbaikan</span>
+              </div>
             </div>
-            <div class="db-stat-value">{{ stats.dikembalikan ?? '-' }}</div>
-            <div class="db-stat-label">Dikembalikan</div>
-            <div class="db-stat-sub"><i class="bi bi-exclamation-circle text-warning"></i><span>Perlu perbaikan</span></div>
-          </div>
-        </template>
+          </template>
 
-      </div>
+        </div>
+      </template>
 
-      <!-- BARIS BAWAH: GRAFIK + AKSI CEPAT & BANTUAN -->
-      <div class="db-bottom-row">
+      <!-- BARIS BAWAH: GRAFIK + AKSI CEPAT (Grid berubah dinamis) -->
+      <div class="db-bottom-row" :class="{ 'no-sidebar-right': !showRightCol }">
 
-        <!-- GRAFIK BATANG -->
+        <!-- GRAFIK BATANG (Muncul untuk semua role) -->
         <div class="db-chart-card">
           <div class="db-chart-header">
             <div>
-              <div class="db-chart-title">Grafik Pengumpulan Sampah</div>
+              <div class="db-chart-title">Data Timbulan Sampah</div>
               <div class="db-chart-subtitle">Data volume sampah bulanan (Kg)</div>
             </div>
             <select class="db-chart-select" v-model="selectedYear" @change="loadChartData">
@@ -199,60 +200,58 @@
             </select>
           </div>
 
-          <!-- Tampilan grafik jika ada data -->
           <div class="db-chart-area" v-if="chartData.length > 0">
             <div class="db-bar-chart">
               <div v-for="(item, index) in chartData" :key="index" class="db-bar-col">
                 <div class="db-bar-wrap">
-                  <!-- Binding style untuk tinggi batang (dinamis, tidak bisa dipindahkan ke CSS) -->
-                  <div class="db-bar-fill" :style="{ height: getBarHeight(item.jumlah) + '%' }" :title="item.bulan + ': ' + item.jumlah.toLocaleString('id-ID') + ' Kg'"></div>
+                  <div class="db-bar-fill" :style="{ height: getBarHeight(item.jumlah) + '%' }"
+                    :title="item.bulan + ': ' + item.jumlah.toLocaleString('id-ID') + ' Kg'"></div>
                 </div>
                 <div class="db-bar-label">{{ item.bulan_singkat }}</div>
               </div>
             </div>
-            <div class="db-chart-legend">
-              <span class="db-legend-dot dot-primary"></span>
-              <span>Volume Terkelola</span>
-            </div>
           </div>
 
-          <!-- Empty state grafik -->
           <div class="db-chart-empty" v-else>
             <i class="bi bi-bar-chart-line"></i>
             <span>Belum ada data grafik untuk tahun {{ selectedYear }}</span>
           </div>
         </div>
 
-        <!-- KOLOM KANAN (aksi cepat + bantuan) -->
-        <div class="db-right-col">
+        <!-- KOLOM KANAN (Hanya muncul untuk Admin & Fasil) -->
+        <div class="db-right-col" v-if="showRightCol">
 
-          <!-- AKSI CEPAT -->
           <div class="db-quick-card">
             <div class="db-quick-title"><i class="bi bi-lightning-charge-fill"></i> Aksi Cepat</div>
             <div class="db-quick-list">
-              <template v-if="isAdmin">
+              <template v-if="currentRole === 'Administrator'">
                 <router-link to="/dashboard/verifikasi" class="db-quick-item quick-red">
                   <i class="bi bi-patch-check-fill"></i><span>Verifikasi Data Sampah</span>
-                  <span v-if="stats.verifikasi_tertunda > 0" class="db-quick-badge">{{ stats.verifikasi_tertunda }}</span>
+                  <span v-if="stats.verifikasi_tertunda > 0" class="db-quick-badge">{{ stats.verifikasi_tertunda
+                    }}</span>
                 </router-link>
-                <router-link to="/dashboard/input-sampah" class="db-quick-item"><i class="bi bi-clipboard-plus-fill"></i><span>Input Data Sampah</span></router-link>
-                <router-link to="/dashboard/input-pengelolaan" class="db-quick-item"><i class="bi bi-clipboard-check-fill"></i><span>Input Data Pengelolaan</span></router-link>
-                <router-link to="/dashboard/users" class="db-quick-item"><i class="bi bi-people-fill"></i><span>Manajemen User</span></router-link>
-                <router-link to="/dashboard/laporan" class="db-quick-item"><i class="bi bi-printer-fill"></i><span>Cetak Laporan</span></router-link>
+                <router-link to="/dashboard/input-sampah" class="db-quick-item"><i
+                    class="bi bi-clipboard-plus-fill"></i><span>Input Data Sampah</span></router-link>
+                <router-link to="/dashboard/users" class="db-quick-item"><i
+                    class="bi bi-people-fill"></i><span>Manajemen User</span></router-link>
               </template>
-              <template v-else>
-                <router-link to="/dashboard/input-sampah" class="db-quick-item quick-primary"><i class="bi bi-clipboard-plus-fill"></i><span>Input Data Sampah</span></router-link>
-                <router-link to="/dashboard/input-pengelolaan" class="db-quick-item"><i class="bi bi-clipboard-check-fill"></i><span>Input Data Pengelolaan</span></router-link>
-                <router-link to="/dashboard/laporan" class="db-quick-item"><i class="bi bi-printer-fill"></i><span>Cetak Laporan</span></router-link>
+              <template v-else-if="currentRole === 'Fasilitator'">
+                <router-link to="/dashboard/input-sampah" class="db-quick-item quick-primary"><i
+                    class="bi bi-clipboard-plus-fill"></i><span>Input Data Sampah</span></router-link>
+                <router-link to="/dashboard/input-pengelolaan" class="db-quick-item"><i
+                    class="bi bi-clipboard-check-fill"></i><span>Input Data Pengelolaan</span></router-link>
+                <router-link to="/dashboard/laporan" class="db-quick-item"><i class="bi bi-printer-fill"></i><span>Cetak
+                    Laporan</span></router-link>
               </template>
             </div>
           </div>
 
-          <!-- PUSAT BANTUAN (unduh PDF panduan) -->
           <div class="db-help-card">
             <div class="db-help-icon"><i class="bi bi-question-circle-fill"></i></div>
             <div class="db-help-title">Pusat Bantuan</div>
-            <div class="db-help-desc">Unduh panduan terbaru untuk mempermudah proses input dan verifikasi data di lapangan.</div>
+            <div class="db-help-desc">Unduh panduan terbaru untuk mempermudah proses input dan verifikasi data di
+              lapangan.
+            </div>
             <button class="db-help-btn" @click="downloadPanduan" :disabled="downloadingPdf">
               <i class="bi bi-download"></i><span>{{ downloadingPdf ? 'Menyiapkan...' : 'Unduh PDF Panduan' }}</span>
             </button>
@@ -262,13 +261,6 @@
       </div>
 
     </template>
-
-    <!-- TOAST NOTIFIKASI -->
-    <div class="db-toast" :class="{ show: toast.show, 'toast-success': toast.type === 'success', 'toast-error': toast.type === 'error' }">
-      <i :class="toast.type === 'success' ? 'bi bi-check-circle-fill' : 'bi bi-x-circle-fill'"></i>
-      <span>{{ toast.message }}</span>
-    </div>
-
   </div>
 </template>
 

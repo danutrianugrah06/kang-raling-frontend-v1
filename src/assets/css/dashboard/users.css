@@ -133,13 +133,12 @@
   font-size: 0.875rem;
 }
 
-/* Lebar kolom (menggantikan inline style width) */
-.us-th-no     { width: 10%; }
-.us-th-nama   { width: 25%; }
-.us-th-email  { width: 25%; }
-.us-th-role   { width: 15%; }
-.us-th-status { width: 15%; }
-.us-th-aksi   { width: 10%; }
+/* Lebar kolom dibagi proporsional (tanpa Hak Akses & No) */
+.us-th-nama       { width: 30%; }
+.us-th-email      { width: 25%; }
+.us-th-role       { width: 20%; }
+.us-th-status     { width: 15%; }
+.us-th-aksi       { width: 10%; }
 
 .us-table thead tr {
   background: #F9FAFB;
@@ -170,17 +169,16 @@
   vertical-align: middle;
 }
 
-.us-td-id { color: #9CA3AF; font-weight: 600; font-size: 0.8125rem; }
 .us-td-nama { font-weight: 600; color: #1F2937; margin: 0; }
 .us-td-email { color: #6B7280; font-size: 0.8125rem; }
 
-/* Text Badges */
-.us-badge-role {
+/* Text Role (Multi-Role Plain Text) */
+.us-text-role {
   font-weight: 600;
   font-size: 0.85rem;
+  color: #374151;
+  line-height: 1.5;
 }
-.us-role-admin { color: #2E7D32; }
-.us-role-fasil { color: #F57C00; }
 
 /* Dropdown Status */
 .us-select-status {
@@ -226,19 +224,18 @@
 .us-btn-edit:hover  { background: #BBDEFB; }
 .us-btn-hapus:hover { background: #FFCDD2; }
 
-/* Skeleton (Ekstraksi inline style) */
+/* Skeleton */
 .us-skel {
   border-radius: 6px;
   background: linear-gradient(90deg, #F3F4F6 25%, #E9EAEC 50%, #F3F4F6 75%);
   background-size: 200% 100%;
   animation: us-shimmer 1.4s infinite;
 }
-.us-skel-no     { width: 30px; height: 14px; }
-.us-skel-nama   { width: 150px; height: 14px; }
-.us-skel-email  { width: 180px; height: 14px; }
-.us-skel-badge  { width: 90px; height: 24px; border-radius: 20px; }
-.us-skel-status { width: 100px; height: 32px; border-radius: 8px; }
-.us-skel-btn    { height: 32px; width: 32px; border-radius: 7px; display: inline-block; }
+.us-skel-nama      { width: 150px; height: 14px; }
+.us-skel-email     { width: 180px; height: 14px; }
+.us-skel-badge     { width: 120px; height: 14px; }
+.us-skel-status    { width: 100px; height: 32px; border-radius: 8px; }
+.us-skel-btn       { height: 32px; width: 32px; border-radius: 7px; display: inline-block; }
 
 @keyframes us-shimmer {
   0%   { background-position: 200% 0; }
@@ -329,7 +326,6 @@
 }
 @keyframes us-slide-up { from { transform: translateY(24px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-/* Modal form dengan lebar maksimum 500px (menggantikan inline style) */
 .us-modal-form { max-width: 500px; }
 .us-modal-sm { max-width: 420px; }
 
@@ -371,7 +367,7 @@
   border-top: 1px solid #F3F4F6;
 }
 
-/* Forms & Alerts */
+/* Forms & Dynamic Dropdowns */
 .us-form-group { margin-bottom: 18px; }
 .us-form-label { display: block; font-size: 0.8125rem; font-weight: 600; color: #374151; margin-bottom: 6px; }
 .us-form-label span { color: #E53935; }
@@ -406,6 +402,50 @@
 .us-form-input.error, .us-form-select.error { border-color: #E53935; }
 .us-form-error { font-size: 0.75rem; color: #E53935; margin-top: 4px; display: flex; align-items: center; gap: 4px; }
 
+/* Dynamic Role Selection CSS */
+.us-dynamic-role-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.us-btn-remove-role {
+  background: #FFEBEE;
+  color: #E53935;
+  border: none;
+  border-radius: 8px;
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: 0.2s;
+  flex-shrink: 0;
+}
+.us-btn-remove-role:hover { background: #FFCDD2; }
+
+.us-btn-add-role {
+  background: transparent;
+  color: #4CAF50;
+  border: 1px dashed #4CAF50;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  transition: 0.2s;
+  width: 100%;
+  justify-content: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+.us-btn-add-role:hover { background: #E8F5E9; }
+
 .us-input-wrap { position: relative; }
 .us-input-wrap .us-form-input { padding-right: 40px; }
 .us-toggle-pw {
@@ -424,17 +464,6 @@
   justify-content: center;
 }
 .us-toggle-pw:hover { color: #4CAF50; }
-
-.us-alert-box {
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 0.8125rem;
-  margin-bottom: 18px;
-  line-height: 1.5;
-  background: #E3F2FD;
-  color: #0D47A1;
-  border-left: 4px solid #1E88E5;
-}
 
 /* Modal Hapus */
 .us-confirm-icon { 

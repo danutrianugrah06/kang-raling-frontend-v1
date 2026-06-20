@@ -60,12 +60,17 @@ export default {
       return pages
     },
     filteredData() {
+      // PENGAMAN: Pastikan dataList benar-benar Array agar tidak error "filter is not a function"
+      if (!Array.isArray(this.dataList)) return [];
+
       if (!this.searchQuery.trim()) return this.dataList
       const q = this.searchQuery.toLowerCase()
+      
+      // PENGAMAN: Tambahkan tanda tanya (?) agar tidak error jika data kosong
       return this.dataList.filter(item => 
-        (item.desa?.nama_desa || '').toLowerCase().includes(q) ||
-        (item.jenis_sampah?.nama || '').toLowerCase().includes(q) ||
-        (item.status || '').toLowerCase().includes(q)
+        (item?.desa?.nama_desa || '').toLowerCase().includes(q) ||
+        (item?.jenis_sampah?.nama || '').toLowerCase().includes(q) ||
+        (item?.status || '').toLowerCase().includes(q)
       )
     }
   },
@@ -79,18 +84,26 @@ export default {
   },
 
   methods: {
-    // Fetch data sampah dari API (dengan pagination)
+    // Fetch data sampah dari API (dengan perbaikan pembungkus pagination Laravel)
     async fetchData() {
       this.loading = true
       try {
         const res = await api.get('/data-sampah', {
           params: { page: this.currentPage, per_page: this.perPage }
         })
-        const d = res.data
-        this.dataList = d.data || []
-        this.currentPage = d.current_page || 1
-        this.lastPage = d.last_page || 1
-        this.total = d.total || 0
+        
+        const d = res.data;
+        
+        // PENGAMAN: Mengecek apakah Laravel membungkus pagination di dalam object 'data'
+        const isPaginatorInsideData = d.data && typeof d.data === 'object' && !Array.isArray(d.data);
+        const paginator = isPaginatorInsideData ? d.data : d;
+
+        // Memaksa mengambil array asli dari dalam paginator
+        this.dataList = Array.isArray(paginator.data) ? paginator.data : [];
+        this.currentPage = paginator.current_page || 1;
+        this.lastPage = paginator.last_page || 1;
+        this.total = paginator.total || 0;
+
       } catch {
         this.showToast('Gagal memuat data sampah.', 'error')
       } finally {
@@ -101,6 +114,7 @@ export default {
     async fetchDesas() {
       try {
         const res = await api.get('/desas')
+        // Membuka bungkus data jika dari API dibungkus lagi
         this.desasList = res.data.data || res.data
       } catch (e) {}
     },
@@ -108,6 +122,7 @@ export default {
     async fetchJenisSampah() {
       try {
         const res = await api.get('/jenis-sampah')
+        // Membuka bungkus data jika dari API dibungkus lagi
         this.jenisSampahList = res.data.data || res.data
       } catch (e) {}
     },
@@ -126,7 +141,6 @@ export default {
       this.fetchData()
     },
 
-    // Buka modal tambah data (3 baris kosong)
     bukaModalTambah() {
       this.modeEdit = false
       this.form = {

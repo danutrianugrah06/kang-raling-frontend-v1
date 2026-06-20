@@ -112,17 +112,18 @@ const routes = [
   },
 
   {
-  path: '/faq',
-  name: 'Faq',
-  component: () => import('@/views/publik/Faq.vue'),
-  meta: {
-    title: 'FAQ',
-    description: 'Temukan jawaban atas pertanyaan umum seputar program Kang Raling dan pengelolaan sampah di Kabupaten Garut.'
-  }
-},
+    path: "/faq",
+    name: "Faq",
+    component: () => import("@/views/publik/Faq.vue"),
+    meta: {
+      title: "FAQ",
+      description:
+        "Temukan jawaban atas pertanyaan umum seputar program Kang Raling dan pengelolaan sampah di Kabupaten Garut.",
+    },
+  },
 
   // ══════════════════════════════
-  // DASHBOARD
+  // DASHBOARD (Dilindungi RBAC Dinamis)
   // ══════════════════════════════
 
   {
@@ -144,49 +145,49 @@ const routes = [
         path: "artikel",
         name: "DashboardArtikel",
         component: () => import("../views/dashboard/Artikel.vue"),
-        meta: { requiresAuth: true, title: "Kelola Artikel" },
+        meta: { requiresAuth: true, permission: "kelola.artikel", title: "Kelola Artikel" },
       },
       {
         path: "galeri",
         name: "DashboardGaleri",
         component: () => import("../views/dashboard/Galeri.vue"),
-        meta: { requiresAuth: true, title: "Kelola Galeri" },
+        meta: { requiresAuth: true, permission: "kelola.galeri", title: "Kelola Galeri" },
       },
       {
         path: "desa-binaan",
         name: "DashboardDesa",
         component: () => import("../views/dashboard/DesaBinaan.vue"),
-        meta: { requiresAuth: true, title: "Kelola Desa Binaan" },
+        meta: { requiresAuth: true, permission: "kelola.desa-binaan", title: "Kelola Desa Binaan" },
       },
       {
         path: "edukasi",
         name: "DashboardEdukasi",
         component: () => import("../views/dashboard/Edukasi.vue"),
-        meta: { requiresAuth: true, title: "Kelola Edukasi" },
+        meta: { requiresAuth: true, permission: "kelola.edukasi", title: "Kelola Edukasi" },
       },
       {
         path: "jenis-sampah",
         name: "DashboardJenisSampah",
         component: () => import("../views/dashboard/JenisSampah.vue"),
-        meta: { requiresAuth: true, title: "Kelola Jenis Sampah" },
+        meta: { requiresAuth: true, permission: "kelola.jenis-sampah", title: "Kelola Jenis Sampah" },
       },
       {
         path: "pengelolaan",
         name: "DashboardPengelolaan",
         component: () => import("../views/dashboard/Pengelolaan.vue"),
-        meta: { requiresAuth: true, title: "Kelola Pengelolaan" },
+        meta: { requiresAuth: true, permission: "kelola.jenis-pengelolaan", title: "Kelola Pengelolaan" },
       },
       {
         path: "input-sampah",
         name: "DashboardInputSampah",
         component: () => import("../views/dashboard/InputSampah.vue"),
-        meta: { requiresAuth: true, title: "Form Input Data Sampah" },
+        meta: { requiresAuth: true, permission: "input.data-sampah", title: "Form Input Data Sampah" },
       },
       {
         path: "input-pengelolaan",
         name: "DashboardInputPengelolaan",
         component: () => import("../views/dashboard/InputPengelolaan.vue"),
-        meta: { requiresAuth: true, title: "Form Input Pengelolaan" },
+        meta: { requiresAuth: true, permission: "input.data-pengelolaan", title: "Form Input Pengelolaan" },
       },
       {
         path: "verifikasi",
@@ -194,15 +195,9 @@ const routes = [
         component: () => import("../views/dashboard/Verifikasi.vue"),
         meta: {
           requiresAuth: true,
-          requiresAdmin: true,
+          permission: "verifikasi.data-sampah",
           title: "Verifikasi Data Sampah",
         },
-      },
-      {
-        path: "akun",
-        name: "DashboardAkun",
-        component: () => import("../views/dashboard/Akun.vue"),
-        meta: { requiresAuth: true, title: "Pengaturan Akun" },
       },
       {
         path: "users",
@@ -210,9 +205,21 @@ const routes = [
         component: () => import("../views/dashboard/Users.vue"),
         meta: {
           requiresAuth: true,
-          requiresAdmin: true,
+          permission: "manajemen.user",
           title: "Manajemen User",
         },
+      },
+      {
+        path: "roles",
+        name: "KelolaRole",
+        component: () => import("@/views/dashboard/KelolaRole.vue"),
+        meta: { requiresAuth: true, permission: "kelola.role-permission", title: "Mengelola Role" },
+      },
+      {
+        path: "permissions",
+        name: "KelolaHakAkses",
+        component: () => import("@/views/dashboard/KelolaHakAkses.vue"),
+        meta: { requiresAuth: true, permission: "kelola.role-permission", title: "Mengelola Hak Akses" },
       },
       {
         path: "activity-log",
@@ -220,7 +227,7 @@ const routes = [
         component: () => import("../views/dashboard/ActivityLog.vue"),
         meta: {
           requiresAuth: true,
-          requiresAdmin: true,
+          permission: "kelola.api-key", // Menyesuaikan dengan logika di Sidebar sebelumnya
           title: "Activity Log",
         },
       },
@@ -230,7 +237,7 @@ const routes = [
         component: () => import("../views/dashboard/ApiTabel.vue"),
         meta: {
           requiresAuth: true,
-          requiresAdmin: true,
+          permission: "kelola.tabel-generate",
           title: "Tabel Generate",
         },
       },
@@ -240,19 +247,27 @@ const routes = [
         component: () => import("../views/dashboard/ApiKeys.vue"),
         meta: {
           requiresAuth: true,
-          requiresAdmin: true,
-          title: "Buat Token Baru",
+          permission: "generate.api-token",
+          title: "API Keys",
         },
       },
       {
         path: "laporan",
         component: () => import("@/views/dashboard/Laporan.vue"),
-        meta: { title: "Cetak Laporan", requiresAuth: true },
+        meta: { requiresAuth: true, permission: "cetak.laporan", title: "Cetak Laporan" },
       },
       {
+        // Rute ini bebas untuk semua role yang bisa login
+        path: "akun",
+        name: "DashboardAkun",
+        component: () => import("../views/dashboard/Akun.vue"),
+        meta: { requiresAuth: true, title: "Pengaturan Akun" },
+      },
+      {
+        // Rute ini bebas untuk semua role yang bisa login
         path: "kontak",
         component: () => import("@/views/dashboard/Kontak.vue"),
-        meta: { title: "Hubungi Developer", requiresAuth: true },
+        meta: { requiresAuth: true, title: "Hubungi Developer" },
       },
     ],
   },
@@ -276,20 +291,13 @@ const router = createRouter({
   routes,
   // Scroll ke atas setiap pindah halaman
   scrollBehavior(to, from, savedPosition) {
-    if (savedPosition) {
-      // Kalau user tekan tombol back browser, kembalikan posisi scroll sebelumnya
-      return savedPosition;
-    }
-    if (to.hash) {
-      // Kalau ada hash (#hubungi dll), scroll ke elemen itu
-      return { el: to.hash, behavior: "smooth" };
-    }
-    // Default: scroll ke atas
+    if (savedPosition) return savedPosition;
+    if (to.hash) return { el: to.hash, behavior: "smooth" };
     return { top: 0, behavior: "smooth" };
   },
 });
 
-// ── ROUTE GUARD ──
+// ── ROUTE GUARD (SATPAM RBAC DINAMIS) ──
 router.beforeEach((to, from, next) => {
   const auth = useAuthStore();
 
@@ -301,8 +309,15 @@ router.beforeEach((to, from, next) => {
     return next("/dashboard");
   }
 
-  if (to.meta.requiresAdmin && !auth.isAdmin) {
-    return next("/dashboard");
+  // Jika route butuh permission spesifik, cek dari role yang aktif
+  if (to.meta.permission && auth.user) {
+    const activeRoleData = auth.user.roles?.find(r => r.name === auth.currentRole);
+    const hasPerm = activeRoleData?.permissions?.includes(to.meta.permission);
+
+    // Jika tidak punya izin, tendang balik ke dashboard utama
+    if (!hasPerm) {
+      return next("/dashboard");
+    }
   }
 
   next();

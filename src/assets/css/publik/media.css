@@ -690,7 +690,7 @@
 
 .detail-article-body {
   font-size: 1.05rem !important;
-  line-height: 1.9 !important;
+  line-height: 2.1 !important; 
   color: #374151 !important;
   font-family: 'Plus Jakarta Sans', sans-serif !important;
   text-align: justify !important;
@@ -698,105 +698,26 @@
 
 .detail-article-body * {
   text-align: justify !important;
-  line-height: 1.9 !important;
+  line-height: 2.1 !important;
 }
 
 .detail-article-body p,
 .detail-article-body div,
 .detail-article-body span {
-  margin-bottom: 24px !important;
+  margin-bottom: 32px !important; 
   display: block !important;
 }
 
 .detail-article-body > :first-child::first-letter,
 .detail-article-body::first-letter {
   float: left !important;
-  font-size: 4.2em !important;
+  font-size: 4.5em !important; 
   font-weight: 800 !important;
-  line-height: 0.8 !important;
-  margin: 10px 14px 0 0 !important;
+  line-height: 0.85 !important;
+  margin: 8px 16px 0 0 !important;
   color: #4CAF50 !important;
   text-shadow: 2px 2px 0px rgba(76,175,80,0.15) !important;
   text-transform: uppercase !important;
-}
-
-.detail-article-body h2,
-.detail-article-body h3,
-.detail-article-body h4 {
-  font-weight: 800 !important;
-  color: #1F2937 !important;
-  margin: 48px 0 18px !important;
-  line-height: 1.4 !important;
-  position: relative !important;
-  padding-bottom: 12px !important;
-  text-align: left !important;
-  display: block !important;
-}
-
-.detail-article-body h2::after,
-.detail-article-body h3::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 60px;
-  height: 4px;
-  background: #4CAF50 !important;
-  border-radius: 4px !important;
-}
-
-.detail-article-body blockquote {
-  margin: 40px 0 !important;
-  padding: 24px 32px 24px 56px !important;
-  background: #F0FDF4 !important;
-  border-left: 6px solid #4CAF50 !important;
-  border-radius: 0 12px 12px 0 !important;
-  font-size: 1.15rem !important;
-  font-style: italic !important;
-  color: #15803D !important;
-  position: relative !important;
-  box-shadow: 0 4px 12px rgba(76,175,80,0.05) !important;
-  display: block !important;
-}
-
-.detail-article-body blockquote::before {
-  content: '\201C' !important;
-  font-family: Georgia, serif !important;
-  font-size: 80px !important;
-  color: rgba(76,175,80,0.25) !important;
-  position: absolute !important;
-  top: -15px !important;
-  left: 14px !important;
-  line-height: 1 !important;
-}
-
-.detail-article-body ul,
-.detail-article-body ol {
-  margin-bottom: 24px !important;
-  padding-left: 28px !important;
-  text-align: left !important;
-  display: block !important;
-}
-
-.detail-article-body li {
-  margin-bottom: 12px !important;
-  line-height: 1.8 !important;
-  text-align: left !important;
-}
-
-.detail-article-body strong,
-.detail-article-body b {
-  color: #111827 !important;
-  font-weight: 700 !important;
-}
-
-.detail-article-body img {
-  max-width: 100% !important;
-  height: auto !important;
-  border-radius: 12px !important;
-  margin: 32px auto !important;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.08) !important;
-  display: block !important;
 }
 
 /* BACA JUGA (REKOMENDASI ARTIKEL) */

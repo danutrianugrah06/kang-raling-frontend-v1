@@ -41,29 +41,32 @@ export default {
 
     // Grouping data berdasarkan desa_id, tanggal, user_id
     groupedData() {
+      // PENGAMAN SAKTI: Pastikan dataList adalah Array agar .filter() tidak error
+      if (!Array.isArray(this.dataList)) return [];
+
       let result = this.dataList;
-      
       if (this.filterStatus) {
-        result = result.filter(item => item.status === this.filterStatus);
+        result = result.filter(item => item?.status === this.filterStatus);
       }
       if (this.searchQuery.trim()) {
         const q = this.searchQuery.toLowerCase();
         result = result.filter(item => 
-          (item.desa?.nama_desa || '').toLowerCase().includes(q)
+          (item?.desa?.nama_desa || '').toLowerCase().includes(q)
         );
       }
       
       const groups = {};
       result.forEach(item => {
-        const key = `${item.desa_id}_${item.tanggal}_${item.user_id}`;
+        // PENGAMAN: Tambahkan ? agar tidak error jika relasi kosong
+        const key = `${item?.desa_id}_${item?.tanggal}_${item?.user_id}`;
         if (!groups[key]) {
           groups[key] = {
             id: key,
-            desa: item.desa,
-            tanggal: item.tanggal,
-            user: item.user,
-            status: item.status,
-            catatan_penolakan: item.catatan_penolakan,
+            desa: item?.desa,
+            tanggal: item?.tanggal,
+            user: item?.user,
+            status: item?.status,
+            catatan_penolakan: item?.catatan_penolakan,
             items: []
           };
         }
@@ -76,7 +79,10 @@ export default {
   watch: {
     searchQuery() {
       clearTimeout(this.searchTimeout);
-      this.searchTimeout = setTimeout(() => {}, 300);
+      this.searchTimeout = setTimeout(() => {
+        this.currentPage = 1;
+        this.fetchData();
+      }, 300);
     }
   },
 
@@ -85,20 +91,25 @@ export default {
   },
 
   methods: {
-    // ==========================================
     // FETCH DATA
-    // ==========================================
     async fetchData() {
       this.loading = true;
       try {
         const res = await api.get('/data-sampah', {
           params: { page: this.currentPage, per_page: this.perPage }
         });
+        
+        // BONGKAR BUNGKUS PAGINATION LARAVEL
         const d = res.data;
-        this.dataList = d.data || [];
-        this.currentPage = d.current_page || 1;
-        this.lastPage = d.last_page || 1;
-        this.total = d.total || 0;
+        const isPaginatorInsideData = d.data && typeof d.data === 'object' && !Array.isArray(d.data);
+        const paginator = isPaginatorInsideData ? d.data : d;
+
+        // Paksa simpan sebagai Array murni
+        this.dataList = Array.isArray(paginator.data) ? paginator.data : [];
+        this.currentPage = paginator.current_page || 1;
+        this.lastPage = paginator.last_page || 1;
+        this.total = paginator.total || 0;
+
       } catch {
         this.showToast('Gagal memuat data antrean.', 'error');
       } finally {
@@ -112,9 +123,7 @@ export default {
       this.fetchData();
     },
 
-    // ==========================================
     // VERIFIKASI LANGSUNG
-    // ==========================================
     async prosesVerify(group) {
       this.loadingAction = group.id;
       try {
@@ -131,9 +140,7 @@ export default {
       }
     },
 
-    // ==========================================
     // TOLAK (MODAL)
-    // ==========================================
     bukaModalReject(group) {
       this.groupToReject = group;
       this.catatanPenolakan = '';
@@ -171,9 +178,7 @@ export default {
       }
     },
 
-    // ==========================================
     // HELPER FORMATTING
-    // ==========================================
     formatTanggal(val) {
       if (!val) return '-';
       return new Date(val).toLocaleDateString('id-ID', {

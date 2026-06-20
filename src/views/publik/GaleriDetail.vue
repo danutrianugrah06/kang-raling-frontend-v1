@@ -4,7 +4,7 @@
 
     <!-- TOP BAR: tombol kembali dan bagikan -->
     <div class="detail-topbar">
-      <div class="galeri-detail-topbar">
+      <div class="detail-topbar-inner">
         <router-link to="/media?tab=galeri" class="detail-back-link">
           <i class="bi bi-arrow-left"></i> Kembali ke Galeri
         </router-link>

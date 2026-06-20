@@ -1,0 +1,779 @@
+/* LAYOUT SPLIT (DUA KOLOM) */
+.ha-layout {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.25rem;
+    align-items: start;
+}
+
+/* PANEL KIRI — DAFTAR ROLE */
+.ha-role-panel {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    border: 1px solid #f3f4f6;
+    overflow: hidden;
+    position: sticky;
+    top: 1rem;
+}
+
+/*  HEADER PANEL ROLE  */
+.ha-role-panel-header {
+    padding: 1.2rem 1.25rem;
+    border-bottom: 1px solid #f3f4f6;
+    background: #f9fafb;
+}
+
+.ha-role-panel-header h6 {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/*  LIST ROLE  */
+.ha-role-list {
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem;
+}
+
+/*  ITEM ROLE 
+   - Clickable, hover dan aktif dengan warna hijau */
+.ha-role-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 0.2rem;
+    border: 1px solid transparent;
+}
+
+.ha-role-item:hover {
+    background: #f9fafb;
+    border-color: #e5e7eb;
+}
+
+.ha-role-item.active {
+    background: #f0fdf4;
+    border-color: #bbf7d0;
+}
+
+/* Informasi role: nama + count */
+.ha-role-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.ha-role-item-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #1f2937;
+}
+
+.ha-role-item.active .ha-role-item-name {
+    color: #2E7D32;
+}
+
+.ha-role-item-count {
+    font-size: 0.75rem;
+    color: #6b7280;
+}
+
+.ha-role-item.active .ha-role-item-count {
+    color: #4CAF50;
+}
+
+/* Ikon panah di sisi kanan, aktif akan bergeser */
+.ha-role-item-arrow {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    transition: transform 0.2s;
+}
+
+.ha-role-item.active .ha-role-item-arrow {
+    color: #4CAF50;
+    transform: translateX(3px);
+}
+
+/*  SKELETON ROLE (loading)  */
+.ha-skeleton-role {
+    padding: 0.85rem;
+    border-bottom: 1px solid #f3f4f6;
+}
+
+/* PANEL KANAN — EDITOR PERMISSION
+   - Menampilkan permission untuk role yang dipilih */
+.ha-editor-panel {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    border: 1px solid #f3f4f6;
+    overflow: hidden;
+}
+
+/*  HEADER EDITOR 
+   - Judul role yang sedang diedit
+   - Tombol aksi (simpan, reset) */
+.ha-editor-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    background: #fcfcfc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.ha-editor-title h5 {
+    margin: 0 0 0.3rem 0;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.ha-editor-title p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.ha-editor-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.ha-editor-body {
+    padding: 1.5rem;
+}
+
+/* GROUP PERMISSION
+   - Setiap group (misal: Data Sampah, Pengelolaan, dll)
+   - Header dengan ikon, judul, dan jumlah permission
+   - Grid permission dengan toggle checkbox */
+.ha-perm-group {
+    margin-bottom: 2rem;
+}
+
+.ha-perm-group-header {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 1rem;
+    padding-bottom: 0.6rem;
+    border-bottom: 2px solid #f3f4f6;
+}
+
+.ha-perm-group-header i {
+    color: #4CAF50;
+    font-size: 1.1rem;
+}
+
+.ha-perm-group-header span {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #374151;
+    text-transform: capitalize;
+}
+
+/* Badge jumlah permission di group */
+.ha-perm-group-count {
+    margin-left: auto;
+    background: #f3f4f6;
+    color: #4b5563;
+    border-radius: 6px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+/*  GRID PERMISSION 
+   - Responsif: minimal 240px per item
+   - Setiap item adalah checkbox custom */
+.ha-perm-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 0.75rem;
+}
+
+.ha-perm-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+    background: #fff;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+}
+
+.ha-perm-item:hover {
+    border-color: #4CAF50;
+    box-shadow: 0 2px 8px rgba(76,175,80,0.08);
+}
+
+.ha-perm-item.active {
+    border-color: #4CAF50;
+    background: #f0fdf4;
+}
+
+/*  CHECKBOX CUSTOM 
+   - Kotak berwarna hijau saat aktif
+   - Ikon centang dari Bootstrap Icons */
+.ha-perm-checkbox {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    border: 2px solid #d1d5db;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-size: 0.8rem;
+    color: #fff;
+}
+
+.ha-perm-item.active .ha-perm-checkbox {
+    background: #4CAF50;
+    border-color: #4CAF50;
+}
+
+/* Nama permission */
+.ha-perm-name {
+    font-size: 0.85rem;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.ha-perm-item.active .ha-perm-name {
+    color: #2E7D32;
+    font-weight: 600;
+}
+
+/* EMPTY STATE (Editor & Semua Perms)
+   - Tampil saat tidak ada permission atau role belum dipilih */
+.ha-empty-editor {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: #9ca3af;
+}
+
+.ha-empty-editor i {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+    color: #d1d5db;
+}
+
+.ha-empty-editor p {
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+/* ALL PERMISSIONS SECTION (DAFTAR SEMUA PERMISSION)
+   - Tabel/grid semua permission yang ada di sistem
+   - Ada tombol hapus untuk setiap permission */
+.ha-all-perms-section {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+    border: 1px solid #f3f4f6;
+    margin-top: 1.5rem;
+    overflow: hidden;
+}
+
+.ha-all-perms-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f3f4f6;
+    background: #f9fafb;
+}
+
+.ha-all-perms-header h6 {
+    margin: 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.ha-all-perms-body {
+    padding: 1.5rem;
+}
+
+/* Grid semua permission */
+.ha-perm-table-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 0.75rem;
+}
+
+.ha-perm-table-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.6rem 1rem;
+    background: #f9fafb;
+    border-radius: 8px;
+    border: 1px solid #e5e7eb;
+}
+
+.ha-perm-table-name {
+    color: #374151;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Tombol hapus di setiap item permission */
+.ha-perm-table-del {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 0.25rem 0.4rem;
+    border-radius: 4px;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+}
+
+.ha-perm-table-del:hover {
+    color: #ef4444;
+    background: #fee2e2;
+}
+
+/* SHIMMER ANIMATION (SKELETON LOADER) */
+.ha-skeleton-line {
+    background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+    background-size: 200% 100%;
+    animation: ha-shimmer 1.4s infinite;
+    border-radius: 6px;
+}
+
+@keyframes ha-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* BUTTONS & FORM ELEMENTS */
+.ha-btn {
+    padding: 0.6rem 1.25rem;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: background 0.15s;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+/* Varian button */
+.ha-btn-primary {
+    background: #4CAF50;
+    color: #fff;
+}
+.ha-btn-primary:hover:not(:disabled) {
+    background: #43a047;
+}
+
+.ha-btn-success {
+    background: #4CAF50;
+    color: #fff;
+}
+.ha-btn-success:hover:not(:disabled) {
+    background: #388E3C;
+}
+
+.ha-btn-danger {
+    background: #ef4444;
+    color: #fff;
+}
+.ha-btn-danger:hover:not(:disabled) {
+    background: #dc2626;
+}
+
+.ha-btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #e5e7eb;
+}
+.ha-btn-secondary:hover:not(:disabled) {
+    background: #e5e7eb;
+}
+
+/*  FORM GROUP  */
+.ha-form-group {
+    margin-bottom: 1.25rem;
+}
+
+.ha-form-group label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 0.5rem;
+}
+
+.ha-form-group label span {
+    color: #ef4444;
+}
+
+.ha-form-control {
+    width: 100%;
+    padding: 0.65rem 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #1f2937;
+    outline: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.2s;
+}
+
+.ha-form-control:focus {
+    border-color: #4CAF50;
+    box-shadow: 0 0 0 3px rgba(76,175,80,0.12);
+}
+
+.ha-form-control.is-invalid {
+    border-color: #ef4444;
+}
+
+/*  FEEDBACK VALIDASI */
+.ha-invalid-feedback {
+    font-size: 0.8rem;
+    color: #ef4444;
+    margin-top: 0.4rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+/*  ALERT INFO  */
+.ha-alert-info {
+    display: flex;
+    gap: 0.6rem;
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 1rem;
+    border-radius: 8px;
+    color: #1e40af;
+    font-size: 0.85rem;
+    line-height: 1.5;
+}
+
+.ha-alert-info i {
+    font-size: 1.1rem;
+    color: #3b82f6;
+}
+
+.ha-alert-info p {
+    margin: 0;
+}
+
+/* PAGE HEADER (JUDUL HALAMAN) */
+.ha-page-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.ha-page-title h4 {
+    margin: 0 0 0.3rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+.ha-page-title p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+/*  TOAST NOTIFIKASI  */
+.ha-toast {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 18px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.14);
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1F2937;
+    animation: ha-toast-in 0.25s ease;
+    max-width: 340px;
+    border-left: 4px solid transparent;
+}
+
+.ha-toast-success {
+    border-left-color: #4CAF50;
+}
+.ha-toast-success i {
+    color: #4CAF50;
+    font-size: 1.1rem;
+}
+
+.ha-toast-error {
+    border-left-color: #E53935;
+}
+.ha-toast-error i {
+    color: #E53935;
+    font-size: 1.1rem;
+}
+
+.ha-toast-warning {
+    border-left-color: #F57C00;
+}
+.ha-toast-warning i {
+    color: #F57C00;
+    font-size: 1.1rem;
+}
+
+@keyframes ha-toast-in {
+    from { transform: translateX(60px); opacity: 0; }
+    to   { transform: translateX(0);    opacity: 1; }
+}
+
+/*  MODAL  */
+.ha-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 1050;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    animation: ha-fade-in 0.18s ease;
+}
+
+@keyframes ha-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.ha-modal {
+    background: #fff;
+    border-radius: 14px;
+    width: 100%;
+    max-width: 460px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.18);
+    animation: ha-slide-up 0.22s ease;
+}
+
+@keyframes ha-slide-up {
+    from { transform: translateY(24px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+.ha-modal-sm {
+    max-width: 420px;
+}
+
+/*  HEADER MODAL  */
+.ha-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #F3F4F6;
+    position: sticky;
+    top: 0;
+    background: #fff;
+    z-index: 10;
+    border-radius: 14px 14px 0 0;
+}
+
+.ha-modal-header h5 {
+    margin: 0;
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: #1F2937;
+}
+
+/* Tombol close modal */
+.ha-modal-close {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    border: none;
+    background: #F3F4F6;
+    color: #6B7280;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.ha-modal-close:hover {
+    background: #E5E7EB;
+}
+
+.ha-modal-body {
+    padding: 20px 24px;
+}
+
+.ha-modal-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 16px 24px 20px;
+    border-top: 1px solid #F3F4F6;
+}
+
+/* MODAL KONFIRMASI HAPUS */
+.ha-confirm-icon {
+  width: 56px !important;
+  height: 56px !important;
+  border-radius: 50% !important;
+  background: #FFEBEE !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 1.4rem !important;
+  color: #E53935 !important;
+  margin: 0 auto 16px !important;
+}
+
+.ha-confirm-title { 
+  font-size: 1rem !important; 
+  font-weight: 700 !important; 
+  color: #1F2937 !important; 
+  text-align: center !important; 
+  margin: 0 0 8px 0 !important; 
+}
+
+.ha-confirm-desc { 
+  font-size: 0.875rem !important; 
+  color: #6B7280 !important; 
+  text-align: center !important; 
+  margin: 0 !important; 
+  line-height: 1.6 !important; 
+}
+
+/* Skeleton Role */
+.ha-skel-role-name {
+  width: 70%;
+  height: 14px;
+  margin-bottom: 6px;
+}
+
+.ha-skel-role-count {
+  width: 40%;
+  height: 10px;
+}
+
+/* Skeleton Group Title */
+.ha-skel-group-title {
+  width: 30%;
+  height: 14px;
+  margin-bottom: 1rem;
+}
+
+/* Skeleton Permission Item */
+.ha-skel-perm-item {
+  height: 46px;
+  border-radius: 8px;
+}
+
+/* Modal Delete: Body */
+.ha-delete-body {
+  text-align: center;
+  padding-top: 30px;
+}
+
+.ha-delete-icon {
+  font-size: 3.5rem;
+  color: #E53935;
+  display: block;
+  margin-bottom: 20px;
+}
+
+.ha-delete-text {
+  font-size: 1rem;
+  color: #374151;
+  margin-bottom: 8px;
+}
+
+.ha-delete-perm-name {
+  font-size: 1.1rem;
+  color: #E53935;
+  margin-bottom: 20px;
+}
+
+.ha-delete-desc {
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Modal Delete: Footer */
+.ha-delete-footer {
+  justify-content: center;
+  border-top: none;
+  padding-bottom: 30px;
+}
+
+.ha-delete-cancel {
+  padding: 10px 24px;
+}
+
+.ha-delete-confirm {
+  padding: 10px 24px;
+}
+
+/* RESPONSIVE */
+
+/* Tablet (≤992px): layout jadi satu kolom */
+@media (max-width: 992px) {
+    .ha-layout {
+        grid-template-columns: 1fr;
+    }
+    .ha-role-panel {
+        position: static;
+    }
+}
+
+/* Mobile kecil (≤480px): grid jadi satu kolom */
+@media (max-width: 480px) {
+    .ha-perm-grid {
+        grid-template-columns: 1fr;
+    }
+    .ha-perm-table-grid {
+        grid-template-columns: 1fr;
+    }
+    .ha-toast {
+        right: 16px;
+        bottom: 16px;
+        left: 16px;
+        max-width: none;
+    }
+}

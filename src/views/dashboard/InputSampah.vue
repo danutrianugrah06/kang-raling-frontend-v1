@@ -1,10 +1,6 @@
 <template>
   <div class="ds-page-content">
-    <link
-      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-
+    
     <!-- Page Header -->
     <div class="ds-page-header">
       <div>
@@ -35,16 +31,16 @@
         </p>
 
         <div v-if="panelDitolakTerbuka" class="ds-rejection-list">
-          <div v-for="item in dataDitolak" :key="'tolak-' + item.id" class="ds-rejection-item">
+          <div v-for="item in dataDitolak" :key="'tolak-' + item?.id" class="ds-rejection-item">
             <div class="ds-rejection-item-head">
               <div class="ds-rejection-meta">
-                <span class="ds-rejection-desa"><i class="bi bi-geo-alt-fill"></i> {{ item.desa?.nama_desa || '-' }}</span>
+                <span class="ds-rejection-desa"><i class="bi bi-geo-alt-fill"></i> {{ item?.desa?.nama_desa || '-' }}</span>
                 <span class="ds-rejection-dot">·</span>
-                <span class="ds-rejection-jenis">{{ item.jenis_sampah?.nama || '-' }}</span>
+                <span class="ds-rejection-jenis">{{ item?.jenis_sampah?.nama || '-' }}</span>
                 <span class="ds-rejection-dot">·</span>
-                <span class="ds-rejection-jumlah"><i class="bi bi-box-seam"></i> {{ formatAngka(item.jumlah) }} Kg</span>
+                <span class="ds-rejection-jumlah"><i class="bi bi-box-seam"></i> {{ formatAngka(item?.jumlah) }} Kg</span>
                 <span class="ds-rejection-dot">·</span>
-                <span class="ds-rejection-tgl"><i class="bi bi-calendar3"></i> {{ formatTanggal(item.tanggal) }}</span>
+                <span class="ds-rejection-tgl"><i class="bi bi-calendar3"></i> {{ formatTanggal(item?.tanggal) }}</span>
               </div>
               <button class="ds-rejection-btn-edit" @click="bukaModalEdit(item)" title="Perbaiki data ini">
                 <i class="bi bi-pencil-square"></i> Perbaiki
@@ -54,7 +50,7 @@
               <i class="bi bi-chat-square-text-fill"></i>
               <div>
                 <p class="ds-rejection-catatan-label">Catatan dari Admin:</p>
-                <p class="ds-rejection-catatan-isi">{{ item.catatan_penolakan || 'Tidak ada catatan.' }}</p>
+                <p class="ds-rejection-catatan-isi">{{ item?.catatan_penolakan || 'Tidak ada catatan.' }}</p>
               </div>
             </div>
           </div>
@@ -74,7 +70,6 @@
         <table class="ds-table" role="table" aria-label="Daftar data sampah">
           <thead>
             <tr>
-              <!-- Class lebar kolom (menggantikan inline style) -->
               <th class="ds-th-no">No</th>
               <th class="ds-th-tanggal">Tanggal</th>
               <th class="ds-th-desa">Desa Binaan</th>
@@ -126,31 +121,31 @@
 
             <!-- Data Rows -->
             <template v-else>
-              <tr v-for="(item, index) in filteredData" :key="item.id" class="ds-data-row">
+              <tr v-for="(item, index) in filteredData" :key="item?.id" class="ds-data-row">
                 <td class="ds-td-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
-                <td>{{ formatTanggal(item.tanggal) }}</td>
+                <td>{{ formatTanggal(item?.tanggal) }}</td>
                 <td>
-                  <p class="ds-td-nama">{{ item.desa ? item.desa.nama_desa : '-' }}</p>
-                  <p class="ds-td-sub">Oleh: {{ item.user ? item.user.nama : '-' }}</p>
+                  <p class="ds-td-nama">{{ item?.desa ? item.desa.nama_desa : '-' }}</p>
+                  <p class="ds-td-sub">Oleh: {{ item?.user ? item.user.nama : '-' }}</p>
                 </td>
-                <td><span class="ds-badge-jenis">{{ item.jenis_sampah ? item.jenis_sampah.nama : '-' }}</span></td>
-                <td><strong>{{ formatAngka(item.jumlah) }}</strong></td>
+                <td><span class="ds-badge-jenis">{{ item?.jenis_sampah ? item.jenis_sampah.nama : '-' }}</span></td>
+                <td><strong>{{ formatAngka(item?.jumlah) }}</strong></td>
                 <td>
-                  <span :class="['ds-status-badge', badgeStatus(item.status)]">
-                    <i :class="iconStatus(item.status)"></i>
-                    {{ capitalize(item.status || 'menunggu') }}
+                  <span :class="['ds-status-badge', badgeStatus(item?.status)]">
+                    <i :class="iconStatus(item?.status)"></i>
+                    {{ capitalize(item?.status || 'menunggu') }}
                   </span>
-                  <div v-if="item.status === 'ditolak' && item.catatan_penolakan" class="ds-catatan-tooltip">
+                  <div v-if="item?.status === 'ditolak' && item?.catatan_penolakan" class="ds-catatan-tooltip">
                     <i class="bi bi-info-circle-fill"></i>
                     <div class="ds-tooltip-text">{{ item.catatan_penolakan }}</div>
                   </div>
                 </td>
                 <td>
                   <div class="ds-aksi">
-                    <button v-if="isAdmin && (item.status === 'menunggu' || item.status === null)" class="ds-btn-icon ds-btn-verifikasi" @click="bukaModalVerifikasi(item)" title="Verifikasi">
+                    <button v-if="isAdmin && (item?.status === 'pending' || item?.status === null)" class="ds-btn-icon ds-btn-verifikasi" @click="bukaModalVerifikasi(item)" title="Verifikasi">
                       <i class="bi bi-shield-check"></i>
                     </button>
-                    <button v-if="item.status !== 'disetujui' || isAdmin" class="ds-btn-icon ds-btn-edit" @click="bukaModalEdit(item)" title="Edit">
+                    <button v-if="item?.status !== 'verified' || isAdmin" class="ds-btn-icon ds-btn-edit" @click="bukaModalEdit(item)" title="Edit">
                       <i class="bi bi-pencil"></i>
                     </button>
                     <button class="ds-btn-icon ds-btn-hapus" @click="konfirmasiHapus(item)" title="Hapus">
@@ -191,7 +186,7 @@
               <label class="ds-form-label">Desa Binaan <span>*</span></label>
               <select v-model="form.desa_id" :class="['ds-form-select', { error: errors.desa_id }]">
                 <option value="" disabled> Pilih Desa </option>
-                <option v-for="desa in desasList" :key="desa.id" :value="desa.id">{{ desa.nama_desa }}</option>
+                <option v-for="desa in desasList" :key="desa?.id" :value="desa?.id">{{ desa?.nama_desa }}</option>
               </select>
               <p v-if="errors.desa_id" class="ds-form-error"><i class="bi bi-exclamation-circle"></i> {{ errors.desa_id }}</p>
             </div>
@@ -202,8 +197,7 @@
             </div>
           </div>
 
-          <!-- Peringatan jika data ditolak -->
-          <div v-if="modeEdit && form.status === 'ditolak'" class="ds-alert-box ds-alert-danger">
+          <div v-if="modeEdit && form.status === 'rejected'" class="ds-alert-box ds-alert-danger">
             <strong>Catatan Penolakan:</strong> {{ form.catatan_penolakan || 'Tidak ada catatan.' }}
           </div>
 
@@ -219,7 +213,7 @@
               <div class="ds-dynamic-col ds-dynamic-col-jenis">
                 <select v-model="item.jenis_sampah_id" :class="['ds-form-select', { error: errors[`items.${idx}.jenis_sampah_id`] }]">
                   <option value="" disabled> Pilih Jenis </option>
-                  <option v-for="jenis in jenisSampahList" :key="jenis.id" :value="jenis.id">{{ jenis.nama }}</option>
+                  <option v-for="jenis in jenisSampahList" :key="jenis?.id" :value="jenis?.id">{{ jenis?.nama }}</option>
                 </select>
               </div>
               <div class="ds-dynamic-col ds-dynamic-col-jumlah">
@@ -310,7 +304,7 @@
 
     <!-- Toast Notifikasi -->
     <div class="ds-toast-wrap" aria-live="polite">
-      <div v-for="toast in toasts" :key="toast.id" :class="['ds-toast', 'ds-toast-' + toast.type]">
+      <div v-for="toast in toasts" :key="toast?.id" :class="['ds-toast', 'ds-toast-' + toast.type]">
         <i :class="['ds-toast-icon bi', toastIcon(toast.type)]"></i>
         <span>{{ toast.message }}</span>
       </div>
@@ -328,7 +322,8 @@ export default {
   computed: {
     ...dataSampahScript.computed,
     dataDitolak() {
-      return this.dataList.filter(item => item.status === 'ditolak' || item.status === 'rejected')
+      if (!Array.isArray(this.dataList)) return [];
+      return this.dataList.filter(item => item?.status === 'ditolak' || item?.status === 'rejected')
     },
   },
 }

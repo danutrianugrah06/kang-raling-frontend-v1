@@ -44,6 +44,9 @@ export default {
   computed: {
     // Grouping data per tanggal per desa (akumulasi jenis sampah)
     groupedDataSampah() {
+      // PENGAMAN: Jika bukan array, kembalikan array kosong agar forEach tidak error
+      if (!Array.isArray(this.dataSampahMentah)) return [];
+
       const groups = {};
       this.dataSampahMentah.forEach((item) => {
         const desaId = item.desa_id || item.desa?.id;
@@ -62,6 +65,7 @@ export default {
             total_terkelola: 0,
           };
         }
+
         const jumlah = parseFloat(item.jumlah || 0);
         groups[key].total_timbulan += jumlah;
         const jenis = (item.jenis_sampah?.nama || "").toLowerCase();
@@ -91,6 +95,7 @@ export default {
         total_organik = 0,
         total_anorganik = 0,
         total_residu = 0;
+        
       this.groupedDataSampah.forEach((group) => {
         total_sampah += group.total_timbulan;
         total_terkelola += group.total_terkelola;
@@ -98,6 +103,7 @@ export default {
         total_anorganik += group.anorganik;
         total_residu += group.residu;
       });
+      
       return {
         jumlah_tps: this.desas.length,
         total_sampah,
@@ -135,7 +141,18 @@ export default {
       this.loadingDesa = true;
       try {
         const res = await api.get("/desas");
-        this.desas = res.data.data || res.data;
+        
+        // PENGAMAN: Bongkar bungkus desa
+        let listDesa = [];
+        if (res.data?.data?.data && Array.isArray(res.data.data.data)) {
+          listDesa = res.data.data.data;
+        } else if (res.data?.data && Array.isArray(res.data.data)) {
+          listDesa = res.data.data;
+        } else if (Array.isArray(res.data)) {
+          listDesa = res.data;
+        }
+        
+        this.desas = listDesa;
       } catch (e) {
       } finally {
         this.loadingDesa = false;
@@ -151,8 +168,21 @@ export default {
         if (this.filterDesa) params.desa_id = this.filterDesa;
         if (this.filterBulan) params.bulan = this.filterBulan;
         if (this.filterTahun) params.tahun = this.filterTahun;
+        
         const res = await api.get("/data-sampah/publik", { params });
-        this.dataSampahMentah = res.data.data || res.data;
+        
+        // PENGAMAN SAKTI: Bongkar bungkus pagination Laravel
+        let mentah = [];
+        if (res.data?.data?.data && Array.isArray(res.data.data.data)) {
+          mentah = res.data.data.data;
+        } else if (res.data?.data && Array.isArray(res.data.data)) {
+          mentah = res.data.data;
+        } else if (Array.isArray(res.data)) {
+          mentah = res.data;
+        }
+        
+        this.dataSampahMentah = mentah;
+        
         if (this.desaList.length > 0) this.openDesaId = this.desaList[0].id;
       } catch (e) {
         this.showToast("Gagal memuat data sampah.", "error");
