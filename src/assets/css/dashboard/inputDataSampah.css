@@ -95,8 +95,7 @@
 .ds-th-no        { width: 5%; }
 .ds-th-tanggal   { width: 15%; }
 .ds-th-desa      { width: 25%; }
-.ds-th-jenis     { width: 20%; }
-.ds-th-jumlah    { width: 10%; }
+.ds-th-rincian   { width: 30%; }
 .ds-th-status    { width: 10%; }
 .ds-th-aksi      { width: 15%; }
 
@@ -795,6 +794,51 @@
 .ds-toast-error   .ds-toast-icon { color: #E53935; }
 .ds-toast-info    .ds-toast-icon { color: #1E88E5; }
 @keyframes ds-toast-in { from { transform: translateX(60px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+/* DESAIN BARU RINCIAN SAMPAH (LIST KOTAK) */
+/* DESAIN BARU RINCIAN SAMPAH (LIST KOTAK) */
+.ds-rincian-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 260px;
+}
+
+.ds-rincian-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #FAFAFA;
+  border: 1px solid #F3F4F6;
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: border-color 0.2s;
+}
+
+.ds-rincian-nama {
+  font-size: 0.8125rem;
+  color: #4B5563;
+  font-weight: 500;
+}
+
+.ds-rincian-qty {
+  font-size: 0.8125rem;
+  color: #111827;
+  font-weight: 700;
+}
+
+/* Skeleton untuk rincian baru */
+.ds-skel-rincian-item {
+  width: 100%;
+  max-width: 260px;
+  height: 32px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, #F3F4F6 25%, #E9EAEC 50%, #F3F4F6 75%);
+  background-size: 200% 100%;
+  animation: ds-shimmer 1.4s infinite;
+}
+.mt-1 { margin-top: 6px; }
 
 /* Responsive */
 @media (max-width: 768px) {

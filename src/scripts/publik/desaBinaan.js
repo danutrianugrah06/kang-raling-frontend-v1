@@ -3,14 +3,12 @@ import api from '@/services/api.js'
 export default {
   data() {
     return {
-      desas: [],           // Array data desa yang ditampilkan
-      loading: true,       // Status loading pertama kali
-      loadingMore: false,  // Status loading saat memuat lebih banyak
-      currentPage: 1,      // Halaman saat ini
-      lastPage: 1,         // Halaman terakhir dari API
-      hasMore: false,      // Apakah masih ada halaman berikutnya
-      toasts: [],          // Antrian notifikasi toast
-      toastCounter: 0,     // Penghitung ID unik toast
+      desas: [],        // Array data desa yang ditampilkan
+      loading: true,    // Status loading saat fetch data
+      currentPage: 1,    // Halaman saat ini
+      lastPage: 1,       // Halaman terakhir dari API
+      toasts: [],        // Antrian notifikasi toast
+      toastCounter: 0,   // Penghitung ID unik toast
     }
   },
 
@@ -22,43 +20,39 @@ export default {
   methods: {
     /*
       FETCH DATA DESA
-      - Mengambil data dari endpoint /desas dengan parameter page dan per_page.
-      - Jika page = 1, ganti array desas; jika page > 1, gabungkan dengan array lama.
-      - Update currentPage, lastPage, dan hasMore untuk kontrol tombol.
+      - Mengambil data dari endpoint /desas dengan parameter page.
+      - Backend sudah paginate(9), jadi setiap halaman berisi 9 desa.
+      - Update currentPage dan lastPage dari response Laravel paginate.
     */
     async fetchDesas(page = 1) {
-      if (page === 1) this.loading = true
-      else this.loadingMore = true
-
+      this.loading = true
       try {
-        const res = await api.get('/desas', { params: { page, per_page: 8 } })
+        const res = await api.get('/desas', { params: { page } })
         const d = res.data
 
-        if (page === 1) {
-          this.desas = d.data || []
-        } else {
-          this.desas = [...this.desas, ...(d.data || [])]
-        }
-
-        this.currentPage = d.current_page
-        this.lastPage = d.last_page
-        this.hasMore = this.currentPage < this.lastPage
+        this.desas       = d.data || []
+        this.currentPage = d.current_page || 1
+        this.lastPage    = d.last_page || 1
 
       } catch (e) {
         this.showToast('Gagal memuat daftar desa.', 'error')
       } finally {
         this.loading = false
-        this.loadingMore = false
       }
     },
 
     /*
-      LOAD MORE: Memanggil fetchDesas dengan halaman berikutnya.
-      - Dicegah jika hasMore false.
+      PINDAH HALAMAN
+      - Dicegah jika halaman tujuan di luar rentang valid.
+      - Scroll ke atas grid supaya pengguna langsung lihat konten baru.
     */
-    loadMore() {
-      if (!this.hasMore) return
-      this.fetchDesas(this.currentPage + 1)
+    goToPage(page) {
+      if (page < 1 || page > this.lastPage) return
+      this.fetchDesas(page)
+      this.$nextTick(() => {
+        const grid = document.querySelector('.desa-grid')
+        if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' })
+      })
     },
 
     /*

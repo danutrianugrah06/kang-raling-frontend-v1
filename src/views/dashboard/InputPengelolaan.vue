@@ -69,9 +69,6 @@
                     <p class="ip-empty-desc">
                       {{ searchQuery ? 'Tidak ada data yang cocok dengan pencarian ini.' : 'Mulai catat pengelolaan untuk data sampah yang telah diverifikasi.' }}
                     </p>
-                    <button v-if="!searchQuery" class="ip-btn-add" @click="bukaModalForm">
-                      <i class="bi bi-plus-lg"></i> Tambah Pengelolaan
-                    </button>
                   </div>
                 </td>
               </tr>

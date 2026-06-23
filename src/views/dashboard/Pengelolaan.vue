@@ -76,9 +76,6 @@
                     <p class="jp-empty-desc">
                       {{ keyword ? 'Tidak ada data yang cocok dengan pencarian ini.' : 'Mulai tambahkan jenis pengelolaan pertama.' }}
                     </p>
-                    <button v-if="!keyword" class="jp-btn-add" @click="bukaModalTambah">
-                      <i class="bi bi-plus-lg"></i> Tambah Pengelolaan
-                    </button>
                   </div>
                 </td>
               </tr>

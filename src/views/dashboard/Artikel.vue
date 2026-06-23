@@ -84,13 +84,6 @@
                         ? 'Tidak ada artikel yang cocok dengan pencarian ini.'
                         : 'Mulai tambahkan artikel pertama kamu.' }}
                     </p>
-                    <button
-                      v-if="!searchQuery"
-                      class="ar-btn-add"
-                      @click="bukaModalTambah"
-                    >
-                      <i class="bi bi-plus-lg"></i> Tambah Artikel
-                    </button>
                   </div>
                 </td>
               </tr>

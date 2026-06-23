@@ -122,10 +122,6 @@
                 {{ formatAngka(profilTps.jumlah_warga_terlayani) }}
               </p>
               <p class="statistik-satuan">Kepala Keluarga (KK)</p>
-              <div class="statistik-bar-wrap">
-                <!-- Class statistik-bar-fill-full menggantikan style="width:100%;" -->
-                <div class="statistik-bar-fill statistik-bar-fill-full"></div>
-              </div>
               <p class="statistik-note">
                 Telah terlayani oleh program pengelolaan sampah mandiri desa.
               </p>

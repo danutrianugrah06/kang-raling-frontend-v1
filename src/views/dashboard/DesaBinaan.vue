@@ -63,9 +63,6 @@
                     <p class="db-empty-desc">
                       {{ searchQuery ? 'Tidak ada desa yang cocok dengan pencarian ini.' : 'Mulai tambahkan desa binaan untuk pertama.' }}
                     </p>
-                    <button v-if="!searchQuery" class="db-btn-add" @click="bukaModalTambahDesa">
-                      <i class="bi bi-plus-lg"></i> Tambah Desa
-                    </button>
                   </div>
                 </td>
               </tr>

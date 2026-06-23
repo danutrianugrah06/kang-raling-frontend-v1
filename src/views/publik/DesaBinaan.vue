@@ -20,9 +20,9 @@
     <section class="desa-content">
       <div class="container">
 
-        <!-- SKELETON LOADER: 8 kartu palsu saat data sedang diambil -->
+        <!-- SKELETON LOADER: 9 kartu palsu saat data sedang diambil -->
         <div v-if="loading" class="desa-grid">
-          <div v-for="n in 8" :key="'sk-'+n" class="skeleton-desa-card">
+          <div v-for="n in 9" :key="'sk-'+n" class="skeleton-desa-card">
             <div class="skeleton-desa-img"></div>
             <div class="skeleton-desa-body">
               <!-- 
@@ -78,15 +78,40 @@
         </div>
 
         <!-- TOMBOL MUAT LEBIH BANYAK: jika masih ada halaman berikutnya -->
-        <div v-if="!loading && desas.length > 0 && hasMore">
-          <button class="btn-load-more" :disabled="loadingMore" @click="loadMore">
-            <!-- Class spinning untuk animasi ikon (keyframes spin ada di desa.css) -->
-            <i
-              class="bi"
-              :class="loadingMore ? 'bi-arrow-repeat spinning' : 'bi-plus-circle'"
-            ></i>
-            {{ loadingMore ? 'Memuat...' : 'Muat Lebih Banyak' }}
-          </button>
+        <!-- PAGINATION: muncul jika lebih dari 1 halaman -->
+        <div v-if="!loading && desas.length > 0 && lastPage > 1" class="custom-pagination">
+          <div class="pagination-info">
+            Menampilkan halaman {{ currentPage }} dari {{ lastPage }}
+          </div>
+          <div class="pagination-actions">
+            <button
+              class="page-btn"
+              :disabled="currentPage === 1"
+              @click="goToPage(currentPage - 1)"
+              aria-label="Halaman sebelumnya"
+            >
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button
+              v-for="page in lastPage"
+              :key="page"
+              class="page-btn num-btn"
+              :class="{ active: page === currentPage }"
+              @click="goToPage(page)"
+              :aria-label="'Halaman ' + page"
+              :aria-current="page === currentPage ? 'page' : undefined"
+            >
+              {{ page }}
+            </button>
+            <button
+              class="page-btn"
+              :disabled="currentPage === lastPage"
+              @click="goToPage(currentPage + 1)"
+              aria-label="Halaman berikutnya"
+            >
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
         </div>
 
       </div>

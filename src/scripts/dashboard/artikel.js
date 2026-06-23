@@ -24,7 +24,7 @@ export default {
       isEdit: false,
       editId: null,
 
-      // Form data
+      // Form data[cite: 3]
       form: {
         judul: '',
         isi_artikel: '',
@@ -33,6 +33,7 @@ export default {
       previewGambar: null,
       existingGambar: null,
       formErrors: {},
+      gambarDihapusSengaja: false, // INDIKATOR BARU: Mendeteksi jika gambar dihapus oleh user[cite: 3]
 
       // Modal hapus
       showModalHapus: false,
@@ -127,6 +128,7 @@ export default {
       this.previewGambar  = null
       this.existingGambar = null
       this.formErrors     = {}
+      this.gambarDihapusSengaja = false // Reset indikator[cite: 3]
       this.showModal      = true
     },
 
@@ -147,6 +149,7 @@ export default {
         : null
       this.previewGambar  = this.existingGambar
       this.formErrors     = {}
+      this.gambarDihapusSengaja = false // Reset indikator[cite: 3]
       this.showModal      = true
     },
 
@@ -186,6 +189,7 @@ export default {
       this.formGambar     = null
       this.previewGambar  = null
       this.existingGambar = null
+      this.gambarDihapusSengaja = true // Aktifkan sinyal hapus[cite: 3]
     },
 
     /**
@@ -208,7 +212,13 @@ export default {
         const fd = new FormData()
         fd.append('judul',       this.form.judul)
         fd.append('isi_artikel', this.form.isi_artikel)
-        if (this.formGambar) fd.append('gambar', this.formGambar)
+        
+        // Logika baru untuk menyuntikkan file gambar atau sinyal hapus gambar[cite: 3]
+        if (this.formGambar) {
+          fd.append('gambar', this.formGambar)
+        } else if (this.isEdit && this.gambarDihapusSengaja) {
+          fd.append('remove_gambar', 'true')
+        }
 
         const config = { headers: { 'Content-Type': 'multipart/form-data' } }
 

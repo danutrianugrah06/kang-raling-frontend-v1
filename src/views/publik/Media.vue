@@ -15,18 +15,10 @@
 
         <!-- TOMBOL TAB: menggunakan class binding untuk menandai tab aktif -->
         <div class="media-tabs">
-          <button
-            class="media-tab-btn"
-            :class="{ active: activeTab === 'artikel' }"
-            @click="switchTab('artikel')"
-          >
+          <button class="media-tab-btn" :class="{ active: activeTab === 'artikel' }" @click="switchTab('artikel')">
             <i class="bi bi-newspaper"></i> Artikel
           </button>
-          <button
-            class="media-tab-btn"
-            :class="{ active: activeTab === 'galeri' }"
-            @click="switchTab('galeri')"
-          >
+          <button class="media-tab-btn" :class="{ active: activeTab === 'galeri' }" @click="switchTab('galeri')">
             <i class="bi bi-images"></i> Galeri
           </button>
         </div>
@@ -42,7 +34,7 @@
 
           <!-- Skeleton loader: 6 kartu palsu saat data sedang diambil -->
           <div v-if="loadingArtikel" class="artikel-grid">
-            <div v-for="n in 6" :key="'sk-artikel-'+n" class="skeleton-card">
+            <div v-for="n in 6" :key="'sk-artikel-' + n" class="skeleton-card">
               <div class="skeleton-img"></div>
               <div class="skeleton-body">
                 <!-- Setiap skeleton-line diberi class khusus untuk margin yang konsisten -->
@@ -67,21 +59,11 @@
 
           <!-- Grid artikel: tampilan normal -->
           <div v-else class="artikel-grid">
-            <div
-              v-for="artikel in artikels"
-              :key="artikel.id"
-              class="artikel-card"
-              @click="goToArtikel(artikel.slug)"
-            >
+            <div v-for="artikel in artikels" :key="artikel.id" class="artikel-card" @click="goToArtikel(artikel.slug)">
               <!-- Gambar artikel dengan fallback jika tidak ada -->
               <div class="artikel-card-img-wrap">
-                <img
-                  v-if="artikel.gambar"
-                  :src="getImageUrl(artikel.gambar)"
-                  :alt="artikel.judul"
-                  loading="lazy"
-                  @error="onImgError"
-                />
+                <img v-if="artikel.gambar" :src="getImageUrl(artikel.gambar)" :alt="artikel.judul" loading="lazy"
+                  @error="onImgError" />
                 <div v-else class="artikel-card-img-placeholder">
                   <i class="bi bi-newspaper"></i>
                 </div>
@@ -103,12 +85,24 @@
           </div>
 
           <!-- Tombol "Muat Lebih Banyak" jika masih ada halaman berikutnya -->
-          <div v-if="!loadingArtikel && artikels.length > 0 && hasMoreArtikel" class="load-more-wrapper text-center">
-            <button class="btn-load-more" :disabled="loadingMoreArtikel" @click="loadMoreArtikel">
-              <i v-if="loadingMoreArtikel" class="bi bi-arrow-repeat spin-animation"></i>
-              <i v-else class="bi bi-plus-circle"></i>
-              {{ loadingMoreArtikel ? 'Memuat...' : 'Muat Lebih Banyak' }}
-            </button>
+          <!-- Pagination Artikel -->
+          <div v-if="!loadingArtikel && artikelTotalPages > 1" class="custom-pagination">
+            <div class="pagination-info">
+              Menampilkan halaman {{ artikelPage }} dari {{ artikelTotalPages }}
+            </div>
+            <div class="pagination-actions">
+              <button class="page-btn" :disabled="artikelPage === 1" @click="changePageArtikel(artikelPage - 1)">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button v-for="page in artikelTotalPages" :key="page" class="page-btn num-btn"
+                :class="{ active: page === artikelPage }" @click="changePageArtikel(page)">
+                {{ page }}
+              </button>
+              <button class="page-btn" :disabled="artikelPage === artikelTotalPages"
+                @click="changePageArtikel(artikelPage + 1)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -117,11 +111,7 @@
 
           <!-- Skeleton loader galeri -->
           <div v-if="loadingGaleri" class="galeri-grid">
-            <div
-              v-for="n in 6"
-              :key="'sk-galeri-'+n"
-              class="skeleton skeleton-galeri-img"
-            ></div>
+            <div v-for="n in 6" :key="'sk-galeri-' + n" class="skeleton skeleton-galeri-img"></div>
           </div>
 
           <!-- Empty state galeri -->
@@ -135,6 +125,7 @@
           </div>
 
           <!-- Grid galeri -->
+          <!-- Grid galeri -->
           <div v-else class="galeri-grid">
             <div
               v-for="galeri in galeris"
@@ -142,38 +133,52 @@
               class="galeri-card"
               @click="goToGaleri(galeri.slug)"
             >
-              <img
-                v-if="galeri.gambar"
-                :src="getImageUrl(galeri.gambar)"
-                :alt="galeri.keterangan || 'Foto Galeri'"
-                loading="lazy"
-                @error="onImgError"
-              />
-              <div v-else class="galeri-card-placeholder">
-                <i class="bi bi-image"></i>
+              <!-- Bagian Gambar Galeri -->
+              <div class="galeri-card-img-wrap">
+                <img
+                  v-if="galeri.gambar"
+                  :src="getImageUrl(galeri.gambar)"
+                  :alt="galeri.keterangan || 'Foto Galeri'"
+                  loading="lazy"
+                  @error="onImgError"
+                />
+                <div v-else class="galeri-card-img-placeholder">
+                  <i class="bi bi-image"></i>
+                </div>
+                <!-- Badge kategori jika ada -->
+                <span v-if="galeri.kategori" class="galeri-badge">{{ galeri.kategori }}</span>
               </div>
 
-              <!-- Badge kategori jika ada -->
-              <span v-if="galeri.kategori" class="galeri-badge">{{ galeri.kategori }}</span>
-
-              <!-- Overlay dengan keterangan dan tanggal saat hover -->
-              <div class="galeri-card-overlay">
-                <p class="galeri-card-keterangan">{{ galeri.keterangan || 'Foto Kegiatan' }}</p>
+              <!-- Bagian Frame Putih (Tanggal & Caption) -->
+              <div class="galeri-card-body">
                 <div class="galeri-card-meta">
                   <i class="bi bi-calendar3"></i>
                   {{ formatTanggal(galeri.created_at) }}
                 </div>
+                <h3 class="galeri-card-title">{{ galeri.keterangan || 'Dokumentasi Kegiatan' }}</h3>
               </div>
             </div>
           </div>
 
           <!-- Tombol "Muat Lebih Banyak" untuk galeri -->
-          <div v-if="!loadingGaleri && galeris.length > 0 && hasMoreGaleri" class="load-more-wrapper text-center galeri-load-more-wrap">
-            <button class="btn-load-more" :disabled="loadingMoreGaleri" @click="loadMoreGaleri">
-              <i v-if="loadingMoreGaleri" class="bi bi-arrow-repeat spin-animation"></i>
-              <i v-else class="bi bi-plus-circle"></i>
-              {{ loadingMoreGaleri ? 'Memuat...' : 'Muat Lebih Banyak' }}
-            </button>
+          <!-- Pagination Galeri -->
+          <div v-if="!loadingGaleri && galeriTotalPages > 1" class="custom-pagination mt-4">
+            <div class="pagination-info">
+              Menampilkan halaman {{ galeriPage }} dari {{ galeriTotalPages }}
+            </div>
+            <div class="pagination-actions">
+              <button class="page-btn" :disabled="galeriPage === 1" @click="changePageGaleri(galeriPage - 1)">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button v-for="page in galeriTotalPages" :key="'gal-' + page" class="page-btn num-btn"
+                :class="{ active: page === galeriPage }" @click="changePageGaleri(page)">
+                {{ page }}
+              </button>
+              <button class="page-btn" :disabled="galeriPage === galeriTotalPages"
+                @click="changePageGaleri(galeriPage + 1)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
           </div>
         </div>
 

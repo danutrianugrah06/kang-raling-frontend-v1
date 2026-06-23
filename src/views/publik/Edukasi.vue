@@ -57,14 +57,14 @@
               <div v-else class="modul-card-img-placeholder">
                 <i class="bi bi-journal-richtext"></i>
               </div>
-              <span class="modul-badge modul">Modul</span>
+              
               <div class="modul-pdf-tag">
                 <i class="bi bi-file-earmark-pdf-fill"></i>
               </div>
             </div>
             <div class="modul-card-body">
               <h3 class="modul-card-title">{{ modul.judul }}</h3>
-              <p class="modul-card-desc">{{ modul.deskripsi || 'Panduan lengkap tersedia dalam format PDF.' }}</p>
+              <p class="modul-card-desc">{{ modul.deskripsi }}</p>
               <div class="modul-card-footer">
                 <span class="modul-card-meta">
                   <i class="bi bi-calendar3"></i>
@@ -79,11 +79,19 @@
         </div>
 
         <!-- Load more modul -->
-        <div v-if="!loadingModul && moduls.length > 0 && hasMoreModul">
-          <button class="btn-load-more" :disabled="loadingMoreModul" @click="loadMoreModul">
-            <i class="bi" :class="loadingMoreModul ? 'bi-arrow-repeat spinning' : 'bi-plus-circle'"></i>
-            {{ loadingMoreModul ? 'Memuat...' : 'Muat Lebih Banyak' }}
-          </button>
+        <div v-if="!loadingModul && moduls.length > 0" class="custom-pagination">
+          <div class="pagination-info">Menampilkan halaman {{ modulPage }} dari {{ modulTotalPages }}</div>
+          <div class="pagination-actions">
+            <button class="page-btn" :disabled="modulPage === 1" @click="changePageModul(modulPage - 1)">
+              <i class="bi bi-chevron-left"></i>
+            </button>
+            <button v-for="page in modulTotalPages" :key="'m'+page" class="page-btn num-btn" :class="{ active: page === modulPage }" @click="changePageModul(page)">
+              {{ page }}
+            </button>
+            <button class="page-btn" :disabled="modulPage === modulTotalPages" @click="changePageModul(modulPage + 1)">
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          </div>
         </div>
 
         <hr class="section-divider" />
@@ -93,17 +101,15 @@
           <h2 class="section-title">Video Edukasi</h2>
         </div>
 
-        <!-- Skeleton video -->
-        <div v-if="loadingVideo">
-          <div class="sk-video-featured"></div>
-          <div class="video-grid">
-            <div v-for="n in 3" :key="'sk-vid-' + n" class="skeleton-video-card">
-              <div class="sk-video-thumb"></div>
-              <div class="sk-body">
-                <div class="sk-line sk-line-short"></div>
-                <div class="sk-line sk-line-full"></div>
-                <div class="sk-line sk-line-medium"></div>
-              </div>
+        <!-- Skeleton Video Baru (Disamakan dengan Modul) -->
+        <div v-if="loadingVideo" class="modul-grid">
+          <div v-for="n in 3" :key="'sk-vid-' + n" class="skeleton-modul-card">
+            <div class="sk-img"></div>
+            <div class="sk-body">
+              <div class="sk-line sk-line-short"></div>
+              <div class="sk-line sk-line-full"></div>
+              <div class="sk-line sk-line-medium"></div>
+              <div class="sk-line sk-line-short sk-line-mt-6"></div>
             </div>
           </div>
         </div>
@@ -118,69 +124,55 @@
           </p>
         </div>
 
-        <!-- Konten video (jika ada) -->
+        <!-- Konten Video (Grid disamakan dengan Modul) -->
         <div v-else>
-          <!-- VIDEO FEATURED (video pertama) -->
-          <div class="video-featured" @click="bukaVideo(videos[0])">
-            <img v-if="getVideoImage(videos[0])" :src="getVideoImage(videos[0])" :alt="videos[0].judul"
-              loading="lazy" />
-            <div v-else class="video-featured-placeholder">
-              <i class="bi bi-play-circle"></i>
-            </div>
-            <div class="video-featured-overlay"></div>
-            <div class="video-play-btn">
-              <i class="bi bi-play-fill"></i>
-            </div>
-            <div class="video-featured-info">
-              <span class="video-featured-badge">
-                <!-- Class icon-mr-4 menggantikan style="margin-right:4px;" -->
-                <i class="bi bi-youtube icon-mr-4"></i> Video
-              </span>
-              <h2 class="video-featured-title">{{ videos[0].judul }}</h2>
-              <div class="video-featured-meta">
-                <span>
-                  <i class="bi bi-calendar3"></i>
-                  {{ formatTanggal(videos[0].created_at) }}
-                </span>
-                <span v-if="videos[0].user">
-                  <i class="bi bi-person-circle"></i>
-                  {{ videos[0].user.nama || videos[0].user.name }}
-                </span>
-              </div>
-            </div>
-          </div>
-
-          <!-- GRID VIDEO SISANYA (mulai index 1) -->
-          <div v-if="videos.length > 1" class="video-grid">
-            <div v-for="video in videos.slice(1)" :key="video.id" class="video-card" @click="bukaVideo(video)">
-              <div class="video-card-thumb">
+          <div class="modul-grid">
+            <div v-for="video in videos" :key="video.id" class="modul-card" @click="bukaVideo(video)">
+              <!-- Gambar Video -->
+              <div class="modul-card-img-wrap">
                 <img v-if="getVideoImage(video)" :src="getVideoImage(video)" :alt="video.judul" loading="lazy" />
-                <div v-else class="video-card-thumb-placeholder">
+                <div v-else class="modul-card-img-placeholder">
                   <i class="bi bi-play-circle"></i>
                 </div>
+                
                 <div class="video-card-thumb-overlay">
                   <div class="video-card-play">
                     <i class="bi bi-play-fill"></i>
                   </div>
                 </div>
               </div>
-              <div class="video-card-body">
-                <span class="video-card-badge">Video</span>
-                <h3 class="video-card-title">{{ video.judul }}</h3>
-                <div class="video-card-meta">
-                  <i class="bi bi-calendar3"></i>
-                  {{ formatTanggal(video.created_at) }}
+              
+              <!-- Teks Video -->
+              <div class="modul-card-body">
+                <h3 class="modul-card-title">{{ video.judul }}</h3>
+                <p class="modul-card-desc">{{ video.deskripsi || 'Video panduan edukasi lingkungan dan tata kelola sampah.' }}</p>
+                <div class="modul-card-footer">
+                  <span class="modul-card-meta">
+                    <i class="bi bi-calendar3"></i>
+                    {{ formatTanggal(video.created_at) }}
+                  </span>
+                  <span class="modul-open-btn video-open-btn">
+                    Tonton <i class="bi bi-play-circle-fill"></i>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- Load more video -->
-          <div v-if="hasMoreVideo">
-            <button class="btn-load-more" :disabled="loadingMoreVideo" @click="loadMoreVideo">
-              <i class="bi" :class="loadingMoreVideo ? 'bi-arrow-repeat spinning' : 'bi-plus-circle'"></i>
-              {{ loadingMoreVideo ? 'Memuat...' : 'Muat Lebih Banyak Video' }}
-            </button>
+          <!-- Pagination Video -->
+          <div v-if="!loadingVideo && videos.length > 0" class="custom-pagination mt-4">
+            <div class="pagination-info">Menampilkan halaman {{ videoPage }} dari {{ videoTotalPages }}</div>
+            <div class="pagination-actions">
+              <button class="page-btn" :disabled="videoPage === 1" @click="changePageVideo(videoPage - 1)">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+              <button v-for="page in videoTotalPages" :key="'v'+page" class="page-btn num-btn" :class="{ active: page === videoPage }" @click="changePageVideo(page)">
+                {{ page }}
+              </button>
+              <button class="page-btn" :disabled="videoPage === videoTotalPages" @click="changePageVideo(videoPage + 1)">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </div>
           </div>
         </div>
 

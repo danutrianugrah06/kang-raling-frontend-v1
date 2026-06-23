@@ -1,6 +1,6 @@
 <template>
   <div class="ds-page-content">
-    
+
     <!-- Page Header -->
     <div class="ds-page-header">
       <div>
@@ -14,6 +14,7 @@
 
     <!-- Table Card -->
     <div class="ds-table-card">
+      
       <!-- Panel Pesan Penolakan (Fasilitator) -->
       <div v-if="!isAdmin && dataDitolak.length > 0" class="ds-rejection-panel">
         <div class="ds-rejection-panel-header">
@@ -26,24 +27,18 @@
             {{ panelDitolakTerbuka ? 'Sembunyikan' : 'Lihat Detail' }}
           </button>
         </div>
-        <p class="ds-rejection-panel-sub">
-          Terdapat {{ dataDitolak.length }} data yang ditolak oleh admin. Silakan perbaiki dan kirim ulang.
-        </p>
-
         <div v-if="panelDitolakTerbuka" class="ds-rejection-list">
-          <div v-for="item in dataDitolak" :key="'tolak-' + item?.id" class="ds-rejection-item">
+          <div v-for="(item, idxGroup) in dataDitolak" :key="'tolak-' + idxGroup" class="ds-rejection-item">
             <div class="ds-rejection-item-head">
               <div class="ds-rejection-meta">
                 <span class="ds-rejection-desa"><i class="bi bi-geo-alt-fill"></i> {{ item?.desa?.nama_desa || '-' }}</span>
                 <span class="ds-rejection-dot">·</span>
-                <span class="ds-rejection-jenis">{{ item?.jenis_sampah?.nama || '-' }}</span>
-                <span class="ds-rejection-dot">·</span>
-                <span class="ds-rejection-jumlah"><i class="bi bi-box-seam"></i> {{ formatAngka(item?.jumlah) }} Kg</span>
-                <span class="ds-rejection-dot">·</span>
                 <span class="ds-rejection-tgl"><i class="bi bi-calendar3"></i> {{ formatTanggal(item?.tanggal) }}</span>
+                <span class="ds-rejection-dot">·</span>
+                <span class="ds-rejection-jumlah"><i class="bi bi-box-seam"></i> Total: {{ formatAngka(item?.total_jumlah) }} Kg</span>
               </div>
               <button class="ds-rejection-btn-edit" @click="bukaModalEdit(item)" title="Perbaiki data ini">
-                <i class="bi bi-pencil-square"></i> Perbaiki
+                <i class="bi bi-pencil-square"></i> Perbaiki Kesatuan
               </button>
             </div>
             <div class="ds-rejection-catatan">
@@ -61,7 +56,8 @@
       <div class="ds-search-bar">
         <div class="ds-search-wrap">
           <i class="bi bi-search"></i>
-          <input v-model="searchQuery" @input="onSearch" type="text" class="ds-search-input" placeholder="Cari desa atau jenis sampah..." aria-label="Cari data sampah" />
+          <input v-model="searchQuery" @input="onSearch" type="text" class="ds-search-input"
+            placeholder="Cari desa atau status..." aria-label="Cari data sampah" />
         </div>
       </div>
 
@@ -73,8 +69,7 @@
               <th class="ds-th-no">No</th>
               <th class="ds-th-tanggal">Tanggal</th>
               <th class="ds-th-desa">Desa Binaan</th>
-              <th class="ds-th-jenis">Jenis Sampah</th>
-              <th class="ds-th-jumlah">Jumlah (Kg)</th>
+              <th class="ds-th-rincian">Rincian Sampah</th>
               <th class="ds-th-status">Status</th>
               <th class="ds-th-aksi">Aksi</th>
             </tr>
@@ -82,15 +77,17 @@
           <tbody>
             <!-- Skeleton Loader -->
             <template v-if="loading">
-              <tr v-for="n in 5" :key="'sk-'+n">
+              <tr v-for="n in 5" :key="'sk-' + n">
                 <td><div class="ds-skel ds-skel-no"></div></td>
                 <td><div class="ds-skel ds-skel-tanggal"></div></td>
                 <td>
                   <div class="ds-skel ds-skel-desa"></div>
                   <div class="ds-skel ds-skel-desa-sub"></div>
                 </td>
-                <td><div class="ds-skel ds-skel-jenis"></div></td>
-                <td><div class="ds-skel ds-skel-jumlah"></div></td>
+                <td>
+                  <div class="ds-skel ds-skel-rincian-item"></div>
+                  <div class="ds-skel ds-skel-rincian-item mt-1"></div>
+                </td>
                 <td><div class="ds-skel ds-skel-badge"></div></td>
                 <td>
                   <div class="ds-aksi">
@@ -102,34 +99,38 @@
             </template>
 
             <!-- Empty State -->
-            <template v-else-if="filteredData.length === 0">
+            <template v-else-if="groupedData.length === 0">
               <tr>
-                <td colspan="7">
+                <td colspan="6">
                   <div class="ds-empty">
                     <div class="ds-empty-icon"><i class="bi bi-clipboard2-data"></i></div>
                     <p class="ds-empty-title">Belum ada data sampah</p>
                     <p class="ds-empty-desc">
                       {{ searchQuery ? 'Tidak ada data yang cocok dengan pencarian ini.' : 'Mulai catat entri data sampah pertama.' }}
                     </p>
-                    <button v-if="!searchQuery" class="ds-btn-add" @click="bukaModalTambah">
-                      <i class="bi bi-plus-lg"></i> Entri Data Sampah
-                    </button>
                   </div>
                 </td>
               </tr>
             </template>
 
-            <!-- Data Rows -->
+            <!-- Data Rows (Grouped) -->
             <template v-else>
-              <tr v-for="(item, index) in filteredData" :key="item?.id" class="ds-data-row">
+              <tr v-for="(item, index) in groupedData" :key="index" class="ds-data-row">
                 <td class="ds-td-center">{{ (currentPage - 1) * perPage + index + 1 }}</td>
                 <td>{{ formatTanggal(item?.tanggal) }}</td>
                 <td>
                   <p class="ds-td-nama">{{ item?.desa ? item.desa.nama_desa : '-' }}</p>
                   <p class="ds-td-sub">Oleh: {{ item?.user ? item.user.nama : '-' }}</p>
                 </td>
-                <td><span class="ds-badge-jenis">{{ item?.jenis_sampah ? item.jenis_sampah.nama : '-' }}</span></td>
-                <td><strong>{{ formatAngka(item?.jumlah) }}</strong></td>
+                <td>
+                  <!-- INI DESAIN BARU RINCIAN SAMPAH -->
+                  <div class="ds-rincian-list">
+                    <div v-for="sampah in item.items" :key="sampah.id" class="ds-rincian-item">
+                       <span class="ds-rincian-nama">{{ sampah.jenis_sampah?.nama || '-' }}</span>
+                       <span class="ds-rincian-qty">{{ formatAngka(sampah.jumlah) }} Kg</span>
+                    </div>
+                  </div>
+                </td>
                 <td>
                   <span :class="['ds-status-badge', badgeStatus(item?.status)]">
                     <i :class="iconStatus(item?.status)"></i>
@@ -142,10 +143,12 @@
                 </td>
                 <td>
                   <div class="ds-aksi">
-                    <button v-if="isAdmin && (item?.status === 'pending' || item?.status === null)" class="ds-btn-icon ds-btn-verifikasi" @click="bukaModalVerifikasi(item)" title="Verifikasi">
+                    <button v-if="isAdmin && (item?.status === 'pending' || item?.status === null)"
+                      class="ds-btn-icon ds-btn-verifikasi" @click="bukaModalVerifikasi(item)" title="Verifikasi">
                       <i class="bi bi-shield-check"></i>
                     </button>
-                    <button v-if="item?.status !== 'verified' || isAdmin" class="ds-btn-icon ds-btn-edit" @click="bukaModalEdit(item)" title="Edit">
+                    <button v-if="item?.status !== 'verified' || isAdmin" class="ds-btn-icon ds-btn-edit"
+                      @click="bukaModalEdit(item)" title="Edit">
                       <i class="bi bi-pencil"></i>
                     </button>
                     <button class="ds-btn-icon ds-btn-hapus" @click="konfirmasiHapus(item)" title="Hapus">
@@ -159,11 +162,10 @@
         </table>
       </div>
 
-      <!-- Pagination -->
-      <div v-if="!loading && dataList.length > 0" class="ds-table-footer">
+      <!-- Pagination (Hanya Angka Row) -->
+      <div v-if="!loading && groupedData.length > 0" class="ds-table-footer">
         <p class="ds-pagination-info">
-          Menampilkan {{ (currentPage - 1) * perPage + 1 }}–{{ Math.min(currentPage * perPage, total) }}
-          dari {{ total.toLocaleString('id-ID') }} data
+          Menampilkan baris data terangkum (Total entri mentah: {{ total.toLocaleString('id-ID') }})
         </p>
         <div class="ds-pagination" role="navigation">
           <button class="ds-page-btn" @click="goToPage(currentPage - 1)" :disabled="currentPage === 1"><i class="bi bi-chevron-left"></i></button>
@@ -177,7 +179,7 @@
     <div v-if="showModalForm" class="ds-modal-overlay" @click.self="tutupModalForm">
       <div class="ds-modal ds-modal-form">
         <div class="ds-modal-header">
-          <h2 class="ds-modal-title">{{ modeEdit ? 'Edit Data Sampah' : 'Entri Data Sampah' }}</h2>
+          <h2 class="ds-modal-title">{{ modeEdit ? 'Edit Kesatuan Data Sampah' : 'Entri Data Sampah' }}</h2>
           <button class="ds-modal-close" @click="tutupModalForm"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="ds-modal-body">
@@ -192,7 +194,7 @@
             </div>
             <div class="ds-form-group">
               <label class="ds-form-label">Tanggal <span>*</span></label>
-              <input v-model="form.tanggal" type="date" :class="['ds-form-input', { error: errors.tanggal }]" />
+              <input v-model="form.tanggal" type="date" :max="todayDate" :class="['ds-form-input', { error: errors.tanggal }]" />
               <p v-if="errors.tanggal" class="ds-form-error"><i class="bi bi-exclamation-circle"></i> {{ errors.tanggal }}</p>
             </div>
           </div>
@@ -204,8 +206,8 @@
           <!-- Dynamic Input Jenis Sampah -->
           <div class="ds-dynamic-section">
             <div class="ds-dynamic-header">
-              <label class="ds-form-label">Rincian Sampah <span>*</span></label>
-              <button v-if="!modeEdit" class="ds-btn-tambah-baris" @click="tambahBarisSampah">
+              <label class="ds-form-label" style="margin-bottom:0;">Rincian Sampah Keseluruhan <span>*</span></label>
+              <button class="ds-btn-tambah-baris" @click="tambahBarisSampah">
                 <i class="bi bi-plus"></i> Tambah Baris
               </button>
             </div>
@@ -219,7 +221,7 @@
               <div class="ds-dynamic-col ds-dynamic-col-jumlah">
                 <input v-model="item.jumlah" type="number" step="0.01" min="0" placeholder="Jumlah (Kg)" :class="['ds-form-input', { error: errors[`items.${idx}.jumlah`] }]" />
               </div>
-              <button v-if="!modeEdit && form.items.length > 1" class="ds-btn-hapus-baris" @click="hapusBarisSampah(idx)" title="Hapus baris">
+              <button v-if="form.items.length > 1" class="ds-btn-hapus-baris" @click="hapusBarisSampah(idx)" title="Hapus baris">
                 <i class="bi bi-dash-circle"></i>
               </button>
             </div>
@@ -231,7 +233,7 @@
           <button class="ds-btn-save" @click="simpanData" :disabled="loadingSubmit">
             <i v-if="loadingSubmit" class="bi bi-arrow-repeat ds-spin"></i>
             <i v-else class="bi bi-check-lg"></i>
-            {{ loadingSubmit ? 'Menyimpan...' : (modeEdit ? 'Simpan Perubahan' : 'Kirim Data') }}
+            {{ loadingSubmit ? 'Menyimpan...' : (modeEdit ? 'Simpan Kesatuan' : 'Kirim Data') }}
           </button>
         </div>
       </div>
@@ -241,32 +243,47 @@
     <div v-if="showModalVerifikasi" class="ds-modal-overlay" @click.self="tutupModalVerifikasi">
       <div class="ds-modal ds-modal-verify">
         <div class="ds-modal-header">
-          <h2 class="ds-modal-title">Verifikasi Data Sampah</h2>
+          <h2 class="ds-modal-title">Verifikasi Kesatuan Sampah</h2>
           <button class="ds-modal-close" @click="tutupModalVerifikasi"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="ds-modal-body">
           <div class="ds-verify-info">
             <p><strong>Desa:</strong> {{ itemVerifikasi?.desa?.nama_desa }}</p>
-            <p><strong>Jenis:</strong> {{ itemVerifikasi?.jenis_sampah?.nama }}</p>
-            <p><strong>Jumlah:</strong> {{ itemVerifikasi?.jumlah }} Kg</p>
+            <p><strong>Tanggal:</strong> {{ formatTanggal(itemVerifikasi?.tanggal) }}</p>
+            
+            <div style="margin-top: 10px;">
+               <strong>Rincian Sampah Terkumpul:</strong>
+               <ul style="margin: 6px 0 0 18px; padding: 0; color: #4B5563;">
+                 <li v-for="i in itemVerifikasi?.items" :key="i.id" style="margin-bottom: 4px;">
+                    {{ i.jenis_sampah?.nama }} — <strong>{{ formatAngka(i.jumlah) }} Kg</strong>
+                 </li>
+               </ul>
+            </div>
+            <p style="margin-top: 12px; border-top: 1px dashed #D1D5DB; padding-top: 8px;">
+               <strong>Total Keseluruhan:</strong> <span style="color:#2E7D32; font-size:16px;">{{ formatAngka(itemVerifikasi?.total_jumlah) }} Kg</span>
+            </p>
           </div>
+
           <div class="ds-form-group">
-            <label class="ds-form-label">Keputusan Verifikasi <span>*</span></label>
+            <label class="ds-form-label">Keputusan Verifikasi Kesatuan <span>*</span></label>
             <div class="ds-radio-group">
               <label class="ds-radio-btn" :class="{ active: formVerifikasi.status === 'disetujui' }">
                 <input type="radio" v-model="formVerifikasi.status" value="disetujui">
-                <i class="bi bi-check-circle"></i> Setujui
+                <i class="bi bi-check-circle"></i> Setujui Semua
               </label>
               <label class="ds-radio-btn reject" :class="{ active: formVerifikasi.status === 'ditolak' }">
                 <input type="radio" v-model="formVerifikasi.status" value="ditolak">
-                <i class="bi bi-x-circle"></i> Tolak
+                <i class="bi bi-x-circle"></i> Tolak Semua
               </label>
             </div>
           </div>
           <div v-if="formVerifikasi.status === 'ditolak'" class="ds-form-group">
             <label class="ds-form-label">Catatan Penolakan <span>*</span></label>
-            <textarea v-model="formVerifikasi.catatan_penolakan" class="ds-form-textarea" placeholder="Berikan alasan mengapa data ini ditolak agar bisa diperbaiki fasilitator..." :class="{ error: errors.catatan_penolakan }"></textarea>
-            <p v-if="errors.catatan_penolakan" class="ds-form-error"><i class="bi bi-exclamation-circle"></i> {{ errors.catatan_penolakan }}</p>
+            <textarea v-model="formVerifikasi.catatan_penolakan" class="ds-form-textarea"
+              placeholder="Berikan alasan mengapa data kesatuan ini ditolak agar bisa diperbaiki fasilitator..."
+              :class="{ error: errors.catatan_penolakan }"></textarea>
+            <p v-if="errors.catatan_penolakan" class="ds-form-error"><i class="bi bi-exclamation-circle"></i> {{
+              errors.catatan_penolakan }}</p>
           </div>
         </div>
         <div class="ds-modal-footer">
@@ -284,19 +301,19 @@
     <div v-if="showModalHapus" class="ds-modal-overlay" @click.self="tutupModalHapus">
       <div class="ds-modal ds-modal-sm">
         <div class="ds-modal-header">
-          <h2 class="ds-modal-title">Konfirmasi Hapus</h2>
+          <h2 class="ds-modal-title">Konfirmasi Hapus Kesatuan</h2>
           <button class="ds-modal-close" @click="tutupModalHapus"><i class="bi bi-x-lg"></i></button>
         </div>
         <div class="ds-modal-body">
           <div class="ds-confirm-icon"><i class="bi bi-trash3"></i></div>
-          <p class="ds-confirm-title">Hapus Data Sampah?</p>
-          <p class="ds-confirm-desc">Tindakan ini tidak bisa dibatalkan.</p>
+          <p class="ds-confirm-title">Hapus Kesatuan Data Sampah?</p>
+          <p class="ds-confirm-desc">Ini akan menghapus seluruh data rincian sampah pada desa dan tanggal tersebut secara permanen.</p>
         </div>
         <div class="ds-modal-footer">
           <button class="ds-btn-cancel" @click="tutupModalHapus" :disabled="loadingHapus">Batal</button>
           <button class="ds-btn-hapus-confirm" @click="hapusData" :disabled="loadingHapus">
             <i v-if="loadingHapus" class="bi bi-arrow-repeat ds-spin"></i>
-            <i v-else class="bi bi-trash3"></i> Ya, Hapus
+            <i v-else class="bi bi-trash3"></i> Ya, Hapus Semua
           </button>
         </div>
       </div>
@@ -309,6 +326,7 @@
         <span>{{ toast.message }}</span>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -322,14 +340,22 @@ export default {
   computed: {
     ...dataSampahScript.computed,
     dataDitolak() {
-      if (!Array.isArray(this.dataList)) return [];
-      return this.dataList.filter(item => item?.status === 'ditolak' || item?.status === 'rejected')
+      // Pastikan computed dataDitolak membaca dari groupedData yang baru
+      if (!Array.isArray(this.groupedData)) return [];
+      return this.groupedData.filter(item => item?.status === 'ditolak' || item?.status === 'rejected')
     },
   },
 }
 </script>
 
 <style scoped>
-.ds-spin { animation: spin 0.8s linear infinite; display: inline-block; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.ds-spin {
+  animation: spin 0.8s linear infinite;
+  display: inline-block;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 </style>

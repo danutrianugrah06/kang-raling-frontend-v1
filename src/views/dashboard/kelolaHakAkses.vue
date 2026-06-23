@@ -68,7 +68,7 @@
           <div class="ha-editor-header">
             <div class="ha-editor-title">
               <h5>Hak Akses: {{ selectedRole.name }}</h5>
-              <p>{{ totalActivePerms }} hak akses aktif — centang permission yang diizinkan lalu klik Simpan.</p>
+              <p>{{ totalActivePerms }} hak akses aktif - centang permission yang diizinkan lalu klik Simpan.</p>
             </div>
             <div class="ha-editor-actions">
               <button

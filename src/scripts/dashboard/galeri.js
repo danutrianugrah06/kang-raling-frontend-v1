@@ -172,6 +172,11 @@ export default {
         this.formErrors.keterangan = "Keterangan wajib diisi.";
         return;
       }
+      if (!this.formGambar && !this.previewGambar) {
+        this.formErrors.gambar = 'Foto galeri wajib ada. Silakan upload gambar pengganti!';
+        this.showToast('Foto galeri tidak boleh kosong.', 'error');
+        return; // Hentikan proses, jangan kirim ke backend
+      }
 
       this.submitting = true;
       try {

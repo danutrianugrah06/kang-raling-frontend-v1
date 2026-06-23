@@ -79,13 +79,6 @@
                         ? 'Tidak ada foto yang cocok dengan pencarian ini.'
                         : 'Mulai unggah foto kegiatan lingkungan.' }}
                     </p>
-                    <button
-                      v-if="!searchQuery"
-                      class="gl-btn-add"
-                      @click="bukaModalTambah"
-                    >
-                      <i class="bi bi-plus-lg"></i> Tambah Gambar
-                    </button>
                   </div>
                 </td>
               </tr>

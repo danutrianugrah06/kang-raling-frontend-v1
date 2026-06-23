@@ -51,7 +51,6 @@
         <table class="ed-table" role="table" aria-label="Daftar konten edukasi">
           <thead>
             <tr>
-              <!-- Class lebar kolom menggantikan inline style width -->
               <th class="ed-th-konten">Konten</th>
               <th class="ed-th-kategori">Kategori</th>
               <th class="ed-th-tanggal">Tanggal Ditambah</th>
@@ -60,7 +59,7 @@
           </thead>
           <tbody>
 
-            <!-- Skeleton -->
+            <!-- Skeleton Loading -->
             <template v-if="loading">
               <tr v-for="n in 5" :key="'sk-'+n">
                 <td>
@@ -83,7 +82,7 @@
               </tr>
             </template>
 
-            <!-- Empty -->
+            <!-- Empty State -->
             <template v-else-if="edukasis.length === 0">
               <tr>
                 <td colspan="4">
@@ -95,33 +94,19 @@
                         ? 'Tidak ada konten yang cocok dengan filter ini.'
                         : 'Mulai tambahkan modul atau video edukasi.' }}
                     </p>
-                    <button
-                      v-if="!searchQuery && !filterKategori"
-                      class="ed-btn-add"
-                      @click="bukaModalTambah"
-                    >
-                      <i class="bi bi-plus-lg"></i> Tambah Konten
-                    </button>
                   </div>
                 </td>
               </tr>
             </template>
 
-            <!-- Data -->
+            <!-- Data Asli -->
             <template v-else>
               <tr v-for="item in edukasis" :key="item.id">
                 <td>
                   <div class="ed-item-cell">
                     <img
-                      v-if="item.kategori === 'modul' && getGambarUrl(item.gambar)"
+                      v-if="getGambarUrl(item.gambar)"
                       :src="getGambarUrl(item.gambar)"
-                      :alt="item.judul"
-                      class="ed-thumb"
-                      loading="lazy"
-                    />
-                    <img
-                      v-else-if="item.kategori === 'video' && getYoutubeThumbnail(item.link_video)"
-                      :src="getYoutubeThumbnail(item.link_video)"
                       :alt="item.judul"
                       class="ed-thumb"
                       loading="lazy"
@@ -131,9 +116,7 @@
                     </div>
                     <div>
                       <p class="ed-item-judul">{{ item.judul }}</p>
-                      <p class="ed-item-meta">
-                        Oleh: {{ item.user ? item.user.nama : 'Admin' }}
-                      </p>
+                      <p class="ed-item-meta">Oleh: {{ item.user ? item.user.nama : 'Admin' }}</p>
                     </div>
                   </div>
                 </td>
@@ -227,8 +210,8 @@
             <i class="bi bi-x-lg"></i>
           </button>
         </div>
+        
         <div class="ed-modal-body">
-
           <!-- Judul -->
           <div class="ed-form-group">
             <label class="ed-form-label" for="ed-judul">Judul Konten <span>*</span></label>
@@ -238,145 +221,88 @@
               type="text"
               :class="['ed-form-input', { error: formErrors.judul }]"
               placeholder="Masukkan judul konten edukasi..."
-              autocomplete="off"
             />
-            <p v-if="formErrors.judul" class="ed-form-error">
-              <i class="bi bi-exclamation-circle"></i> {{ formErrors.judul }}
-            </p>
+            <p v-if="formErrors.judul" class="ed-form-error"><i class="bi bi-exclamation-circle"></i> {{ formErrors.judul }}</p>
           </div>
 
           <!-- Pilih Kategori -->
           <div class="ed-form-group">
             <label class="ed-form-label">Pilih Kategori <span>*</span></label>
             <div class="ed-kategori-picker">
-              <div
-                :class="['ed-kategori-option', form.kategori === 'modul' ? 'selected' : '']"
-                @click="pilihKategori('modul')"
-                role="button"
-                tabindex="0"
-                aria-pressed="form.kategori === 'modul'"
-                @keydown.enter="pilihKategori('modul')"
-              >
-                <!-- Class warna ikon menggantikan inline style -->
+              <div :class="['ed-kategori-option', form.kategori === 'modul' ? 'selected' : '']" @click="pilihKategori('modul')">
                 <i class="bi bi-file-earmark-pdf-fill ed-kategori-icon ed-kategori-icon-modul"></i>
                 <p class="ed-kategori-nama">Modul PDF</p>
-                <p class="ed-kategori-desc">Upload file PDF + gambar cover</p>
+                <p class="ed-kategori-desc">Upload file PDF</p>
               </div>
-              <div
-                :class="['ed-kategori-option', form.kategori === 'video' ? 'selected-video' : '']"
-                @click="pilihKategori('video')"
-                role="button"
-                tabindex="0"
-                aria-pressed="form.kategori === 'video'"
-                @keydown.enter="pilihKategori('video')"
-              >
+              <div :class="['ed-kategori-option', form.kategori === 'video' ? 'selected-video' : '']" @click="pilihKategori('video')">
                 <i class="bi bi-play-circle-fill ed-kategori-icon ed-kategori-icon-video"></i>
-                <p class="ed-kategori-nama">Video YouTube</p>
-                <p class="ed-kategori-desc">Tempelkan link video YouTube</p>
+                <p class="ed-kategori-nama">Video Lokal</p>
+                <p class="ed-kategori-desc">Upload file MP4 dari perangkat</p>
               </div>
             </div>
-            <p v-if="formErrors.kategori" class="ed-form-error" style="margin-top:8px;">
-              <i class="bi bi-exclamation-circle"></i> {{ formErrors.kategori }}
-            </p>
+            <p v-if="formErrors.kategori" class="ed-form-error" style="margin-top:8px;"><i class="bi bi-exclamation-circle"></i> {{ formErrors.kategori }}</p>
           </div>
 
-          <!-- Field Modul -->
+          <!-- KHUSUS MODUL: Upload PDF -->
           <template v-if="form.kategori === 'modul'">
-
             <div class="ed-form-group">
               <label class="ed-form-label">File PDF <span>*</span></label>
               <div v-if="formFilePdf || existingPdf" class="ed-file-selected">
                 <i class="bi bi-file-earmark-pdf-fill ed-pdf-icon"></i>
-                <span class="ed-file-selected-name">
-                  {{ formFilePdf ? formFilePdf.name : 'File PDF sudah ada' }}
-                </span>
-                <button
-                  type="button"
-                  class="ed-file-remove"
-                  @click="hapusPdf"
-                  aria-label="Hapus file PDF"
-                >
-                  <i class="bi bi-x"></i>
-                </button>
+                <span class="ed-file-selected-name">{{ formFilePdf ? formFilePdf.name : 'File PDF sudah tersimpan' }}</span>
+                <button type="button" class="ed-file-remove" @click="hapusPdf"><i class="bi bi-x"></i></button>
               </div>
               <div v-else class="ed-upload-area">
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  @change="onPdfChange"
-                  aria-label="Upload file PDF"
-                />
+                <input type="file" accept="application/pdf" @change="onPdfChange" />
                 <i class="bi bi-file-earmark-arrow-up ed-upload-icon"></i>
-                <p class="ed-upload-text"><strong>Klik untuk upload</strong> atau seret file PDF</p>
-                <p class="ed-upload-hint">Format PDF — Maks. 10MB</p>
+                <p class="ed-upload-text"><strong>Klik untuk upload</strong> file PDF</p>
               </div>
-              <p v-if="formErrors.file_pdf" class="ed-form-error">
-                <i class="bi bi-exclamation-circle"></i> {{ formErrors.file_pdf }}
-              </p>
+              <p v-if="formErrors.file_pdf" class="ed-form-error"><i class="bi bi-exclamation-circle"></i> {{ formErrors.file_pdf }}</p>
             </div>
-
-            <div class="ed-form-group">
-              <label class="ed-form-label">Gambar Cover</label>
-              <div v-if="previewGambar" class="ed-preview-wrap">
-                <img :src="previewGambar" alt="Preview gambar cover" class="ed-preview-img" />
-                <button
-                  type="button"
-                  class="ed-preview-remove"
-                  @click="hapusPreviewGambar"
-                  aria-label="Hapus gambar"
-                >
-                  <i class="bi bi-x"></i>
-                </button>
-              </div>
-              <div v-else class="ed-upload-area">
-                <input
-                  type="file"
-                  accept="image/jpeg,image/png,image/webp"
-                  @change="onGambarChange"
-                  aria-label="Upload gambar cover"
-                />
-                <i class="bi bi-cloud-upload ed-upload-icon"></i>
-                <p class="ed-upload-text"><strong>Klik untuk upload</strong> atau seret gambar</p>
-                <p class="ed-upload-hint">JPG, PNG, WebP - Maks. 10MB</p>
-              </div>
-            </div>
-
           </template>
 
-          <!-- Field Video -->
+          <!-- KHUSUS VIDEO: Upload MP4 Lokal -->
           <template v-if="form.kategori === 'video'">
             <div class="ed-form-group">
-              <label class="ed-form-label" for="ed-link-video">Link Video YouTube <span>*</span></label>
-              <input
-                id="ed-link-video"
-                v-model="form.link_video"
-                type="url"
-                :class="['ed-form-input', { error: formErrors.link_video }]"
-                placeholder="Contoh: https://www.youtube.com/watch?v=..."
-                autocomplete="off"
-              />
-              <p v-if="formErrors.link_video" class="ed-form-error">
-                <i class="bi bi-exclamation-circle"></i> {{ formErrors.link_video }}
-              </p>
-              <p class="ed-form-hint">
-                <i class="bi bi-info-circle"></i>
-                Salin link dari YouTube. Bisa berupa link biasa atau link share.
-              </p>
+              <label class="ed-form-label">File Video Lokal <span>*</span></label>
+              <div v-if="formFileVideo || existingVideo" class="ed-file-selected" style="background: #FFF3E0; border-color: #FFCC80;">
+                <i class="bi bi-film ed-pdf-icon" style="color: #F57C00;"></i>
+                <span class="ed-file-selected-name" style="color: #E65100;">{{ formFileVideo ? formFileVideo.name : 'Video sudah tersimpan di server' }}</span>
+                <button type="button" class="ed-file-remove" @click="hapusVideo"><i class="bi bi-x"></i></button>
+              </div>
+              <div v-else class="ed-upload-area">
+                <input type="file" accept="video/mp4,video/webm,video/ogg" @change="onVideoChange" />
+                <i class="bi bi-camera-video ed-upload-icon"></i>
+                <p class="ed-upload-text"><strong>Klik untuk upload</strong> file Video</p>
+                <p class="ed-upload-hint">MP4, WebM, OGG — (Disarankan maks. 100MB)</p>
+              </div>
+              <p v-if="formErrors.link_video" class="ed-form-error"><i class="bi bi-exclamation-circle"></i> {{ formErrors.link_video }}</p>
             </div>
           </template>
+
+          <!-- SHARED: Gambar Cover (Untuk Modul & Video) -->
+          <div class="ed-form-group" v-if="form.kategori">
+            <label class="ed-form-label">Gambar Thumbnail/Cover</label>
+            <div v-if="previewGambar" class="ed-preview-wrap">
+              <img :src="previewGambar" alt="Preview" class="ed-preview-img" />
+              <button type="button" class="ed-preview-remove" @click="hapusPreviewGambar"><i class="bi bi-x"></i></button>
+            </div>
+            <div v-else class="ed-upload-area">
+              <input type="file" accept="image/jpeg,image/png,image/webp" @change="onGambarChange" />
+              <i class="bi bi-image ed-upload-icon"></i>
+              <p class="ed-upload-text"><strong>Klik untuk upload</strong> gambar sampul</p>
+              <p class="ed-upload-hint">Sangat disarankan untuk video lokal</p>
+            </div>
+          </div>
 
           <!-- Deskripsi -->
           <div class="ed-form-group">
-            <label class="ed-form-label" for="ed-deskripsi">Deskripsi</label>
-            <textarea
-              id="ed-deskripsi"
-              v-model="form.deskripsi"
-              class="ed-form-textarea"
-              placeholder="Tulis deskripsi singkat konten ini..."
-            ></textarea>
+            <label class="ed-form-label" for="ed-deskripsi">Deskripsi Singkat</label>
+            <textarea id="ed-deskripsi" v-model="form.deskripsi" class="ed-form-textarea" placeholder="Tulis ringkasan..."></textarea>
           </div>
 
         </div>
+
         <div class="ed-modal-footer">
           <button class="ed-btn-cancel" @click="tutupModal" :disabled="submitting">Batal</button>
           <button class="ed-btn-save" @click="submitForm" :disabled="submitting">

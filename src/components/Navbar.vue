@@ -14,10 +14,10 @@
         <router-link to="/media" @click="menuOpen = false">Media</router-link>
       </li>
       <li>
-        <router-link to="/desa-binaan" @click="menuOpen = false">Desa Binaan</router-link>
+        <router-link to="/edukasi" @click="menuOpen = false">Edukasi</router-link>
       </li>
       <li>
-        <router-link to="/edukasi" @click="menuOpen = false">Edukasi</router-link>
+        <router-link to="/desa-binaan" @click="menuOpen = false">Desa Binaan</router-link>
       </li>
       <li>
         <router-link to="/data-sampah" @click="menuOpen = false">Data Sampah</router-link>

@@ -4,12 +4,10 @@ export default {
   data() {
     return {
       dataList: [],
-      
       loading: true,
-      loadingAction: null, // Menyimpan ID group yang sedang diproses
+      loadingAction: null,
       loadingSubmitReject: false,
       
-      // Pagination & Search
       currentPage: 1,
       lastPage: 1,
       total: 0,
@@ -18,15 +16,29 @@ export default {
       filterStatus: 'pending',
       searchTimeout: null,
 
-      // Modal Reject
       showModalReject: false,
       groupToReject: null,
       catatanPenolakan: '',
       errorCatatan: '',
 
-      // Toast
+      // STATE BARU UNTUK MODAL BATAL VERIFIKASI
+      showModalCancel: false,
+      groupToCancel: null,
+
       toasts: [],
       toastCounter: 0,
+
+      // STATE BARU UNTUK MODAL BATAL VERIFIKASI
+      showModalCancel: false,
+      groupToCancel: null,
+
+      // --- TAMBAHAN BARU: STATE UNTUK MODAL VERIFIKASI ---
+      showModalVerify: false,
+      groupToVerify: null,
+
+      // --- TAMBAHAN BARU: STATE UNTUK MODAL TOGGLE PUBLIKASI ---
+      showModalTogglePublish: false,
+      groupToTogglePublish: null,
     }
   },
 
@@ -39,9 +51,7 @@ export default {
       return pages
     },
 
-    // Grouping data berdasarkan desa_id, tanggal, user_id
     groupedData() {
-      // PENGAMAN SAKTI: Pastikan dataList adalah Array agar .filter() tidak error
       if (!Array.isArray(this.dataList)) return [];
 
       let result = this.dataList;
@@ -50,14 +60,11 @@ export default {
       }
       if (this.searchQuery.trim()) {
         const q = this.searchQuery.toLowerCase();
-        result = result.filter(item => 
-          (item?.desa?.nama_desa || '').toLowerCase().includes(q)
-        );
+        result = result.filter(item => (item?.desa?.nama_desa || '').toLowerCase().includes(q));
       }
       
       const groups = {};
       result.forEach(item => {
-        // PENGAMAN: Tambahkan ? agar tidak error jika relasi kosong
         const key = `${item?.desa_id}_${item?.tanggal}_${item?.user_id}`;
         if (!groups[key]) {
           groups[key] = {
@@ -66,6 +73,7 @@ export default {
             tanggal: item?.tanggal,
             user: item?.user,
             status: item?.status,
+            is_public: !!item?.is_public,
             catatan_penolakan: item?.catatan_penolakan,
             items: []
           };
@@ -91,25 +99,20 @@ export default {
   },
 
   methods: {
-    // FETCH DATA
     async fetchData() {
       this.loading = true;
       try {
         const res = await api.get('/data-sampah', {
           params: { page: this.currentPage, per_page: this.perPage }
         });
-        
-        // BONGKAR BUNGKUS PAGINATION LARAVEL
         const d = res.data;
         const isPaginatorInsideData = d.data && typeof d.data === 'object' && !Array.isArray(d.data);
         const paginator = isPaginatorInsideData ? d.data : d;
-
-        // Paksa simpan sebagai Array murni
+        
         this.dataList = Array.isArray(paginator.data) ? paginator.data : [];
         this.currentPage = paginator.current_page || 1;
         this.lastPage = paginator.last_page || 1;
         this.total = paginator.total || 0;
-
       } catch {
         this.showToast('Gagal memuat data antrean.', 'error');
       } finally {
@@ -123,15 +126,22 @@ export default {
       this.fetchData();
     },
 
-    // VERIFIKASI LANGSUNG
-    async prosesVerify(group) {
-      this.loadingAction = group.id;
+    // --- FITUR VERIFIKASI (MODAL CUSTOM) ---
+    bukaModalVerify(group) {
+      this.groupToVerify = group;
+      this.showModalVerify = true;
+    },
+    tutupModalVerify() {
+      this.showModalVerify = false;
+      this.groupToVerify = null;
+    },
+    async submitVerify() {
+      this.loadingAction = 'verify';
       try {
-        const promises = group.items.map(item => {
-          return api.post(`/data-sampah/${item.id}/verify`);
-        });
+        const promises = this.groupToVerify.items.map(item => api.post(`/data-sampah/${item.id}/verify`));
         await Promise.all(promises);
-        this.showToast('Data berhasil diverifikasi dan dipublikasikan.', 'success');
+        this.showToast('Data berhasil diverifikasi dan langsung tayang ke Publik.', 'success');
+        this.tutupModalVerify();
         this.fetchData(); 
       } catch {
         this.showToast('Gagal memverifikasi data.', 'error');
@@ -140,32 +150,78 @@ export default {
       }
     },
 
-    // TOLAK (MODAL)
+    // --- FITUR BATAL (MODAL CUSTOM) ---
+    bukaModalCancel(group) {
+      this.groupToCancel = group;
+      this.showModalCancel = true;
+    },
+    tutupModalCancel() {
+      this.showModalCancel = false;
+      this.groupToCancel = null;
+    },
+    async submitCancelVerify() {
+      this.loadingAction = 'cancel';
+      try {
+        const requests = this.groupToCancel.items.map(item => api.post(`/data-sampah/${item.id}/cancel-verify`));
+        await Promise.all(requests);
+        this.showToast('Verifikasi dibatalkan. Status dikembalikan ke Pending.', 'info');
+        this.tutupModalCancel();
+        this.fetchData();
+      } catch {
+        this.showToast('Gagal membatalkan verifikasi.', 'error');
+      } finally {
+        this.loadingAction = null;
+      }
+    },
+
+    // --- FITUR TOGGLE PUBLIKASI ---
+    // --- FITUR TOGGLE PUBLIKASI (MODAL CUSTOM) ---
+    bukaModalTogglePublish(group) {
+      this.groupToTogglePublish = group;
+      this.showModalTogglePublish = true;
+    },
+    tutupModalTogglePublish() {
+      this.showModalTogglePublish = false;
+      this.groupToTogglePublish = null;
+    },
+    async submitTogglePublish() {
+      this.loadingAction = 'pub';
+      const group = this.groupToTogglePublish;
+      try {
+        const requests = group.items.map(item => api.post(`/data-sampah/${item.id}/toggle-publish`));
+        await Promise.all(requests);
+        
+        const isNowPublic = !group.is_public;
+        this.showToast(isNowPublic ? 'Data resmi ditayangkan ke Publik.' : 'Data ditarik dari halaman Publik.', 'success');
+        this.tutupModalTogglePublish();
+        this.fetchData();
+      } catch {
+        this.showToast('Gagal mengubah status tayang.', 'error');
+      } finally {
+        this.loadingAction = null;
+      }
+    },
+
     bukaModalReject(group) {
       this.groupToReject = group;
       this.catatanPenolakan = '';
       this.errorCatatan = '';
       this.showModalReject = true;
     },
-
     tutupModalReject() {
       this.showModalReject = false;
       this.groupToReject = null;
     },
-
     async submitReject() {
       this.errorCatatan = '';
       if (!this.catatanPenolakan.trim()) {
         this.errorCatatan = 'Catatan penolakan wajib diisi.';
         return;
       }
-
       this.loadingSubmitReject = true;
       try {
         const promises = this.groupToReject.items.map(item => {
-          return api.post(`/data-sampah/${item.id}/reject`, {
-            catatan_penolakan: this.catatanPenolakan
-          });
+          return api.post(`/data-sampah/${item.id}/reject`, { catatan_penolakan: this.catatanPenolakan });
         });
         await Promise.all(promises);
         this.showToast('Penolakan berhasil dikirim ke Fasilitator.', 'success');
@@ -178,50 +234,43 @@ export default {
       }
     },
 
-    // HELPER FORMATTING
     formatTanggal(val) {
       if (!val) return '-';
-      return new Date(val).toLocaleDateString('id-ID', {
-        day: '2-digit', month: 'short', year: 'numeric'
-      });
+      return new Date(val).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
     },
-
     formatAngka(n) {
       if (!n && n !== 0) return '0';
       return Number(n).toLocaleString('id-ID');
     },
-
     capitalize(str) {
-      if (!str) return '';
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    },
+      if (!str) return 'Menunggu';
+      
+      // Kamus penerjemah khusus untuk tampilan tabel
+      const terjemahan = {
+        'pending': 'Menunggu',
+        'verified': 'Disetujui',
+        'rejected': 'Ditolak'
+      };
 
+      return terjemahan[str.toLowerCase()] || (str.charAt(0).toUpperCase() + str.slice(1));
+    },
     badgeStatus(status) {
       if (status === 'verified') return 'vs-badge-success';
       if (status === 'rejected') return 'vs-badge-danger';
       return 'vs-badge-warning';
     },
-
     iconStatus(status) {
       if (status === 'verified') return 'bi-check-circle-fill';
       if (status === 'rejected') return 'bi-x-circle-fill';
       return 'bi-clock-fill';
     },
-
     showToast(message, type = 'info') {
       const id = ++this.toastCounter;
       this.toasts.push({ id, message, type });
-      setTimeout(() => {
-        this.toasts = this.toasts.filter(t => t.id !== id);
-      }, 3500);
+      setTimeout(() => { this.toasts = this.toasts.filter(t => t.id !== id); }, 3500);
     },
-
     toastIcon(type) {
-      const map = {
-        success: 'bi-check-circle-fill',
-        error:   'bi-x-circle-fill',
-        info:    'bi-info-circle-fill',
-      };
+      const map = { success: 'bi-check-circle-fill', error: 'bi-x-circle-fill', info: 'bi-info-circle-fill' };
       return map[type] || 'bi-info-circle-fill';
     }
   }

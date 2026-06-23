@@ -76,9 +76,6 @@
                     <p class="js-empty-desc">
                       {{ keyword ? 'Tidak ada data yang cocok dengan pencarian ini.' : 'Mulai tambahkan jenis sampah pertama.' }}
                     </p>
-                    <button v-if="!keyword" class="js-btn-add" @click="bukaModalTambah">
-                      <i class="bi bi-plus-lg"></i> Tambah Jenis Sampah
-                    </button>
                   </div>
                 </td>
               </tr>
