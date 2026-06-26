@@ -117,7 +117,7 @@ export default {
 
   mounted() {
     const user = JSON.parse(localStorage.getItem('user') || '{}')
-    this.isAdmin = user.role === 'administrator'
+    this.isAdmin = user.role === 'Koordinator'
     this.fetchData()
     this.fetchDesas()
     this.fetchJenisSampah()

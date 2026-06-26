@@ -104,7 +104,7 @@ export function useLoginScript() {
       if (error.response?.status === 401 || error.response?.status === 422) {
         errorMessage.value = 'Email atau password salah. Silakan coba lagi.'
       } else if (error.response?.status === 403) {
-        errorMessage.value = 'Akun Anda tidak aktif. Hubungi administrator.'
+        errorMessage.value = 'Akun Anda tidak aktif. Hubungi koordinator.'
       } else if (!navigator.onLine) {
         errorMessage.value = 'Tidak ada koneksi internet. Periksa jaringan Anda.'
       } else {

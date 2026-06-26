@@ -77,8 +77,8 @@
       </div>
 
       <!-- STATISTIK BERDASARKAN ROLE (Hanya untuk Admin & Fasil) -->
-      <template v-if="['Administrator', 'Fasilitator'].includes(currentRole)">
-        <div class="db-section-label">{{ currentRole === 'Administrator' ? 'Status Verifikasi Data' : 'Status Pengajuan Saya' }}</div>
+      <template v-if="['Koordinator', 'Fasilitator'].includes(currentRole)">
+        <div class="db-section-label">{{ currentRole === 'Koordinator' ? 'Status Verifikasi Data' : 'Status Pengajuan Saya' }}</div>
         <div class="db-stat-grid">
 
           <!-- FASILITATOR -->
@@ -126,8 +126,8 @@
             </div>
           </template>
 
-          <!-- ADMINISTRATOR -->
-          <template v-if="currentRole === 'Administrator'">
+          <!-- Koordinator -->
+          <template v-if="currentRole === 'Koordinator'">
             <div class="db-stat-card">
               <div class="db-stat-header">
                 <span class="db-stat-badge badge-blue">Input</span>
@@ -224,7 +224,7 @@
           <div class="db-quick-card">
             <div class="db-quick-title"><i class="bi bi-lightning-charge-fill"></i> Aksi Cepat</div>
             <div class="db-quick-list">
-              <template v-if="currentRole === 'Administrator'">
+              <template v-if="currentRole === 'Koordinator'">
                 <router-link to="/dashboard/verifikasi" class="db-quick-item quick-red">
                   <i class="bi bi-patch-check-fill"></i><span>Verifikasi Data Sampah</span>
                   <span v-if="stats.verifikasi_tertunda > 0" class="db-quick-badge">{{ stats.verifikasi_tertunda

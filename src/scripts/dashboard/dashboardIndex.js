@@ -77,7 +77,7 @@ export default {
 
     // 2. Tentukan apakah perlu menampilkan kolom kanan (Aksi Cepat)
     showRightCol() {
-      return ["Administrator", "Fasilitator"].includes(this.currentRole);
+      return ["Koordinator", "Fasilitator"].includes(this.currentRole);
     },
 
     // 3. Kelas warna untuk Banner (DIBUAT UNIVERSAL UNTUK SEMUA ROLE / RBAC)
@@ -153,7 +153,7 @@ export default {
           (Number(data.total_pending) || 0);
 
         // Isi data spesifik berdasarkan Wujud Aktif
-        if (this.currentRole === "Administrator") {
+        if (this.currentRole === "Koordinator") {
           this.stats.data_terinput =
             data.total_entri !== undefined ? data.total_entri : totalEntriRiil; // Sekarang nampil 3, bukan 6.6!
           this.stats.verifikasi_tertunda = data.total_pending ?? 0;

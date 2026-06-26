@@ -74,7 +74,7 @@
                 <td class="at-td-center">{{ index + 1 }}</td>
                 <td>
                   <p class="at-td-nama">{{ item.name }}</p>
-                  <p class="at-td-sub">Oleh: {{ item.generated_by_name || 'Administrator' }}</p>
+                  <p class="at-td-sub">Oleh: {{ item.generated_by_name || 'Koordinator' }}</p>
                 </td>
                 <td>
                   <div class="at-key-wrap">

@@ -207,7 +207,7 @@ export default {
 
     roleBadgeClass() {
       const map = {
-        'Administrator':       'role-admin',
+        'Koordinator':         'role-admin',
         'Fasilitator':         'role-fasil',
         'Pimpinan':            'role-pimpinan',
         'Developer Eksternal': 'role-dev',

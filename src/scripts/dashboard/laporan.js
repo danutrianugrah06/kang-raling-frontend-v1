@@ -47,7 +47,7 @@ export default {
   computed: {
     namaUser() {
       const user = JSON.parse(localStorage.getItem("user") || "{}");
-      return user.nama || "Administrator";
+      return user.nama || "Koordinator";
     },
     daftarTahun() {
       const now = new Date().getFullYear();

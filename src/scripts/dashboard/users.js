@@ -66,7 +66,7 @@ export default {
 
     getRoleBadgeClass(roleName) {
       const map = {
-        'Administrator':       'us-role-admin',
+        'Koordinator':       'us-role-admin',
         'Fasilitator':         'us-role-fasil',
         'Pimpinan':            'us-role-pimpinan',
         'Developer Eksternal': 'us-role-dev',
